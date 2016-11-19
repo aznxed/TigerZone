@@ -4,10 +4,9 @@ enum EdgeType {
 	ROAD, FIELD, CITY
 }
 
-
 public class Tile {
 
-	// Each tile has the corrds
+	// Each tile has the cords
 	// of where its at on the board
 	private int row;
 	private int col;
