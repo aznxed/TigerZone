@@ -567,13 +567,13 @@ public class Board {
 				if(gameBoard.board[i][j] == null)
 				{
 					JLabel j28 = new JLabel();
-					j28.setIcon(new ImageIcon("C:/Users/Skyler/Pictures/Screenshots/Carcassonne Tiles/Tile28.png"));
+					j28.setIcon(new ImageIcon("C:/Users/Edward/Desktop/Images/Tile28.png"));
 					jp.add(j28);
 				}
 				else
 				{
 					JLabel j1 = new JLabel();
-					ImageIcon II = new ImageIcon("C:/Users/Skyler/Pictures/Screenshots/Carcassonne Tiles/Tile"+Integer.toString(gameBoard.board[i][j].getType()) + "." + Integer.toString(gameBoard.board[i][j].getDegrees()) + ".png");
+					ImageIcon II = new ImageIcon("C:/Users/Edward/Desktop/Images//Tile"+Integer.toString(gameBoard.board[i][j].getType()) + "." + Integer.toString(gameBoard.board[i][j].getDegrees()) + ".png");
 					Image image = II.getImage(); // transform it 
 					Image newimg = image.getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
 					II = new ImageIcon(newimg);
