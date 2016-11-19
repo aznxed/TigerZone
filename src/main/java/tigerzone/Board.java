@@ -7,10 +7,10 @@ public class Board {
 
 	//Changes
 	public static int TILE_NUM = 77;
-	public static int MAX_ROWS = 143;
-	public static int MAX_COLS = 143;
+	public static int MAX_ROWS = TILE_NUM - 1;
+	public static int MAX_COLS = TILE_NUM - 1;
 
-	public static int CENTER_CELL = MAX_ROWS / 2 + 1;
+	public static int CENTER_CELL = TILE_NUM;
 
 	private Tile[][] board = new Tile[MAX_ROWS][MAX_COLS];
 
