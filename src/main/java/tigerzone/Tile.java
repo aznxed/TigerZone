@@ -3,7 +3,7 @@ package tigerzone;
 import tigerzone.EdgeType;
 
 enum EdgeType {
-	ROAD, FIELD, CITY
+	GAMETRAIL, JUNGLE, LAKE
 }
 
 
@@ -11,6 +11,9 @@ public class Tile {
 
 	// Each tile has the corrds
 	// of where its at on the board
+	
+	private int[][] arr= new int[3][3]; //constructs the points we need
+	
 	private int row;
 	private int col;
 	
@@ -23,6 +26,13 @@ public class Tile {
 	private EdgeType leftEdge;
 	private EdgeType rightEdge;
 	
+	private int topIndex;
+	private int bottomIndex;
+	private int leftIndex;
+	private int rightIndex;
+	
+	private boolean roadEnd;
+	
 	
 	public Tile(int type, EdgeType topEdge, EdgeType bottomEdge, EdgeType leftEdge, EdgeType rightEdge)
 	{
@@ -31,6 +41,7 @@ public class Tile {
 		this.bottomEdge = bottomEdge;
 		this.leftEdge = leftEdge;
 		this.rightEdge = rightEdge;
+		this.roadEnd = false;
 	}
 	
 	public Tile(int type, int row, int col, EdgeType topEdge, EdgeType bottomEdge, EdgeType leftEdge, EdgeType rightEdge)
@@ -42,6 +53,7 @@ public class Tile {
 		this.bottomEdge = bottomEdge;
 		this.leftEdge = leftEdge;
 		this.rightEdge = rightEdge;
+		this.roadEnd = false;
 	}
 	
 	public Tile(int type, int degrees, int row, int col, EdgeType topEdge, EdgeType bottomEdge, EdgeType leftEdge, EdgeType rightEdge)
@@ -54,6 +66,7 @@ public class Tile {
 		this.bottomEdge = bottomEdge;
 		this.leftEdge = leftEdge;
 		this.rightEdge = rightEdge;
+		this.roadEnd = false;
 	}
 	
 	public int getType()
@@ -112,5 +125,55 @@ public class Tile {
 
 	public void setRightEdge(EdgeType rightEdge) {
 		this.rightEdge = rightEdge;
+	}
+	
+	public int getTopIndex()
+	{
+		return topIndex;
+	}
+	
+	public int getBottomIndex()
+	{
+		return bottomIndex;
+	}
+	
+	public int getLeftIndex()
+	{
+		return leftIndex;
+	}
+	
+	public int getRightIndex()
+	{
+		return rightIndex;
+	}
+	
+	public void setTopIndex(int topIndex)
+	{
+		this.topIndex = topIndex;
+	}
+	
+	public void setBottomIndex(int bottomIndex)
+	{
+		this.bottomIndex = bottomIndex;
+	}
+	
+	public void setLeftIndex(int leftIndex)
+	{
+		this.leftIndex = leftIndex;
+	}
+	
+	public void setRightIndex(int rightIndex)
+	{
+		this.rightIndex = rightIndex;
+	}
+	
+	public boolean getRoadEnd()
+	{
+		return roadEnd;
+	}
+	
+	public void setRoadEnd()
+	{
+		this.roadEnd = true;
 	}
 }
