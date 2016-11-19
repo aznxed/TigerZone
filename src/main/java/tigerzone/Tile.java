@@ -1,5 +1,7 @@
 package tigerzone;
 
+import tigerzone.EdgeType;
+
 enum EdgeType {
 	ROAD, FIELD, CITY
 }
@@ -12,10 +14,57 @@ public class Tile {
 	private int row;
 	private int col;
 	
+	private int type;
+	
+	private int degrees;
+	
 	private EdgeType topEdge;
 	private EdgeType bottomEdge;
 	private EdgeType leftEdge;
 	private EdgeType rightEdge;
+	
+	
+	public Tile(int type, EdgeType topEdge, EdgeType bottomEdge, EdgeType leftEdge, EdgeType rightEdge)
+	{
+		this.type = type;
+		this.topEdge = topEdge;
+		this.bottomEdge = bottomEdge;
+		this.leftEdge = leftEdge;
+		this.rightEdge = rightEdge;
+	}
+	
+	public Tile(int type, int row, int col, EdgeType topEdge, EdgeType bottomEdge, EdgeType leftEdge, EdgeType rightEdge)
+	{
+		this.type = type;
+		this.row = row;
+		this.col = col;
+		this.topEdge = topEdge;
+		this.bottomEdge = bottomEdge;
+		this.leftEdge = leftEdge;
+		this.rightEdge = rightEdge;
+	}
+	
+	public Tile(int type, int degrees, int row, int col, EdgeType topEdge, EdgeType bottomEdge, EdgeType leftEdge, EdgeType rightEdge)
+	{
+		this.type = type;
+		this.degrees = degrees;
+		this.row = row;
+		this.col = col;
+		this.topEdge = topEdge;
+		this.bottomEdge = bottomEdge;
+		this.leftEdge = leftEdge;
+		this.rightEdge = rightEdge;
+	}
+	
+	public int getType()
+	{
+		return type;
+	}
+	
+	public int getDegrees()
+	{
+		return degrees;
+	}
 
 	public int getRow() {
 		return row;
