@@ -289,7 +289,7 @@ public class Board {
 	
 	public Tile rotateTile(Tile tile, int degrees)
 	{
-		Tile rotateTile = new Tile(tile.getType(), degrees, tile.getRow(), tile.getCol(), tile.getTopEdge(), tile.getBottomEdge(), tile.getLeftEdge(), tile.getRightEdge());
+		Tile rotateTile = new Tile(tile.getArr(), tile.getType(), degrees, tile.getRow(), tile.getCol(), tile.getTopEdge(), tile.getBottomEdge(), tile.getLeftEdge(), tile.getRightEdge());
 		for(int i = 0; i < degrees/90; i++)
 		{
 			EdgeType temp = rotateTile.getTopEdge();
@@ -298,6 +298,8 @@ public class Board {
 			rotateTile.setBottomEdge(rotateTile.getRightEdge());
 			rotateTile.setRightEdge(temp);
 		}
+		
+		int[][] rotateArr;
 		return rotateTile;
 	}
 	
@@ -366,137 +368,167 @@ public class Board {
 	
 	public void initTiles(List<Tile> tiles)
 	{
-		Tile startTile = new Tile(19, 270, CENTER_CELL, CENTER_CELL, EdgeType.LAKE, EdgeType.JUNGLE, EdgeType.GAMETRAIL, EdgeType.GAMETRAIL);
+		
+		int[][] tileA= {{-1,9,-1},{9,-1,9},{-1,9,-1}};// 1:no:empty field
+		int[][] tileB= {{-1,9,-1},{9,3,9},{-1,9,-1}}; // 4: no: monistary
+		int[][] tileC= {{-1,9,-1},{9,3,9},{-1,5,-1}}; // 2: no : monistary with 1 road leaving.
+		int[][] tileD= {{9,5,10},{6,4,7},{11,8,12}}; // 4: no: crossrouads 4 roads 4 fields.
+		int[][] tileE= {{9,5,10},{9,-1,10},{9,5,10}}; //8: no: a straight road with 2 fields on the side  19
+		int[][] tileF= {{9,5,10},{5,-1,10},{10,10,-1}}; // 9:no: a curved road has 2 total fields
+		int[][] tileG= {{9,5,10},{6,4,10},{11,7,10}}; // 4: no: three way crossroads 3 total fields
+		int[][] tileH= {{-1,1,-1},{1,-1,1},{-1,1,-1}}; //1:no: giant city tile on each side
+		int[][] tileI= {{-1,9,-1},{1,-1,1},{-1,1,-1}}; //4: no: city on 3 sides field on top side
+		int[][] tileJ= {{-1,1,-1},{9,-1,1},{-1,9,-1}}; //5:no: diagonal tile bottom left field top right city 23
+		int[][] tileK= {{-1,9,-1},{1,-1,1},{-1,10,-1}}; //3:no" one city from left to right going thru center with 2 fields
+		int[][] tileL= {{-1,1,-1},{9,-1,9},{-1,2,-1}}; // 3: no: inverse of above 2 citys 1 field
+		int[][] tileM= {{-1,1,-1},{9,-1,9},{-1,9,-1}}; // 5:no: city on top one field
+		int[][] tileN= {{-1,9,-1},{9,-1,1},{-1,2,-1}}; // 2:no: two cities adjacent 
+		int[][] tileO= {{9,5,10},{5,-1,1},{10,10,-1}}; //1:no: road in top left city on right
+		int[][] tileP= {{9,5,10},{5,-1,1},{10,10,-1}}; //2:yes:same as above but w boar
+		int[][] tileQ= {{9,9,-1},{5,-1,1},{10,5,9}}; // 1: no: same as o but roads go from left to down
+		int[][] tileR= {{9,9,-1},{5,-1,1},{10,5,9}}; // 2:yes: same as above but has animal 19
+		int[][] tileS= {{9,5,10},{9,-1,1},{9,5,10}}; // no idea:no feild L road M city Rightside
+		int[][] tileT= {{9,5,10},{9,-1,1},{9,5,10}}; // 2: Yes: same as above w deer
+		int[][] tileU= {{9,5,10},{1,4,1},{-1,1,-1}}; // 3:no:road Top city L R B
+		int[][] tileV= {{9,5,10},{6,4,1},{11,7,10}}; // 1:no:3 progned road facing left city on right
+		int[][] tileW= {{9,5,10},{6,4,1},{11,7,10}}; //2:yes: same as above but with boar
+		int[][] tileX= {{9,5,10},{5,-1,1},{10,1,-1}}; //3:no: road goues left to up city R & Botom
+		int[][] tileY= {{9,5,10},{5,-1,1},{10,1,-1}}; //2:yes: same as above but has goat
+		int[][] tileZ= {{-1,1,-1},{9,-1,10},{9,5,10}}; //1:no city Top road B field L field R
+		int[][] tileZZ= {{-1,1,-1},{9,-1,10},{9,5,10}};//2:yes:see above
+		
+		
+		Tile startTile = new Tile(tileS, 19, 270, CENTER_CELL, CENTER_CELL, EdgeType.LAKE, EdgeType.JUNGLE, EdgeType.GAMETRAIL, EdgeType.GAMETRAIL);
 		board[CENTER_CELL][CENTER_CELL] = startTile;
 		
 		
-		Tile tile = new Tile(1, EdgeType.JUNGLE, EdgeType.JUNGLE, EdgeType.JUNGLE, EdgeType.JUNGLE);
+		Tile tile = new Tile(tileA, 1, EdgeType.JUNGLE, EdgeType.JUNGLE, EdgeType.JUNGLE, EdgeType.JUNGLE);
 		tiles.add(tile);
 		
-		tile = new Tile(2, EdgeType.JUNGLE, EdgeType.JUNGLE, EdgeType.JUNGLE, EdgeType.JUNGLE);
+		tile = new Tile(tileB, 2, EdgeType.JUNGLE, EdgeType.JUNGLE, EdgeType.JUNGLE, EdgeType.JUNGLE);
 		for(int i = 0; i < 4; i++)
 		{
 			tiles.add(tile);
 		}
 		
-		tile = new Tile(3, EdgeType.JUNGLE, EdgeType.GAMETRAIL, EdgeType.JUNGLE, EdgeType.JUNGLE);
+		tile = new Tile(tileC, 3, EdgeType.JUNGLE, EdgeType.GAMETRAIL, EdgeType.JUNGLE, EdgeType.JUNGLE);
 		tile.setRoadEnd();
 		tiles.add(tile);
 		tiles.add(tile);
 		
-		tile = new Tile(4, EdgeType.GAMETRAIL, EdgeType.GAMETRAIL, EdgeType.GAMETRAIL, EdgeType.GAMETRAIL);
+		tile = new Tile(tileD, 4, EdgeType.GAMETRAIL, EdgeType.GAMETRAIL, EdgeType.GAMETRAIL, EdgeType.GAMETRAIL);
 		tile.setRoadEnd();
 		tiles.add(tile);
 		
-		tile = new Tile(5, EdgeType.GAMETRAIL, EdgeType.GAMETRAIL, EdgeType.JUNGLE, EdgeType.JUNGLE);
+		tile = new Tile(tileE, 5, EdgeType.GAMETRAIL, EdgeType.GAMETRAIL, EdgeType.JUNGLE, EdgeType.JUNGLE);
 		for(int i = 0; i < 8; i++)
 		{
 			tiles.add(tile);
 		}
 		
-		tile = new Tile(6, EdgeType.GAMETRAIL, EdgeType.JUNGLE, EdgeType.GAMETRAIL, EdgeType.JUNGLE);
+		tile = new Tile(tileF, 6, EdgeType.GAMETRAIL, EdgeType.JUNGLE, EdgeType.GAMETRAIL, EdgeType.JUNGLE);
 		for(int i = 0; i < 9; i++)
 		{
 			tiles.add(tile);
 		}
 		
-		tile = new Tile(7, EdgeType.GAMETRAIL, EdgeType.GAMETRAIL, EdgeType.GAMETRAIL, EdgeType.JUNGLE);
+		tile = new Tile(tileG, 7, EdgeType.GAMETRAIL, EdgeType.GAMETRAIL, EdgeType.GAMETRAIL, EdgeType.JUNGLE);
 		tile.setRoadEnd();
 		for(int i = 0; i < 4; i++)
 		{
 			tiles.add(tile);
 		}
 		
-		tile = new Tile(8, EdgeType.LAKE, EdgeType.LAKE, EdgeType.LAKE, EdgeType.LAKE);
+		tile = new Tile(tileH, 8, EdgeType.LAKE, EdgeType.LAKE, EdgeType.LAKE, EdgeType.LAKE);
 		tiles.add(tile);
 		
-		tile = new Tile(9, EdgeType.JUNGLE, EdgeType.LAKE, EdgeType.LAKE, EdgeType.LAKE);
+		tile = new Tile(tileI, 9, EdgeType.JUNGLE, EdgeType.LAKE, EdgeType.LAKE, EdgeType.LAKE);
 		for(int i = 0; i < 4; i++)
 		{
 			tiles.add(tile);
 		}
 		
-		tile = new Tile(10, EdgeType.LAKE, EdgeType.JUNGLE, EdgeType.JUNGLE, EdgeType.LAKE);
+		tile = new Tile(tileJ, 10, EdgeType.LAKE, EdgeType.JUNGLE, EdgeType.JUNGLE, EdgeType.LAKE);
 		for(int i = 0; i < 5; i++)
 		{
 			tiles.add(tile);
 		}
 		
-		tile = new Tile(11, EdgeType.JUNGLE, EdgeType.JUNGLE, EdgeType.LAKE, EdgeType.LAKE);
+		tile = new Tile(tileK, 11, EdgeType.JUNGLE, EdgeType.JUNGLE, EdgeType.LAKE, EdgeType.LAKE);
 		for(int i = 0; i < 3; i++)
 		{
 			tiles.add(tile);
 		}
 		
-		tile = new Tile(12, EdgeType.LAKE, EdgeType.LAKE, EdgeType.JUNGLE, EdgeType.JUNGLE);
+		tile = new Tile(tileL, 12, EdgeType.LAKE, EdgeType.LAKE, EdgeType.JUNGLE, EdgeType.JUNGLE);
 		for(int i = 0; i < 3; i++)
 		{
 			tiles.add(tile);
 		}
 		
-		tile = new Tile(13, EdgeType.LAKE, EdgeType.JUNGLE, EdgeType.JUNGLE, EdgeType.JUNGLE);
+		tile = new Tile(tileM, 13, EdgeType.LAKE, EdgeType.JUNGLE, EdgeType.JUNGLE, EdgeType.JUNGLE);
 		for(int i = 0; i < 5; i++)
 		{
 			tiles.add(tile);
 		}
 		
-		tile = new Tile(14, EdgeType.JUNGLE, EdgeType.LAKE, EdgeType.JUNGLE, EdgeType.LAKE);
+		tile = new Tile(tileN, 14, EdgeType.JUNGLE, EdgeType.LAKE, EdgeType.JUNGLE, EdgeType.LAKE);
 		tiles.add(tile);
 		tiles.add(tile);
 		
-		tile = new Tile(15, EdgeType.GAMETRAIL, EdgeType.JUNGLE, EdgeType.GAMETRAIL, EdgeType.LAKE);
+		tile = new Tile(tileO, 15, EdgeType.GAMETRAIL, EdgeType.JUNGLE, EdgeType.GAMETRAIL, EdgeType.LAKE);
 		tiles.add(tile);
 		
-		tile = new Tile(16, EdgeType.GAMETRAIL, EdgeType.JUNGLE, EdgeType.GAMETRAIL, EdgeType.LAKE);
-		tiles.add(tile);
-		tiles.add(tile);
-		
-		tile = new Tile(17, EdgeType.JUNGLE, EdgeType.GAMETRAIL, EdgeType.GAMETRAIL, EdgeType.LAKE);
-		tiles.add(tile);
-		
-		tile = new Tile(18, EdgeType.JUNGLE, EdgeType.GAMETRAIL, EdgeType.GAMETRAIL, EdgeType.LAKE);
+		tile = new Tile(tileP, 16, EdgeType.GAMETRAIL, EdgeType.JUNGLE, EdgeType.GAMETRAIL, EdgeType.LAKE);
 		tiles.add(tile);
 		tiles.add(tile);
 		
-		tile = new Tile(19, EdgeType.GAMETRAIL, EdgeType.GAMETRAIL, EdgeType.JUNGLE, EdgeType.LAKE);
+		tile = new Tile(tileQ, 17, EdgeType.JUNGLE, EdgeType.GAMETRAIL, EdgeType.GAMETRAIL, EdgeType.LAKE);
+		tiles.add(tile);
+		
+		tile = new Tile(tileR, 18, EdgeType.JUNGLE, EdgeType.GAMETRAIL, EdgeType.GAMETRAIL, EdgeType.LAKE);
 		tiles.add(tile);
 		tiles.add(tile);
 		
-		tile = new Tile(20, EdgeType.GAMETRAIL, EdgeType.GAMETRAIL, EdgeType.JUNGLE, EdgeType.LAKE);
+		tile = new Tile(tileS, 19, EdgeType.GAMETRAIL, EdgeType.GAMETRAIL, EdgeType.JUNGLE, EdgeType.LAKE);
 		tiles.add(tile);
 		tiles.add(tile);
 		
-		tile = new Tile(21, EdgeType.GAMETRAIL, EdgeType.LAKE, EdgeType.LAKE, EdgeType.LAKE);
+		tile = new Tile(tileT, 20, EdgeType.GAMETRAIL, EdgeType.GAMETRAIL, EdgeType.JUNGLE, EdgeType.LAKE);
+		tiles.add(tile);
+		tiles.add(tile);
+		
+		tile = new Tile(tileU, 21, EdgeType.GAMETRAIL, EdgeType.LAKE, EdgeType.LAKE, EdgeType.LAKE);
 		tile.setRoadEnd();
 		for(int i = 0; i < 3; i++)
 		{
 			tiles.add(tile);
 		}
 		
-		tile = new Tile(22, EdgeType.GAMETRAIL, EdgeType.GAMETRAIL, EdgeType.GAMETRAIL, EdgeType.LAKE);
+		tile = new Tile(tileV, 22, EdgeType.GAMETRAIL, EdgeType.GAMETRAIL, EdgeType.GAMETRAIL, EdgeType.LAKE);
 		tile.setRoadEnd();
 		tiles.add(tile);
 		
-		tile = new Tile(23, EdgeType.GAMETRAIL, EdgeType.GAMETRAIL, EdgeType.GAMETRAIL, EdgeType.LAKE);
+		tile = new Tile(tileW, 23, EdgeType.GAMETRAIL, EdgeType.GAMETRAIL, EdgeType.GAMETRAIL, EdgeType.LAKE);
 		tile.setRoadEnd();
 		tiles.add(tile);
 		tiles.add(tile);
 		
-		tile = new Tile(24, EdgeType.GAMETRAIL, EdgeType.LAKE, EdgeType.GAMETRAIL, EdgeType.LAKE);
+		tile = new Tile(tileX, 24, EdgeType.GAMETRAIL, EdgeType.LAKE, EdgeType.GAMETRAIL, EdgeType.LAKE);
 		for(int i = 0; i < 3; i++)
 		{
 			tiles.add(tile);
 		}
 		
-		tile = new Tile(25, EdgeType.GAMETRAIL, EdgeType.LAKE, EdgeType.GAMETRAIL, EdgeType.LAKE);
+		tile = new Tile(tileY, 25, EdgeType.GAMETRAIL, EdgeType.LAKE, EdgeType.GAMETRAIL, EdgeType.LAKE);
 		tiles.add(tile);
 		tiles.add(tile);
 		
-		tile = new Tile(26, EdgeType.LAKE, EdgeType.GAMETRAIL, EdgeType.JUNGLE, EdgeType.JUNGLE);
+		tile = new Tile(tileZ, 26, EdgeType.LAKE, EdgeType.GAMETRAIL, EdgeType.JUNGLE, EdgeType.JUNGLE);
 		tile.setRoadEnd();
 		tiles.add(tile);
 		
-		tile = new Tile(26, EdgeType.LAKE, EdgeType.GAMETRAIL, EdgeType.JUNGLE, EdgeType.JUNGLE);
+		tile = new Tile(tileZZ, 27, EdgeType.LAKE, EdgeType.GAMETRAIL, EdgeType.JUNGLE, EdgeType.JUNGLE);
 		tile.setRoadEnd();
 		tiles.add(tile);
 		tiles.add(tile);
@@ -567,13 +599,13 @@ public class Board {
 				if(gameBoard.board[i][j] == null)
 				{
 					JLabel j28 = new JLabel();
-					j28.setIcon(new ImageIcon("C:/Users/Skyler/Pictures/Screenshots/Carcassonne Tiles/Tile28.png"));
+					j28.setIcon(new ImageIcon("C:/Users/Skyler/Pictures/Screenshots/CarcassonneTiles/Tile28.png"));
 					jp.add(j28);
 				}
 				else
 				{
 					JLabel j1 = new JLabel();
-					ImageIcon II = new ImageIcon("C:/Users/Skyler/Pictures/Screenshots/Carcassonne Tiles/Tile"+Integer.toString(gameBoard.board[i][j].getType()) + "." + Integer.toString(gameBoard.board[i][j].getDegrees()) + ".png");
+					ImageIcon II = new ImageIcon("C:/Users/Skyler/Pictures/Screenshots/CarcassonneTiles/Tile"+Integer.toString(gameBoard.board[i][j].getType()) + "." + Integer.toString(gameBoard.board[i][j].getDegrees()) + ".png");
 					Image image = II.getImage(); // transform it 
 					Image newimg = image.getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
 					II = new ImageIcon(newimg);

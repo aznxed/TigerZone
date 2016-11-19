@@ -12,7 +12,7 @@ public class Tile {
 	// Each tile has the corrds
 	// of where its at on the board
 	
-	private int[][] arr= new int[3][3]; //constructs the points we need
+	private int[][] arr = new int[3][3]; //constructs the points we need
 	
 	private int row;
 	private int col;
@@ -34,8 +34,9 @@ public class Tile {
 	private boolean roadEnd;
 	
 	
-	public Tile(int type, EdgeType topEdge, EdgeType bottomEdge, EdgeType leftEdge, EdgeType rightEdge)
+	public Tile(int[][] arr, int type, EdgeType topEdge, EdgeType bottomEdge, EdgeType leftEdge, EdgeType rightEdge)
 	{
+		this.arr = arr;
 		this.type = type;
 		this.topEdge = topEdge;
 		this.bottomEdge = bottomEdge;
@@ -44,8 +45,9 @@ public class Tile {
 		this.roadEnd = false;
 	}
 	
-	public Tile(int type, int row, int col, EdgeType topEdge, EdgeType bottomEdge, EdgeType leftEdge, EdgeType rightEdge)
+	public Tile(int[][] arr, int type, int row, int col, EdgeType topEdge, EdgeType bottomEdge, EdgeType leftEdge, EdgeType rightEdge)
 	{
+		this.arr = arr;
 		this.type = type;
 		this.row = row;
 		this.col = col;
@@ -56,8 +58,9 @@ public class Tile {
 		this.roadEnd = false;
 	}
 	
-	public Tile(int type, int degrees, int row, int col, EdgeType topEdge, EdgeType bottomEdge, EdgeType leftEdge, EdgeType rightEdge)
+	public Tile(int[][] arr, int type, int degrees, int row, int col, EdgeType topEdge, EdgeType bottomEdge, EdgeType leftEdge, EdgeType rightEdge)
 	{
+		this.arr = arr;
 		this.type = type;
 		this.degrees = degrees;
 		this.row = row;
@@ -67,6 +70,16 @@ public class Tile {
 		this.leftEdge = leftEdge;
 		this.rightEdge = rightEdge;
 		this.roadEnd = false;
+	}
+	
+	public int[][] getArr()
+	{
+		return arr;
+	}
+	
+	public void setArr(int[][] arr)
+	{
+		this.arr = arr;
 	}
 	
 	public int getType()
