@@ -13,23 +13,29 @@ public class Board {
 
 	private Tile[][] board = new Tile[MAX_ROWS][MAX_COLS];
 
-	public boolean isValid(int x, int y, Tile tile) {
+	//TODO: Add rotation when placing tile
+	public boolean placeTile(int x, int y, Tile tile) {
+		//Center is empty, place tile
 		if (getCenterTile() == null) {
 			board[CENTER_CELL][CENTER_CELL] = tile;
 			return true;
 		} 
 		
-		//Tile already placed there
+		//Tile at X,Y
 		if(board[x][y] != null){
 			return false;
 		}
 		
+		//Check if Sides are invalid
 		List<Tile> nbors = getNeighbors(x, y);
 		
+		//No neighbors
 		if(nbors.isEmpty()){
 			return false;
 		}
 		
+		//TODO: Find better way of checking matching sides
+		//Check if neighbor sides match
 		for(int i = 0; i < nbors.size(); i++){
 			Tile nTile = nbors.get(i);
 			
@@ -55,21 +61,16 @@ public class Board {
 					continue; 
 				}
 			}
-			
-			
-			
-			
 		}
-		
-		
-		
 		return true;
 	}
 
+	//TODO: Do we need this?
 	public Tile getCenterTile() {
 		return board[CENTER_CELL][CENTER_CELL];
 	}
 
+	//Set board values to NULL
 	public void clearBoard() {
 
 		for (int x = 0; x < MAX_ROWS; x++) {
@@ -112,7 +113,7 @@ public class Board {
 	}
 	
 	public boolean addTile(int x, int y, Tile tile){
-		if(isValid(x, y, tile)){
+		if(placeTile(x, y, tile)){
 			//add tile to board
 			//give tile coords
 			return true;
