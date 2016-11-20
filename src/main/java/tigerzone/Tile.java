@@ -4,7 +4,6 @@ enum EdgeType {
 	ROAD, FIELD, CITY
 }
 
-
 public class Tile {
 
 	// Each tile has the cords
