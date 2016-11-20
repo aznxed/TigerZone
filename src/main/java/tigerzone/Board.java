@@ -10,7 +10,7 @@ public class Board {
 	public static int MAX_ROWS = TILE_NUM * 2 - 1;
 	public static int MAX_COLS = TILE_NUM * 2 - 1;
 
-	public static int CENTER_CELL = TILE_NUM;
+	public static int CENTER_TILE = TILE_NUM;
 
 	private Tile[][] board = new Tile[MAX_ROWS][MAX_COLS];
 
@@ -67,7 +67,7 @@ public class Board {
 
 	//TODO: Do we need this?
 	public Tile getCenterTile() {
-		return board[CENTER_CELL][CENTER_CELL];
+		return board[CENTER_TILE][CENTER_TILE];
 	}
 
 	//Set board values to NULL
@@ -117,23 +117,10 @@ public class Board {
 		if(isValid(x, y, tile)){
 			//TODO: Needs rotation
 			//Place tile
-			board[CENTER_CELL][CENTER_CELL] = tile;
+			board[CENTER_TILE][CENTER_TILE] = tile;
 			return true;
 		}
 		return false;
-	}
-
-	public static void main(String[] args) {
-		System.out.println(MAX_ROWS / 2 + 1);
-		
-		Tile tile1 = new Tile();
-		Tile tile2 = new Tile();
-		
-		tile1.setTopEdge(EdgeType.FIELD);
-		tile2.setTopEdge(EdgeType.FIELD);
-		
-		System.out.println(tile1.getTopEdge() == tile2.getTopEdge());
-		
 	}
 
 }
