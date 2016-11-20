@@ -15,10 +15,9 @@ public class Board {
 	private Tile[][] board = new Tile[MAX_ROWS][MAX_COLS];
 
 	//TODO: Add rotation when placing tile
-	public boolean placeTile(int x, int y, Tile tile) {
+	public boolean isValid(int x, int y, Tile tile) {
 		//Center is empty, place tile
 		if (getCenterTile() == null) {
-			board[CENTER_CELL][CENTER_CELL] = tile;
 			return true;
 		} 
 		
@@ -114,9 +113,11 @@ public class Board {
 	}
 	
 	public boolean addTile(int x, int y, Tile tile){
-		if(placeTile(x, y, tile)){
-			//add tile to board
-			//give tile coords
+		//Check if valid placement
+		if(isValid(x, y, tile)){
+			//TODO: Needs rotation
+			//Place tile
+			board[CENTER_CELL][CENTER_CELL] = tile;
 			return true;
 		}
 		return false;
