@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Board {
 
+	//Changes
 	public static int TILE_NUM = 77;
 	public static int MAX_ROWS = 143;
 	public static int MAX_COLS = 143;
