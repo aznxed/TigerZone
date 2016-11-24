@@ -4,6 +4,7 @@ package tigerzone;
 public class startGame {
 	public String playerName = "Tigger";
 	public String serverPassword = "PersiaRocks!";
+	public int number1 = 1;
 	
 	public static void main(String[] args) {
 		
@@ -25,7 +26,8 @@ public class startGame {
 		
 		System.out.println(Board.CENTER_TILE);
 		
-		//Initialize AIs
+		//Initialize Sockets
+		tcpClient tcpClient = new tcpClient();
 		
 	}
 }
