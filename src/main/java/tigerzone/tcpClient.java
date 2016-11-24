@@ -29,7 +29,7 @@ public class tcpClient {
 	
 			//Initiate conversation with client by writing to the socket
 			//Create object that keeps track of the current joke, the current state within the joke
-			tcpProtocol tcpP = new tcpProtocol();
+			tigerzoneClientProtocol tcpP = new tigerzoneClientProtocol();
 			//Get the first message that the server sends to the client
 			outputLine = tcpP.processInput(null);
 			//Write the information to the client socket, therefore sending the message to the client
