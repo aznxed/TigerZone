@@ -28,9 +28,9 @@ public class tcpServer {
 	
 			//Initiate conversation with client by writing to the socket
 			//Create object that keeps track of the current joke, the current state within the joke
-			KnockKnockProtocol kkp = new KnockKnockProtocol();
+			tigerzoneServerProtocol serverp = new tigerzoneServerProtocol();
 			//Get the first message that the server sends to the client
-			outputLine = kkp.processInput(null);
+			outputLine = serverp.processInput(null);
 			//Write the information to the client socket, therefore sending the message to the client
 			out.println(outputLine);
 			
@@ -41,7 +41,7 @@ public class tcpServer {
 			//the client responds by writing to its output stream
 			while ((inputLine = in.readLine()) != null) {
 				//ask the KnockKnockProtocol for a suitable reply
-				outputLine = kkp.processInput(inputLine);
+				outputLine = serverp.processInput(inputLine);
 				//send reply
 				out.println(outputLine);
 				//if reply is bye then quit the loop

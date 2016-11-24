@@ -5,14 +5,15 @@ import java.io.*;
 
 public class tcpClient {
 	public static void main(String[] args) throws IOException {
-		
+		/*
 		if (args.length != 1) {
 			System.err.println("Usage: java tcpServer <port number>");
 			System.exit(1);
 		}
 		
 		//portNumber is specified in first command line argument
-		int portNumber = Integer.parseInt(args[0]);
+		int portNumber = Integer.parseInt(args[0]);*/
+		int portNumber = 4444;
 		
 		//TODO: Do I need to support multiple clients? 
 		try (
@@ -28,9 +29,9 @@ public class tcpClient {
 	
 			//Initiate conversation with client by writing to the socket
 			//Create object that keeps track of the current joke, the current state within the joke
-			KnockKnockProtocol kkp = new KnockKnockProtocol();
+			tcpProtocol tcpP = new tcpProtocol();
 			//Get the first message that the server sends to the client
-			outputLine = kkp.processInput(null);
+			outputLine = tcpP.processInput(null);
 			//Write the information to the client socket, therefore sending the message to the client
 			out.println(outputLine);
 			
@@ -41,7 +42,7 @@ public class tcpClient {
 			//the client responds by writing to its output stream
 			while ((inputLine = in.readLine()) != null) {
 				//ask the KnockKnockProtocol for a suitable reply
-				outputLine = kkp.processInput(inputLine);
+				outputLine = tcpP.processInput(inputLine);
 				//send reply
 				out.println(outputLine);
 				//if reply is bye then quit the loop
