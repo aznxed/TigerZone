@@ -37,7 +37,8 @@ public class tigerzoneClientProtocol {
             if (theInput.equals("HELLO!")) {
                 theOutput = "I AM " + playerName + " " + playerPassword;
                 state = SentName;
-            } else {
+            } 
+            else {
                 theOutput = "Error Invalid Message Hello";
             }
         }

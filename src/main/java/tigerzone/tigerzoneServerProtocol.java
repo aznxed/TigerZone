@@ -62,7 +62,7 @@ public class tigerzoneServerProtocol {
         //Get player id and player password
         else if (state == SentHello) {
         	String[] split = theInput.split(" ");
-            if (split[0].equals("I") && split[1].equals("am")) {
+            if (split[0].equals("I") && split[1].equals("AM")) {
             	//TODO: Check if player ID and password are correct
             	if (true) {
                 theOutput = "WELCOME " + split[2] + " PLEASE WAIT FOR THE NEXT CHALLENGE";
