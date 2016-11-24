@@ -1,6 +1,10 @@
 package tigerzone;
 
+
 public class startGame {
+	public String playerName = "Tigger";
+	public String serverPassword = "PersiaRocks!";
+	
 	public static void main(String[] args) {
 		
 		//Used for how many boards and AI that need to be made. 
