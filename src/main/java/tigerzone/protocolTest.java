@@ -20,11 +20,11 @@ public class protocolTest {
 		while (!stop) {
 			//sOut = serverP.processInput(bOut);
 			//System.out.println("ServerB: " + sOut);
-			aOut = playerA.processInput(sOut);
+			aOut = playerA.readLine(sOut);
 			System.out.println("PlayerA: " + aOut);
 			sOut = serverP.processInput(aOut);
 			System.out.println("ServerA: " + sOut);
-			//bOut = playerB.processInput(sOut);
+			//bOut = playerB.readLine(sOut);
 			//System.out.println("PlayerB: " + bOut);
 			if (sOut.equals("Bye.")) {
 				break;

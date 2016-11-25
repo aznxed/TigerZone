@@ -23,7 +23,7 @@ public class tigerzoneClientProtocol {
     private int matchTotal = -1;
     private String opponent = "";
 
-    public String processInput(String theInput) {
+    public String readLine(String theInput) {
         String theOutput = null;
 
         if (state == WAITING) {

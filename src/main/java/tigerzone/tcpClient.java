@@ -5,54 +5,54 @@ import java.io.*;
 
 public class tcpClient {
 	public static void main(String[] args) throws IOException {
-		/*
-		if (args.length != 1) {
-			System.err.println("Usage: java tcpServer <port number>");
-			System.exit(1);
-		}
 		
-		//portNumber is specified in first command line argument
-		int portNumber = Integer.parseInt(args[0]);*/
-		int portNumber = 4444;
+		String hostName;
+		int portNumber;
 		
-		//TODO: Do I need to support multiple clients? 
-		try (
-			//Create ServerSocket object to listen on port portNumber
-			ServerSocket serverSocket = new ServerSocket(portNumber);
-			//Accept a connection from client and create a socket object on the port
-			Socket clientSocket = serverSocket.accept();
-			//Get socket's input and output streams and open readers and writers on them
-			PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-			BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-		) {
-			String inputLine, outputLine;
-	
-			//Initiate conversation with client by writing to the socket
-			//Create object that keeps track of the current joke, the current state within the joke
-			tigerzoneClientProtocol tcpP = new tigerzoneClientProtocol();
-			//Get the first message that the server sends to the client
-			outputLine = tcpP.processInput(null);
-			//Write the information to the client socket, therefore sending the message to the client
-			out.println(outputLine);
-			
-			//Communicate with the client by reading from and writing to the socket
-			//while the client and server still have something to say to each other
-			//read and write to the socket
-			//while loop iterates on the read from the input stream until
-			//the client responds by writing to its output stream
-			while ((inputLine = in.readLine()) != null) {
-				//ask the KnockKnockProtocol for a suitable reply
-				outputLine = tcpP.processInput(inputLine);
-				//send reply
-				out.println(outputLine);
-				//if reply is bye then quit the loop
-				//java runtime automatically closes the input and output streams, the
-				//client socket and server socket because it was created in the try-with-
-				//resources statement
-				if (outputLine.equals("Bye."))
-					break;
+		if (false) {
+			if (args.length != 2) {
+			    System.err.println(
+			        "Usage: java EchoClient <host name> <port number>");
+			    System.exit(1);
 			}
 			
+			hostName = args[0];
+			portNumber = Integer.parseInt(args[1]);
+		}
+		else {
+				//TODO: Host name is unknown
+				hostName = "tigerzoneServer";
+				portNumber = 10;
+		}
+		
+		try (
+		    Socket tzSocket = new Socket(hostName, portNumber);
+		    PrintWriter out = new PrintWriter(tzSocket.getOutputStream(), true);
+		    BufferedReader in = new BufferedReader(new InputStreamReader(tzSocket.getInputStream()));
+		) {
+		    BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
+		    String serverMessage;
+		    String userMessage;
+		
+		    while ((serverMessage = in.readLine()) != null) {
+		        System.out.println("Server: " + serverMessage);
+		        if (serverMessage.equals("Bye."))
+		            break;
+		        
+		        userMessage = stdIn.readLine();
+		        if (userMessage != null) {
+		            System.out.println("User: " + userMessage);
+		            out.println(userMessage);
+		        }
+		    }
+		//Unknown host
+		} catch (UnknownHostException e) {
+		    System.err.println("Don't know about host " + hostName);
+		    System.exit(1);
+		} catch (IOException e) {
+		    System.err.println("Couldn't get I/O for the connection to " +
+		        hostName);
+		    System.exit(1);
 		}
 	}
 }

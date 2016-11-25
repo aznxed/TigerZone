@@ -23,6 +23,7 @@ public class tigerzoneServerProtocol {
     private static final int SentEndConnection = 23;
     
     private int state = WAITING;
+    private int connectedPlayers = 0;
     
     //TODO: MAKE non constant
     private int challengeNum = 1;
