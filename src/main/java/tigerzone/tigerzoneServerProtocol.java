@@ -32,11 +32,30 @@ public class tigerzoneServerProtocol {
     private int roundTotal = 1;
     private int moveTime = 1;
     private boolean gameOver = false;
-    
+
+	private int timeToMatch = 15;
     private String tourPassword = "PersiaRocks!";
     private String playPassword = "Obiwan77";
+	private String startingTile = "TLTJ-";
 	private String tileString = "TLTTP LJTJ- JLJL- JJTJX LTTJB TLLT-";
 	private String[] deck = tileString.split(" ");
+	private int moveNum = 0;
+	
+	//Used for sending current game
+	private boolean gameID = false;
+	
+	bot serverBot = new bot();
+	
+	public String moveMess(String gID, int time, int num, String tiles){
+		String mess = "";
+    	if (moveTime > 1){
+    		mess = "MAKE YOUR MOVE IN GAME " + gID + " WITHIN " + time + " SECONDS: MOVE " + num + " PLACE " + tiles;
+    	}
+    	else {
+    		mess = "MAKE YOUR MOVE IN GAME " + gID + " WITHIN " + time + " SECOND: MOVE " + num + " PLACE " + tiles;
+    	}
+    	return mess;
+	}
     
     public String processInput(String theInput) {
         String theOutput = null;
@@ -101,22 +120,24 @@ public class tigerzoneServerProtocol {
         //Send starting tile
         else if (state == SentOpponent) {
         	//TODO: Make non-constant
-        	String startingTile = "TLTJ-";
         	int xPos = 0;
         	int yPos = 0;
         	int rot = 0;
             theOutput = "STARTING TILE IS " + startingTile + " AT " + xPos + " " + yPos + " " + rot;
+            //Initialize board and place first for serverBot
+            serverBot.initBoards();
+            serverBot.firstTile(startingTile, xPos, yPos, rot);
             state = SentStartTile;
         }
         else if (state == SentStartTile) {
-        	//TODO: Make non-constant
             theOutput = "REMAINING " + deck.length + " TILES ARE [ " + tileString + " ]";
             state = SentRemainingTiles;
         }
         //Send time till match starts
         else if (state == SentRemainingTiles) {
         	//TODO: Make non-constant
-        	int timeToMatch = 15;
+        	moveNum = 0;
+            gameID = false;
         	if (timeToMatch > 1){
         		theOutput = "MATCH BEGINS IN " + timeToMatch + " SECONDS";
         	}
@@ -125,29 +146,27 @@ public class tigerzoneServerProtocol {
         	}
             state = SentMatchBeginTime;
         }
-        //Send move request
-        //TODO: Set timer for response
+        //Send move request to player
         else if (state == SentMatchBeginTime) {
         	//TODO: Make non-constant
-        	String gameID = "A";
-        	int moveNum = 1;
-        	String tile = "TLTTP";
-        	if (moveTime > 1){
-        		theOutput = "MAKE YOUR MOVE IN GAME " + gameID + " WITHIN " + moveTime + " SECONDS: MOVE " + moveNum + " PLACE " + tile;
-        	}
-        	else {
-        		theOutput = "MAKE YOUR MOVE IN GAME " + gameID + " WITHIN " + moveTime + " SECOND: MOVE " + moveNum + " PLACE " + tile;
-        	}
+            //TODO: Set timer for response
+        	String tile = deck[moveNum];
+        	//Send Move to player
+        	move PlayerMove = moveMess((gameID ? "A" : "B"), moveTime, moveNum, tile);
+        	theOutput = 
+        	//Send Move to bot
+        	move botMove = new move();
+        	move botMove = serverBot.makeMove((gameID ? "B" : "A"), moveTime, tile);
+        	
+        	moveNum++;
             state = SentMakeAMove;
         }
-        //Send Player Made a Move
+        //Send Move Opponent Made
         else if (state == SentMakeAMove) {
         	//TODO: Make non-constant
-        	int tilesLeft = 6;
-        	String gameID = "Z";
-        	String playerID = "BLARG";
+        	String botID = "BLARG";
         	int moveNum = 0;
-        	theOutput = "GAME " + gameID + " MOVE " + moveNum + " PLAYER " + playerID + " ";
+        	theOutput = "GAME " + gameID + " MOVE " + moveNum + " PLAYER " + botID + " ";
         	if (true) {
             	String[] split = theInput.split(" ");
         		theOutput = theOutput + split[5] + " AT " + split[7] + " " + split[8] + " " + split[9] + " TIGER " + split[11];
