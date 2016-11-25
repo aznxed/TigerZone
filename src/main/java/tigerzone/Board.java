@@ -473,7 +473,7 @@ public class Board {
 																											// top
 																											// side
 		TerrainType[] tileJ = { TerrainType.JUNGLE, TerrainType.LAKE, TerrainType.LAKE, TerrainType.JUNGLE,
-				TerrainType.JUNGLE, TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE }; // 5:no:
+				TerrainType.LAKE, TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE }; // 5:no:
 																													// diagonal
 																													// tile
 																													// bottom
@@ -574,7 +574,7 @@ public class Board {
 																													// with
 																													// boar
 		TerrainType[] tileX = { TerrainType.JUNGLE, TerrainType.GAMETRAIL, TerrainType.JUNGLE, TerrainType.GAMETRAIL,
-				TerrainType.GAMETRAIL, TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.LAKE, TerrainType.LAKE }; // 3:no:
+				TerrainType.LAKE, TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.LAKE, TerrainType.LAKE }; // 3:no:
 																													// road
 																													// goues
 																													// left
@@ -585,7 +585,7 @@ public class Board {
 																													// &
 																													// Botom
 		TerrainType[] tileY = { TerrainType.JUNGLE, TerrainType.GAMETRAIL, TerrainType.JUNGLE, TerrainType.GAMETRAIL,
-				TerrainType.GAMETRAIL, TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.LAKE, TerrainType.LAKE }; // 2:yes:
+				TerrainType.LAKE, TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.LAKE, TerrainType.LAKE }; // 2:yes:
 																													// same
 																													// as
 																													// above
@@ -597,9 +597,11 @@ public class Board {
 				TerrainType.JUNGLE }; // 1:no city Top road B field L field R
 		TerrainType[] tileZZ = { TerrainType.JUNGLE, TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.JUNGLE,
 				TerrainType.END, TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.GAMETRAIL, TerrainType.JUNGLE };// 2:yes:see
-																														// above
+								// above
+		
+		//CROCODILE TILE, I need middle to be LAKE
 		TerrainType[] tileZZZ = { TerrainType.JUNGLE, TerrainType.GAMETRAIL, TerrainType.JUNGLE, TerrainType.LAKE,
-				TerrainType.CROCODILE, TerrainType.LAKE, TerrainType.LAKE, TerrainType.LAKE, TerrainType.LAKE };
+				TerrainType.LAKE, TerrainType.LAKE, TerrainType.LAKE, TerrainType.LAKE, TerrainType.LAKE };
 
 		Tile startTile = new Tile(tileS, 19, 0, CENTER_CELL, CENTER_CELL);
 		board[CENTER_CELL][CENTER_CELL] = startTile;

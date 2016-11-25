@@ -80,44 +80,50 @@ public class Tile {
 		return (trailEdgeCount > 2 || trailEdgeCount == 1);
 	}
 
-	public void addTrail(List<List<Tile>> trails, List<Tile> trail) {
+	/**
+	 * Add a list to a list of lists, but only if it does not already exist in
+	 * the list of lists
+	 * 
+	 * @param lists
+	 * @param list
+	 */
+	public void addDistinctList(List<List<Tile>> lists, List<Tile> list) {
 
-		// Don't want to add empty tiles to the list
-		if (trail.size() == 1) {
+		// Don't want to add empty lists
+		if (list.size() == 1) {
 			return;
 		}
 
-		// If there are no existing trails, then add the trail to the list
-		if (trails.isEmpty()) {
-			trails.add(trail);
+		// If there are no existing lists, then add the list
+		if (lists.isEmpty()) {
+			lists.add(list);
 			return;
 		}
 
-		// Add the passed in trail to a set
-		Set<Tile> inSet = new HashSet<Tile>(trail);
+		// Create a set from the passed in list
+		Set<Tile> inSet = new HashSet<Tile>(list);
 
-		// Go through each trail in the trails list
-		for (List<Tile> lTrail : trails) {
-			// If the two trails are of different size, we know they
-			// are two different trails, continue
-			if (lTrail.size() != trail.size()) {
+		// Go through each list in the list of lists
+		for (List<Tile> lList : lists) {
+			// If the two lists are of different size, we know they
+			// are two different lists, continue
+			if (lList.size() != list.size()) {
 				continue;
 			}
 
 			// Else they're the same size and could possibly be the
-			// same trail (loop)
-			// Create a new set and add the lTrail elements to it
-			Set<Tile> tSet = new HashSet<Tile>(lTrail);
-			// If the elements in both trails are the same, they are the
-			// same trail, so return
+			// same list (loop)
+			// Create a new set from the lList elements
+			Set<Tile> tSet = new HashSet<Tile>(lList);
+			// If the elements in both lists are the same, they are the
+			// same list, so return
 			if (tSet.equals(inSet)) {
 				return;
 			}
-
 		}
 
-		// They are all different trails, so it's safe to add it to the list
-		trails.add(trail);
+		// They are all different lists, so it's safe to add it to the list
+		lists.add(list);
 
 	}
 
@@ -178,7 +184,7 @@ public class Tile {
 		List<List<Tile>> uniqueTrails = new ArrayList<List<Tile>>();
 
 		for (List<Tile> originalTrail : trails) {
-			addTrail(uniqueTrails, originalTrail);
+			addDistinctList(uniqueTrails, originalTrail);
 		}
 
 		// set score to trailCount - the number of trails emanating from tile.
@@ -220,19 +226,19 @@ public class Tile {
 		return score;
 	}
 
-	//Get the score if this is a den tile
-	//Return 0 if it's not a den
+	// Get the score if this is a den tile
+	// Return 0 if it's not a den
 	public int getDenScore() {
 		int score = 0;
 
-		//If this is not a den tile, just return
+		// If this is not a den tile, just return
 		if (!this.isDen()) {
 			return score;
 		}
-		
-		//Else get all its possible 8 neighbors
+
+		// Else get all its possible 8 neighbors
 		List<Tile> neighbors = this.getBoard().getDenNeighbors(this.getRow(), this.getCol());
-		//Return the size of that list plus one to include itself
+		// Return the size of that list plus one to include itself
 		return neighbors.size() + 1;
 	}
 
@@ -391,6 +397,213 @@ public class Tile {
 		return false;
 	}
 
+	public int getLakeScore() {
+
+		int score = 0;
+
+		if (!isLake()) {
+			return score;
+		}
+
+		List<List<Tile>> lakes = new ArrayList<List<Tile>>();
+		List<Tile> lake;
+
+		if (this.getTopEdge() == TerrainType.LAKE) {
+			this.getBoard().clearVisited();
+			this.setVisited(true);
+			lake = new ArrayList<Tile>();
+			lake.add(this);
+			isLakeComplete(lake, getBoard().getTile(row + 1, col));
+			lakes.add(lake);
+		}
+		if (this.getBottomEdge() == TerrainType.LAKE) {
+			this.getBoard().clearVisited();
+			this.setVisited(true);
+			lake = new ArrayList<Tile>();
+			lake.add(this);
+			isRoadComplete(lake, getBoard().getTile(row - 1, col));
+			lakes.add(lake);
+		}
+		if (this.getRightEdge() == TerrainType.LAKE) {
+			this.getBoard().clearVisited();
+			this.setVisited(true);
+			lake = new ArrayList<Tile>();
+			lake.add(this);
+			isRoadComplete(lake, getBoard().getTile(row, col + 1));
+			lakes.add(lake);
+		}
+		if (this.getLeftEdge() == TerrainType.LAKE) {
+			this.getBoard().clearVisited();
+			this.setVisited(true);
+			lake = new ArrayList<Tile>();
+			lake.add(this);
+			isRoadComplete(lake, getBoard().getTile(row, col - 1));
+			lakes.add(lake);
+		}
+
+		// Filtered list of lakes based on the original lakes list
+		// We'll be using addDistinctList() to filter out any duplicates and
+		// non-existent lakes (lakes of only size 1)
+		List<List<Tile>> uniqueLakes = new ArrayList<List<Tile>>();
+
+		for (List<Tile> originalLake : lakes) {
+			addDistinctList(uniqueLakes, originalLake);
+		}
+
+		boolean lakeComplete = true;
+		if (this.isLakeCenter()) {
+			for (List<Tile> l : uniqueLakes) {
+				Tile startTile = l.get(0);
+				Tile endTile = l.get(l.size() - 1);
+				if (!endTile.isLakeCenter()) {
+					lakeComplete = false;
+				}
+				if (startTile != endTile) {
+					score += l.size();
+				} else {
+					score += l.size() - 1;
+				}
+			}
+			if (lakeComplete) {
+				score *= 2;
+			}
+			return (score == 0) ? 1 : score;			
+		}
+
+		for (List<Tile> l : uniqueLakes) {
+			lakeComplete = true;
+			Tile startTile = l.get(0);
+			Tile endTile = l.get(l.size() - 1);
+			if (!endTile.isLakeCenter()) {
+				lakeComplete = false;
+			}
+			if (startTile != endTile) {
+				score += l.size();
+			} else {
+				score += l.size() - 1;
+			}
+			if (lakeComplete) {
+				score *= 2;
+			}
+		}
+		return score;
+
+	}
+
+	public static boolean isLakeComplete(List<Tile> lake, Tile current) {
+
+		// do nothing if there is no current tile
+		if (current == null) {
+			return false;
+		}
+
+		// record from where we came
+		Tile previous = lake.get(lake.size() - 1);
+
+		// add this current tile to the lake
+		lake.add(current);
+
+		// if there is no lake in the middle, then the lake cannot continiue and
+		// is complete
+		if (!current.isLakeCenter()) {
+			return true;
+		}
+
+		// since there is a lake in the center, we should be able to advance the
+		// lake
+
+		// if this current tile was previously visited, then the lake has
+		// looped and its complete
+		if (current.isVisited()) {
+			return true;
+		}
+
+		// mark current tile as being visited
+		current.setVisited(true);
+
+		// get the neighbors for this current tile
+		List<Tile> neighbors = current.getBoard().getNeighbors(current.getRow(), current.getCol());
+
+		boolean completed;
+
+		// Iterate through the neighbors that allow the lake to continue; i.e.,
+		// find those neighboring tiles that share a lake edge
+		for (Tile neighbor : neighbors) {
+
+			// can't go back from where we came
+			if (neighbor == previous) {
+				continue;
+			}
+
+			// Check if neighbor is in same row
+			if (neighbor.getRow() == current.getRow()) {
+				if (neighbor.getCol() > current.getCol()) {
+					// This is right neighbor - is there a lake
+					// leading to that neighbor?
+					if (current.getRightEdge() == TerrainType.LAKE) {
+						// yes, so follow that lake
+						completed = isLakeComplete(lake, neighbor);
+						// return true if the lake completed
+						if (completed == false) {
+							return false;
+						}
+						// move on to next neighbor
+					}
+				} else {
+					// This is left neighbor- is there a trail
+					// leading to that neighbor?
+					if (current.getLeftEdge() == TerrainType.LAKE) {
+						completed = isLakeComplete(lake, neighbor);
+						if (completed == false) {
+							return false;
+						}
+					}
+				}
+			}
+
+			// If not in the same row, it must be in the same column
+			if (neighbor.getCol() == current.getCol()) {
+				if (neighbor.getRow() > current.getRow()) {
+					// This is bottom neighbor - is there a lake
+					// leading to that neighbor
+					if (current.getBottomEdge() == TerrainType.LAKE) {
+						completed = isLakeComplete(lake, neighbor);
+						if (completed == false) {
+							return false;
+						}
+					}
+
+				} else {
+					if (current.getTopEdge() == TerrainType.LAKE) {
+						// This is top neighbor - is there a lake
+						// leading to that neighbor
+						completed = isLakeComplete(lake, neighbor);
+						if (completed == false) {
+							return false;
+						}
+					}
+				}
+			}
+		}
+
+		// the lake never completed.
+		return true;
+	}
+
+	// Checks if tile contains a lake
+	public boolean isLake() {
+		if (this.isLakeCenter()) {
+			return true;
+		}
+
+		if (this.getLeftEdge() == TerrainType.LAKE || this.getRightEdge() == TerrainType.LAKE
+				|| this.getTopEdge() == TerrainType.LAKE || this.getBottomEdge() == TerrainType.LAKE) {
+			return true;
+		}
+
+		return false;
+	}
+
 	public TerrainType[] getTilePortionType() {
 		return tilePortionType;
 	}
@@ -449,6 +662,10 @@ public class Tile {
 
 	public boolean isDen() {
 		return tilePortionType[4] == TerrainType.DEN;
+	}
+
+	public boolean isLakeCenter() {
+		return tilePortionType[4] == TerrainType.LAKE;
 	}
 
 	public String getCode() {
