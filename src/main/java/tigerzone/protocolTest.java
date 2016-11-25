@@ -18,17 +18,15 @@ public class protocolTest {
 		tigerzoneClientProtocol playerB = new tigerzoneClientProtocol();
 		
 		while (!stop) {
-			//sOut = serverP.processInput(bOut);
-			//System.out.println("ServerB: " + sOut);
 			aOut = playerA.processMessage(sOut);
 			System.out.println("PlayerA: " + aOut);
 			sOut = serverP.processInput(aOut);
 			System.out.println("ServerA: " + sOut);
-			//bOut = playerB.readLine(sOut);
-			//System.out.println("PlayerB: " + bOut);
-			if (sOut.equals("Bye.")) {
-				break;
-			}
+			try {
+				if (aOut.equals("Bye.")) {
+					break;
+				}
+			} catch (Exception ex){}
 		}
 	}
 }

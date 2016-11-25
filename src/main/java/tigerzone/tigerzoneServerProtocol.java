@@ -46,7 +46,7 @@ public class tigerzoneServerProtocol {
 	private String currentTile = "";
 	
 	//Used for sending current game
-	private boolean gameID = false;
+	private boolean gameID = true;
 	
 	bot serverBot = new bot();
 	
@@ -140,8 +140,8 @@ public class tigerzoneServerProtocol {
         //Send time till match starts
         else if (state == SentRemainingTiles) {
         	//TODO: Make non-constant
-        	moveNum = 0;
-            gameID = false;
+        	moveNum = 1;
+            gameID = true;
         	if (timeToMatch > 1){
         		theOutput = "MATCH BEGINS IN " + timeToMatch + " SECONDS";
         	}
@@ -154,12 +154,11 @@ public class tigerzoneServerProtocol {
         else if (state == SentMatchBeginTime) {
         	//TODO: Make non-constant
             //TODO: Set timer for response
-        	currentTile = deck[moveNum];
+        	currentTile = deck[moveNum - 1];
         	//Send Move to player
         	theOutput = moveMess((gameID ? "A" : "B"), moveTime, moveNum, currentTile);
         	//Send Move to bot
         	botMove = serverBot.makeMove((gameID ? "B" : "A"), moveTime, currentTile);
-        	moveNum++;
             state = SentMakeAMove;
         }
         //Send Move Opponent Made
@@ -196,8 +195,9 @@ public class tigerzoneServerProtocol {
         	else if (true) {
         	theOutput = theOutput + "FORFEITED: ILLEGAL MESSAGE RECEIVED";
         	}*/
-        	if (!gameOver){
+        	if (deck.length > moveNum){
         		state = SentMatchBeginTime;
+            	moveNum++;
         	}
         	else {
         		state = SentMoveMade;

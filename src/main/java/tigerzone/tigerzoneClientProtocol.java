@@ -31,6 +31,7 @@ public class tigerzoneClientProtocol {
     private int matchTotal = -1;
     private String opponent = "";
     private int gamesOver = 0;
+    private move playerMove;
     
     bot bot = new bot();
 
@@ -114,17 +115,13 @@ public class tigerzoneClientProtocol {
         else if (state == MakeAMove) {
         	String[] split = theInput.split(" ");
         	if (split[0].equals("MAKE")) {
-        		//TODO: makeMove will not output a string
-        		/*
-        		theOutput = bot.makeMove(split[5], Integer.valueOf(split[7]), split[12]);
+        		//player needs to make a move
+            	playerMove = bot.makeMove(split[5], Integer.valueOf(split[7]), split[12]);
         		theOutput = "Game " + split[5] + " MOVE " + split[10] + " PLACE " + split[12]
-        						+ " AT " + x + " " + y + " " + rot;
-        		//Added meeple if necessary
-        		if(false){
-        			theOutput = theOutput + " " + meep + " " + meepPos;
-        		}*/
-        		theOutput = "Game " + split[5] + " MOVE " + split[10] + " PLACE " + split[12]
-						+ " AT " + 999 + " " + 999 + " " + 0;
+						+ " AT " + playerMove.xPos + " " + playerMove.yPos + " " + playerMove.rot;
+            	if(!(playerMove.meep).equals("")){
+            		theOutput = theOutput + " " + playerMove.meep + " " + playerMove.meepPos;
+            	}
         		state = MoveMade;
         	}
         	else if (split[0].equals("GAME")) {
@@ -149,7 +146,12 @@ public class tigerzoneClientProtocol {
         	String[] split = theInput.split(" ");
         	if (split[0].equals("GAME")) {
         		if (!split[5].equals(playerName)){
-	        		bot.placeTile(split[1], split[7], Integer.valueOf(split[9]), Integer.valueOf(split[10]), Integer.valueOf(split[11]), split[12], Integer.valueOf(split[13]));
+        			if (split.length < (12 + 1)) {
+        				bot.placeTile(split[1], split[7], Integer.valueOf(split[9]), Integer.valueOf(split[10]), Integer.valueOf(split[11]), "", -1);
+        				}
+        			else {
+        				bot.placeTile(split[1], split[7], Integer.valueOf(split[9]), Integer.valueOf(split[10]), Integer.valueOf(split[11]), split[12], Integer.valueOf(split[13]));
+        			}
 	        		state = MakeAMove;
         		}
         		else {
@@ -181,7 +183,7 @@ public class tigerzoneClientProtocol {
         	}
         }
         else if (state == Finished) {
-        	theOutput = "Bye";
+        	theOutput = "Bye.";
         }
         return theOutput;
     }
