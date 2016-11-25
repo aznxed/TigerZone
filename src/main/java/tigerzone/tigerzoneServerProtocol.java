@@ -35,6 +35,8 @@ public class tigerzoneServerProtocol {
     
     private String tourPassword = "PersiaRocks!";
     private String playPassword = "Obiwan77";
+	private String tileString = "TLTTP LJTJ- JLJL- JJTJX LTTJB TLLT-";
+	private String[] deck = tileString.split(" ");
     
     public String processInput(String theInput) {
         String theOutput = null;
@@ -99,18 +101,16 @@ public class tigerzoneServerProtocol {
         //Send starting tile
         else if (state == SentOpponent) {
         	//TODO: Make non-constant
-        	String startingTile = "TLTJ";
+        	String startingTile = "TLTJ-";
         	int xPos = 0;
         	int yPos = 0;
         	int rot = 0;
-            theOutput = "STARTING TILE IS " + startingTile + "AT" + xPos + " " + yPos + " " + rot;
+            theOutput = "STARTING TILE IS " + startingTile + " AT " + xPos + " " + yPos + " " + rot;
             state = SentStartTile;
         }
         else if (state == SentStartTile) {
         	//TODO: Make non-constant
-        	int tilesLeft = 6;
-        	String tileString = "TLTTP LJTJ- JLJL- JJTJX LTTJB TLLT-";
-            theOutput = "REMAINING " + tilesLeft + " TILES ARE [ " + tileString + " ]";
+            theOutput = "REMAINING " + deck.length + " TILES ARE [ " + tileString + " ]";
             state = SentRemainingTiles;
         }
         //Send time till match starts
@@ -133,10 +133,10 @@ public class tigerzoneServerProtocol {
         	int moveNum = 1;
         	String tile = "TLTTP";
         	if (moveTime > 1){
-        		theOutput = "MAKE YOUR MOVE IN GAME " + gameID + " WITHIN " + moveTime + "SECONDS: MOVE " + moveNum + " PLACE " + tile;
+        		theOutput = "MAKE YOUR MOVE IN GAME " + gameID + " WITHIN " + moveTime + " SECONDS: MOVE " + moveNum + " PLACE " + tile;
         	}
         	else {
-        		theOutput = "MAKE YOUR MOVE IN GAME " + gameID + " WITHIN " + moveTime + "SECOND: MOVE " + moveNum + " PLACE " + tile;
+        		theOutput = "MAKE YOUR MOVE IN GAME " + gameID + " WITHIN " + moveTime + " SECOND: MOVE " + moveNum + " PLACE " + tile;
         	}
             state = SentMakeAMove;
         }
