@@ -144,6 +144,7 @@ public class tigerzoneClientProtocol {
         		}
         	}
         }
+        //Place the Opponents Tile
         else if (state == MoveMade) {
         	String[] split = theInput.split(" ");
         	if (split[0].equals("GAME")) {

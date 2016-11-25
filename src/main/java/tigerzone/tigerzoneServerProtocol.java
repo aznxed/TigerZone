@@ -40,6 +40,10 @@ public class tigerzoneServerProtocol {
 	private String tileString = "TLTTP LJTJ- JLJL- JJTJX LTTJB TLLT-";
 	private String[] deck = tileString.split(" ");
 	private int moveNum = 0;
+	private move botMove;
+	private move playerMove;
+	private String botID = "TeamFoo";
+	private String currentTile = "";
 	
 	//Used for sending current game
 	private boolean gameID = false;
@@ -150,23 +154,24 @@ public class tigerzoneServerProtocol {
         else if (state == SentMatchBeginTime) {
         	//TODO: Make non-constant
             //TODO: Set timer for response
-        	String tile = deck[moveNum];
+        	currentTile = deck[moveNum];
         	//Send Move to player
-        	move PlayerMove = moveMess((gameID ? "A" : "B"), moveTime, moveNum, tile);
-        	theOutput = 
+        	theOutput = moveMess((gameID ? "A" : "B"), moveTime, moveNum, currentTile);
         	//Send Move to bot
-        	move botMove = new move();
-        	move botMove = serverBot.makeMove((gameID ? "B" : "A"), moveTime, tile);
-        	
+        	botMove = serverBot.makeMove((gameID ? "B" : "A"), moveTime, currentTile);
         	moveNum++;
             state = SentMakeAMove;
         }
         //Send Move Opponent Made
         else if (state == SentMakeAMove) {
-        	//TODO: Make non-constant
-        	String botID = "BLARG";
-        	int moveNum = 0;
-        	theOutput = "GAME " + gameID + " MOVE " + moveNum + " PLAYER " + botID + " ";
+        	//Sent botmove to player
+        	theOutput = "GAME " + (gameID ? "B" : "A") + " MOVE " + moveNum + " PLAYER " + botID + " PLACED "
+        					+ currentTile + " AT " + botMove.xPos + " " + botMove.yPos + " " + botMove.rot;
+        	if(!(botMove.meep).equals("")){
+        		theOutput = theOutput + " " + botMove.meep + " " + botMove.meepPos;
+        	}
+        	//Receive playerMove
+        	/*
         	if (true) {
             	String[] split = theInput.split(" ");
         		theOutput = theOutput + split[5] + " AT " + split[7] + " " + split[8] + " " + split[9] + " TIGER " + split[11];
@@ -190,7 +195,7 @@ public class tigerzoneServerProtocol {
         	//Illegal Message Received
         	else if (true) {
         	theOutput = theOutput + "FORFEITED: ILLEGAL MESSAGE RECEIVED";
-        	}
+        	}*/
         	if (!gameOver){
         		state = SentMatchBeginTime;
         	}
