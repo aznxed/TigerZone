@@ -24,8 +24,6 @@ public class tigerzoneClientProtocol {
     private String opponent = "";
 
     public String processMessage(String theInput) {
-    	System.out.println("Client Protocol Called");
-    	System.out.println(theInput);
         String theOutput = null;
 
         if (state == WAITING) {

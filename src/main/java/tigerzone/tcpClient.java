@@ -62,12 +62,3 @@ public class tcpClient {
 		}
 	}
 }
-/*
-tigerzoneServerProtocol serverp = new tigerzoneServerProtocol();
-outputLine = serverp.processInput(null);
-out.println(outputLine);
-
-while ((inputLine = in.readLine()) != null) {
-	outputLine = serverp.processInput(inputLine);
-	out.println(outputLine);
-*/

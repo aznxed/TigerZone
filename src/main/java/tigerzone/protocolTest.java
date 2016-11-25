@@ -20,7 +20,7 @@ public class protocolTest {
 		while (!stop) {
 			//sOut = serverP.processInput(bOut);
 			//System.out.println("ServerB: " + sOut);
-			aOut = playerA.readLine(sOut);
+			aOut = playerA.processMessage(sOut);
 			System.out.println("PlayerA: " + aOut);
 			sOut = serverP.processInput(aOut);
 			System.out.println("ServerA: " + sOut);
