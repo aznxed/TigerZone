@@ -888,6 +888,8 @@ public class Board {
 		gameBoard.setBottomBound(CENTER_CELL + 1);
 		gameBoard.setLeftBound(CENTER_CELL - 1);
 		gameBoard.setRightBound(CENTER_CELL + 1);
+		
+		String imagePath = "src/main/CarcassonneTiles/";
 
 		gameBoard.initTiles(tiles);
 
@@ -930,13 +932,11 @@ public class Board {
 					.getRightBound(); j++) {
 				if (gameBoard.board[i][j] == null) {
 					JLabel j29 = new JLabel();
-					j29.setIcon(new ImageIcon(
-							"C:/Users/Carlyyyyyyyyy/Pictures/Screenshots/CarcassonneTiles/Tile29.png"));
+					j29.setIcon(new ImageIcon(imagePath + "Tile29.png"));
 					jp.add(j29);
 				} else {
 					JLabel j1 = new JLabel();
-					ImageIcon II = new ImageIcon(
-							"C:/Users/Carlyyyyyyyyy/Pictures/Screenshots/CarcassonneTiles/Tile"
+					ImageIcon II = new ImageIcon(imagePath + "Tile"
 									+ Integer.toString(gameBoard.board[i][j]
 											.getType())
 									+ "."
