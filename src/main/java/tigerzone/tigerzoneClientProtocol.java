@@ -24,6 +24,7 @@ public class tigerzoneClientProtocol {
     private String opponent = "";
 
     public String readLine(String theInput) {
+    	System.out.println(theInput);
         String theOutput = null;
 
         if (state == WAITING) {
