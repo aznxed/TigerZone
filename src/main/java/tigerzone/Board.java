@@ -30,10 +30,6 @@ public class Board {
 	// Keep a list of all the tiles placed on the board
 	private List<Tile> placedTiles = new ArrayList<Tile>();
 
-	private List<Cluster> trailClusters = new ArrayList<Cluster>();
-	private List<Cluster> lakeClusters = new ArrayList<Cluster>();
-	private List<Cluster> jungleClusters = new ArrayList<Cluster>();
-
 	public int getTopBound() {
 		return this.topBound;
 	}
@@ -67,9 +63,20 @@ public class Board {
 	}
 
 	public Tile getTile(int x, int y) {
-		return board[x][y];
+		if (x >= 0 && x < MAX_ROWS && y >= 0 && y < MAX_COLS) {
+			return board[x][y];
+		}
+		return null;
+
 	}
 
+	/**
+	 * Return this tile's immediate neighbors
+	 * 
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public List<Tile> getNeighbors(int x, int y) {
 		List<Tile> n = new ArrayList<Tile>();
 
@@ -100,47 +107,135 @@ public class Board {
 		return n;
 	}
 
-	//This will return all of the possible 8 neighbors surrounding a tile
-	//if they exist
+	/**
+	 * Returns the 8 possible neighbors that surround this tile. Note that not
+	 * all 8 may be returned, since some may not exist
+	 * 
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public List<Tile> getDenNeighbors(int x, int y) {
-
-		//Get the list of neighbors for the tile at x, y
+		// Get the list of "immediate" 4 neighbors for the tile at x, y. There
+		// may be up to 4 possible neighbors
 		List<Tile> nList = getNeighbors(x, y);
-		
-		//List of all possible 8 neighbors
+
+		// List of all possible 8 neighbors
 		List<Tile> denNeighbors = new ArrayList<Tile>(nList);
-		
-		//Go through each tile in nList
+
+		// Go through each tile in nList
 		for (Tile n : nList) {
-			//Check if this tile is a top or bottom neighbor
+			// Check if this tile is a top or bottom neighbor
 			if (n.getRow() == x + 1 || n.getRow() == x - 1) {
-				//See if this tile has a left neighbor
+				// See if this tile has a left neighbor
 				if (board[n.getRow()][n.getCol() - 1] != null) {
 					denNeighbors.add(board[n.getRow()][n.getCol() - 1]);
 				}
-				//See if this tile has a right neighbor
+				// See if this tile has a right neighbor
 				if (board[n.getRow()][n.getCol() + 1] != null) {
 					denNeighbors.add(board[n.getRow()][n.getCol() + 1]);
 				}
 			}
 		}
-
 		return denNeighbors;
 	}
 
+	/**
+	 * Checks to see if the tile being placed at the x-y coordinate is valid
+	 * with respect to its potential neighbors
+	 * 
+	 * @param x
+	 * @param y
+	 * @param tile
+	 * @return
+	 */
 	public boolean isValid(int x, int y, Tile tile) {
-		// Space already has tile
+
+		// Tile already exists in that position
 		if (board[x][y] != null) {
 			return false;
 		}
 
+		// return true if the board is empty
+		if (placedTiles.isEmpty()) {
+			return true;
+		}
+
+		// Get the neighbors of this position
 		List<Tile> nbors = getNeighbors(x, y);
 
-		// No neighbors
+		// If there are no neighbors, then its not a valid
+		// position in which to place a tile.
 		if (nbors.isEmpty()) {
 			return false;
 		}
 
+		// Ensure that all the neighbors are compatible.
+		boolean valid = true;
+		// Iterate through all its potential neighbors
+		for (Tile neighbor : nbors) {
+
+			// Check if neighbor is in same row
+			if (neighbor.getRow() == x) {
+				if (neighbor.getCol() > y) {
+					// This is right neighbor
+					if (neighbor.getLeftEdge() != tile.getRightEdge()) {
+						valid = false;
+						// no need to continue checking other
+						// neighbors
+						break;
+					}
+				} else {
+					// This is left neighbor
+					if (neighbor.getRightEdge() != tile.getLeftEdge()) {
+						valid = false;
+						break;
+					}
+				}
+			}
+
+			// If not in the same row, it must be in the same column
+			if (neighbor.getCol() == y) {
+				if (neighbor.getRow() > x) {
+					// This is bottom neighbor
+					if (neighbor.getTopEdge() != tile.getBottomEdge()) {
+						valid = false;
+						break;
+					}
+
+				} else {
+					// This is top neighbor
+					if (neighbor.getBottomEdge() != tile.getTopEdge()) {
+						valid = false;
+						break;
+					}
+				}
+			}
+
+		} // Iterate thru neighbors
+		return valid;
+	}
+
+	/**
+	 * Add a Tile to the board. It will first validate that the Tile can be
+	 * added to that position.
+	 * 
+	 * @param x
+	 * @param y
+	 * @param tile
+	 * @return
+	 */
+	public boolean addXTile(int x, int y, Tile tile) {
+		if (!isValid(x, y, tile)) {
+			return false;
+		}
+		// add tile to board
+		// give tile coords
+		placedTiles.add(tile);
+		board[x][y] = tile;
+		tile.setCol(y);
+		tile.setRow(x);
+		tile.setBoard(this);
 		return true;
 	}
 
@@ -265,7 +360,8 @@ public class Board {
 	}
 
 	public Tile rotateTile(Tile tile, int degrees) {
-		Tile rotateTile = new Tile(tile.getTilePortionType(), tile.getType(), degrees, tile.getRow(), tile.getCol());
+		Tile rotateTile = new Tile(tile.getTilePortionType(), tile.getType(),
+				degrees, tile.getRow(), tile.getCol());
 
 		TerrainType[] rotateArr = new TerrainType[9];
 		if (degrees == 90) {
@@ -306,7 +402,8 @@ public class Board {
 					tile.setCol(j);
 					List<Integer> validOrients = getValidOrients(i, j, tile);
 					for (int k = 0; k < validOrients.size(); k++) {
-						possibleMoves.add(rotateTile(tile, validOrients.get(k)));
+						possibleMoves
+								.add(rotateTile(tile, validOrients.get(k)));
 
 					}
 				}
@@ -328,7 +425,7 @@ public class Board {
 	public void addTile(Tile tile) {
 		// For now just take the first possible tile
 
-		// I don't get this! Comments please!
+		/** I don't get this! Comments please! **/
 		if (!(getPossibleMoves(tile).isEmpty())) {
 
 			// Keep a list of all the tiles placed on the board
@@ -336,10 +433,11 @@ public class Board {
 			tile.setBoard(this);
 
 			Random rand = new Random();
-			// This doesn't make sense to me. Shouldn't we be adding the tile
-			// passed in
-			// not the tile you're getting from the possible moves list?
-			Tile addTile = getPossibleMoves(tile).get(rand.nextInt(getPossibleMoves(tile).size()));
+			/**This doesn't make sense to me. Shouldn't we be adding the tile
+			// passed in and not the tile you're getting from the possible moves
+			list? **/
+			Tile addTile = getPossibleMoves(tile).get(
+					rand.nextInt(getPossibleMoves(tile).size()));
 			int x = addTile.getRow();
 			int y = addTile.getCol();
 			board[x][y] = addTile;
@@ -386,9 +484,13 @@ public class Board {
 		}
 	}
 
-	// Removes the tile at the given coords
+	/**
+	 * Removes the Tile at the given coordinates
+	 * 
+	 * @param x
+	 * @param y
+	 */
 	public void removeTile(int x, int y) {
-
 		board[x][y] = null;
 	}
 
@@ -407,201 +509,255 @@ public class Board {
 
 	public void initTiles(List<Tile> tiles) {
 
-		TerrainType[] tileA = { TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE,
-				TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE };// 1:no:empty
-																														// field
-		TerrainType[] tileB = { TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE,
-				TerrainType.DEN, TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE }; // 4:
-																													// no:
-																													// monistary
-		TerrainType[] tileC = { TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE,
-				TerrainType.DEN, TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.GAMETRAIL, TerrainType.JUNGLE }; // 2:
-																														// no
-																														// :
-																														// monistary
-																														// with
-																														// 1
-																														// road
-																														// leaving.
-		TerrainType[] tileD = { TerrainType.JUNGLE, TerrainType.GAMETRAIL, TerrainType.JUNGLE, TerrainType.GAMETRAIL,
-				TerrainType.END, TerrainType.GAMETRAIL, TerrainType.JUNGLE, TerrainType.GAMETRAIL, TerrainType.JUNGLE }; // 4:
-																															// no:
-																															// crossrouads
-																															// 4
-																															// roads
-																															// 4
-																															// fields.
-		TerrainType[] tileE = { TerrainType.JUNGLE, TerrainType.GAMETRAIL, TerrainType.JUNGLE, TerrainType.JUNGLE,
-				TerrainType.GAMETRAIL, TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.GAMETRAIL,
+		TerrainType[] tileA = { TerrainType.JUNGLE, TerrainType.JUNGLE,
+				TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE,
+				TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE,
+				TerrainType.JUNGLE };// 1:no:empty
+										// field
+		TerrainType[] tileB = { TerrainType.JUNGLE, TerrainType.JUNGLE,
+				TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.DEN,
+				TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE,
+				TerrainType.JUNGLE }; // 4:
+										// no:
+										// monistary
+		TerrainType[] tileC = { TerrainType.JUNGLE, TerrainType.JUNGLE,
+				TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.DEN,
+				TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.GAMETRAIL,
+				TerrainType.JUNGLE }; // 2:
+										// no
+										// :
+										// monistary
+										// with
+										// 1
+										// road
+										// leaving.
+		TerrainType[] tileD = { TerrainType.JUNGLE, TerrainType.GAMETRAIL,
+				TerrainType.JUNGLE, TerrainType.GAMETRAIL, TerrainType.END,
+				TerrainType.GAMETRAIL, TerrainType.JUNGLE,
+				TerrainType.GAMETRAIL, TerrainType.JUNGLE }; // 4:
+																// no:
+																// crossrouads
+																// 4
+																// roads
+																// 4
+																// fields.
+		TerrainType[] tileE = { TerrainType.JUNGLE, TerrainType.GAMETRAIL,
+				TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.GAMETRAIL,
+				TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.GAMETRAIL,
 				TerrainType.JUNGLE }; // 8: no: a straight road with 2 fields on
 										// the side 19
-		TerrainType[] tileF = { TerrainType.JUNGLE, TerrainType.GAMETRAIL, TerrainType.JUNGLE, TerrainType.GAMETRAIL,
-				TerrainType.GAMETRAIL, TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE }; // 9:no:
-																															// a
-																															// curved
-																															// road
-																															// has
-																															// 2
-																															// total
-																															// fields
-		TerrainType[] tileG = { TerrainType.JUNGLE, TerrainType.GAMETRAIL, TerrainType.JUNGLE, TerrainType.GAMETRAIL,
-				TerrainType.END, TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.GAMETRAIL, TerrainType.JUNGLE }; // 4:
-																														// no:
-																														// three
-																														// way
-																														// crossroads
-																														// 3
-																														// total
-																														// fields
-		TerrainType[] tileH = { TerrainType.LAKE, TerrainType.LAKE, TerrainType.LAKE, TerrainType.LAKE,
-				TerrainType.LAKE, TerrainType.LAKE, TerrainType.LAKE, TerrainType.LAKE, TerrainType.LAKE }; // 1:no:
-																											// giant
-																											// city
-																											// tile
-																											// on
-																											// each
-																											// side
-		TerrainType[] tileI = { TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.LAKE,
-				TerrainType.LAKE, TerrainType.LAKE, TerrainType.LAKE, TerrainType.LAKE, TerrainType.LAKE }; // 4:
-																											// no:
-																											// city
-																											// on
-																											// 3
-																											// sides
-																											// field
-																											// on
-																											// top
-																											// side
-		TerrainType[] tileJ = { TerrainType.JUNGLE, TerrainType.LAKE, TerrainType.LAKE, TerrainType.JUNGLE,
-				TerrainType.LAKE, TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE }; // 5:no:
-																													// diagonal
-																													// tile
-																													// bottom
-																													// left
-																													// field
-																													// top
-																													// right
-																													// city
-																													// 23
-		TerrainType[] tileK = { TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.LAKE,
-				TerrainType.LAKE, TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE }; // 3:no"
-																													// one
-																													// city
-																													// from
-																													// left
-																													// to
-																													// right
-																													// going
-																													// thru
-																													// center
-																													// with
-																													// 2
-																													// fields
-		TerrainType[] tileL = { TerrainType.JUNGLE, TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.JUNGLE,
-				TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.LAKE, TerrainType.JUNGLE }; // 3:
-																													// no:
-																													// inverse
-																													// of
-																													// above
-																													// 2
-																													// citys
-																													// 1
-																													// field
-		TerrainType[] tileM = { TerrainType.JUNGLE, TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.JUNGLE,
-				TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE }; // 5:no:
-																														// city
-																														// on
-																														// top
-																														// one
-																														// field
-		TerrainType[] tileN = { TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE,
-				TerrainType.JUNGLE, TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.LAKE, TerrainType.JUNGLE }; // 2:no:
-																													// two
-																													// cities
-																													// adjacent
-		TerrainType[] tileO = { TerrainType.JUNGLE, TerrainType.GAMETRAIL, TerrainType.JUNGLE, TerrainType.GAMETRAIL,
-				TerrainType.GAMETRAIL, TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE }; // 1:no:
-																														// road
-																														// in
-																														// top
-																														// left
-																														// city
-																														// on
-																														// right
-		TerrainType[] tileP = { TerrainType.JUNGLE, TerrainType.GAMETRAIL, TerrainType.JUNGLE, TerrainType.GAMETRAIL,
-				TerrainType.GAMETRAIL, TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE }; // 2:yes:same
-																														// as
-																														// above
-																														// but
-																														// w
-																														// boar
-		TerrainType[] tileQ = { TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.GAMETRAIL,
-				TerrainType.GAMETRAIL, TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.GAMETRAIL,
-				TerrainType.JUNGLE }; // 1: no: same as o but roads go from left
-										// to down
-		TerrainType[] tileR = { TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.GAMETRAIL,
-				TerrainType.GAMETRAIL, TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.GAMETRAIL,
-				TerrainType.JUNGLE }; // 2:yes: same as above but has animal 19
-		TerrainType[] tileS = { TerrainType.JUNGLE, TerrainType.GAMETRAIL, TerrainType.JUNGLE, TerrainType.JUNGLE,
-				TerrainType.GAMETRAIL, TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.GAMETRAIL,
+		TerrainType[] tileF = { TerrainType.JUNGLE, TerrainType.GAMETRAIL,
+				TerrainType.JUNGLE, TerrainType.GAMETRAIL,
+				TerrainType.GAMETRAIL, TerrainType.JUNGLE, TerrainType.JUNGLE,
+				TerrainType.JUNGLE, TerrainType.JUNGLE }; // 9:no:
+															// a
+															// curved
+															// road
+															// has
+															// 2
+															// total
+															// fields
+		TerrainType[] tileG = { TerrainType.JUNGLE, TerrainType.GAMETRAIL,
+				TerrainType.JUNGLE, TerrainType.GAMETRAIL, TerrainType.END,
+				TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.GAMETRAIL,
+				TerrainType.JUNGLE }; // 4:
+										// no:
+										// three
+										// way
+										// crossroads
+										// 3
+										// total
+										// fields
+		TerrainType[] tileH = { TerrainType.LAKE, TerrainType.LAKE,
+				TerrainType.LAKE, TerrainType.LAKE, TerrainType.LAKE,
+				TerrainType.LAKE, TerrainType.LAKE, TerrainType.LAKE,
+				TerrainType.LAKE }; // 1:no:
+									// giant
+									// city
+									// tile
+									// on
+									// each
+									// side
+		TerrainType[] tileI = { TerrainType.JUNGLE, TerrainType.JUNGLE,
+				TerrainType.JUNGLE, TerrainType.LAKE, TerrainType.LAKE,
+				TerrainType.LAKE, TerrainType.LAKE, TerrainType.LAKE,
+				TerrainType.LAKE }; // 4:
+									// no:
+									// city
+									// on
+									// 3
+									// sides
+									// field
+									// on
+									// top
+									// side
+		TerrainType[] tileJ = { TerrainType.JUNGLE, TerrainType.LAKE,
+				TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.LAKE,
+				TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.JUNGLE,
+				TerrainType.JUNGLE }; // 5:no:
+										// diagonal
+										// tile
+										// bottom
+										// left
+										// field
+										// top
+										// right
+										// city
+										// 23
+		TerrainType[] tileK = { TerrainType.JUNGLE, TerrainType.JUNGLE,
+				TerrainType.JUNGLE, TerrainType.LAKE, TerrainType.LAKE,
+				TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.JUNGLE,
+				TerrainType.JUNGLE }; // 3:no"
+										// one
+										// city
+										// from
+										// left
+										// to
+										// right
+										// going
+										// thru
+										// center
+										// with
+										// 2
+										// fields
+		TerrainType[] tileL = { TerrainType.JUNGLE, TerrainType.LAKE,
+				TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE,
+				TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.LAKE,
+				TerrainType.JUNGLE }; // 3:
+										// no:
+										// inverse
+										// of
+										// above
+										// 2
+										// citys
+										// 1
+										// field
+		TerrainType[] tileM = { TerrainType.JUNGLE, TerrainType.LAKE,
+				TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE,
+				TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE,
+				TerrainType.JUNGLE }; // 5:no:
+										// city
+										// on
+										// top
+										// one
+										// field
+		TerrainType[] tileN = { TerrainType.JUNGLE, TerrainType.JUNGLE,
+				TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE,
+				TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.LAKE,
+				TerrainType.JUNGLE }; // 2:no:
+										// two
+										// cities
+										// adjacent
+		TerrainType[] tileO = { TerrainType.JUNGLE, TerrainType.GAMETRAIL,
+				TerrainType.JUNGLE, TerrainType.GAMETRAIL,
+				TerrainType.GAMETRAIL, TerrainType.LAKE, TerrainType.JUNGLE,
+				TerrainType.JUNGLE, TerrainType.JUNGLE }; // 1:no:
+															// road
+															// in
+															// top
+															// left
+															// city
+															// on
+															// right
+		TerrainType[] tileP = { TerrainType.JUNGLE, TerrainType.GAMETRAIL,
+				TerrainType.JUNGLE, TerrainType.GAMETRAIL,
+				TerrainType.GAMETRAIL, TerrainType.LAKE, TerrainType.JUNGLE,
+				TerrainType.JUNGLE, TerrainType.JUNGLE }; // 2:yes:same
+															// as
+															// above
+															// but
+															// w
+															// boar
+		TerrainType[] tileQ = { TerrainType.JUNGLE, TerrainType.JUNGLE,
+				TerrainType.JUNGLE, TerrainType.GAMETRAIL,
+				TerrainType.GAMETRAIL, TerrainType.LAKE, TerrainType.JUNGLE,
+				TerrainType.GAMETRAIL, TerrainType.JUNGLE }; // 1: no: same as o
+																// but roads go
+																// from left
+																// to down
+		TerrainType[] tileR = { TerrainType.JUNGLE, TerrainType.JUNGLE,
+				TerrainType.JUNGLE, TerrainType.GAMETRAIL,
+				TerrainType.GAMETRAIL, TerrainType.LAKE, TerrainType.JUNGLE,
+				TerrainType.GAMETRAIL, TerrainType.JUNGLE }; // 2:yes: same as
+																// above but has
+																// animal 19
+		TerrainType[] tileS = { TerrainType.JUNGLE, TerrainType.GAMETRAIL,
+				TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.GAMETRAIL,
+				TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.GAMETRAIL,
 				TerrainType.JUNGLE }; // no idea:no feild L road M city
 										// Rightside
-		TerrainType[] tileT = { TerrainType.JUNGLE, TerrainType.GAMETRAIL, TerrainType.JUNGLE, TerrainType.JUNGLE,
-				TerrainType.GAMETRAIL, TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.GAMETRAIL,
+		TerrainType[] tileT = { TerrainType.JUNGLE, TerrainType.GAMETRAIL,
+				TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.GAMETRAIL,
+				TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.GAMETRAIL,
 				TerrainType.JUNGLE }; // 2: Yes: same as above w deer
-		TerrainType[] tileU = { TerrainType.JUNGLE, TerrainType.GAMETRAIL, TerrainType.JUNGLE, TerrainType.LAKE,
-				TerrainType.END, TerrainType.LAKE, TerrainType.LAKE, TerrainType.LAKE, TerrainType.LAKE }; // 3:no:road
-																											// Top
-																											// city
-																											// L
-																											// R
-																											// B
-		TerrainType[] tileV = { TerrainType.JUNGLE, TerrainType.GAMETRAIL, TerrainType.JUNGLE, TerrainType.GAMETRAIL,
-				TerrainType.END, TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.GAMETRAIL, TerrainType.JUNGLE }; // 1:no:3
-																													// progned
-																													// road
-																													// facing
-																													// left
-																													// city
-																													// on
-																													// right
-		TerrainType[] tileW = { TerrainType.JUNGLE, TerrainType.GAMETRAIL, TerrainType.JUNGLE, TerrainType.GAMETRAIL,
-				TerrainType.END, TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.GAMETRAIL, TerrainType.JUNGLE }; // 2:yes:
-																													// same
-																													// as
-																													// above
-																													// but
-																													// with
-																													// boar
-		TerrainType[] tileX = { TerrainType.JUNGLE, TerrainType.GAMETRAIL, TerrainType.JUNGLE, TerrainType.GAMETRAIL,
-				TerrainType.LAKE, TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.LAKE, TerrainType.LAKE }; // 3:no:
-																													// road
-																													// goues
-																													// left
-																													// to
-																													// up
-																													// city
-																													// R
-																													// &
-																													// Botom
-		TerrainType[] tileY = { TerrainType.JUNGLE, TerrainType.GAMETRAIL, TerrainType.JUNGLE, TerrainType.GAMETRAIL,
-				TerrainType.LAKE, TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.LAKE, TerrainType.LAKE }; // 2:yes:
-																													// same
-																													// as
-																													// above
-																													// but
-																													// has
-																													// goat
-		TerrainType[] tileZ = { TerrainType.JUNGLE, TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.JUNGLE,
-				TerrainType.GAMETRAIL, TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.GAMETRAIL,
+		TerrainType[] tileU = { TerrainType.JUNGLE, TerrainType.GAMETRAIL,
+				TerrainType.JUNGLE, TerrainType.LAKE, TerrainType.END,
+				TerrainType.LAKE, TerrainType.LAKE, TerrainType.LAKE,
+				TerrainType.LAKE }; // 3:no:road
+									// Top
+									// city
+									// L
+									// R
+									// B
+		TerrainType[] tileV = { TerrainType.JUNGLE, TerrainType.GAMETRAIL,
+				TerrainType.JUNGLE, TerrainType.GAMETRAIL, TerrainType.END,
+				TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.GAMETRAIL,
+				TerrainType.JUNGLE }; // 1:no:3
+										// progned
+										// road
+										// facing
+										// left
+										// city
+										// on
+										// right
+		TerrainType[] tileW = { TerrainType.JUNGLE, TerrainType.GAMETRAIL,
+				TerrainType.JUNGLE, TerrainType.GAMETRAIL, TerrainType.END,
+				TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.GAMETRAIL,
+				TerrainType.JUNGLE }; // 2:yes:
+										// same
+										// as
+										// above
+										// but
+										// with
+										// boar
+		TerrainType[] tileX = { TerrainType.JUNGLE, TerrainType.GAMETRAIL,
+				TerrainType.JUNGLE, TerrainType.GAMETRAIL, TerrainType.LAKE,
+				TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.LAKE,
+				TerrainType.LAKE }; // 3:no:
+									// road
+									// goues
+									// left
+									// to
+									// up
+									// city
+									// R
+									// &
+									// Botom
+		TerrainType[] tileY = { TerrainType.JUNGLE, TerrainType.GAMETRAIL,
+				TerrainType.JUNGLE, TerrainType.GAMETRAIL, TerrainType.LAKE,
+				TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.LAKE,
+				TerrainType.LAKE }; // 2:yes:
+									// same
+									// as
+									// above
+									// but
+									// has
+									// goat
+		TerrainType[] tileZ = { TerrainType.JUNGLE, TerrainType.LAKE,
+				TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.GAMETRAIL,
+				TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.GAMETRAIL,
 				TerrainType.JUNGLE }; // 1:no city Top road B field L field R
-		TerrainType[] tileZZ = { TerrainType.JUNGLE, TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.JUNGLE,
-				TerrainType.END, TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.GAMETRAIL, TerrainType.JUNGLE };// 2:yes:see
-								// above
-		
-		//CROCODILE TILE, I need middle to be LAKE
-		TerrainType[] tileZZZ = { TerrainType.JUNGLE, TerrainType.GAMETRAIL, TerrainType.JUNGLE, TerrainType.LAKE,
-				TerrainType.LAKE, TerrainType.LAKE, TerrainType.LAKE, TerrainType.LAKE, TerrainType.LAKE };
+		TerrainType[] tileZZ = { TerrainType.JUNGLE, TerrainType.LAKE,
+				TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.END,
+				TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.GAMETRAIL,
+				TerrainType.JUNGLE };// 2:yes:see
+		// above
+
+		// CROCODILE TILE, I need middle to be LAKE
+		TerrainType[] tileZZZ = { TerrainType.JUNGLE, TerrainType.GAMETRAIL,
+				TerrainType.JUNGLE, TerrainType.LAKE, TerrainType.LAKE,
+				TerrainType.LAKE, TerrainType.LAKE, TerrainType.LAKE,
+				TerrainType.LAKE };
 
 		Tile startTile = new Tile(tileS, 19, 0, CENTER_CELL, CENTER_CELL);
 		board[CENTER_CELL][CENTER_CELL] = startTile;
@@ -740,7 +896,8 @@ public class Board {
 		}
 
 		for (int i = gameBoard.getTopBound(); i <= gameBoard.getBottomBound(); i++) {
-			for (int j = gameBoard.getLeftBound(); j <= gameBoard.getRightBound(); j++) {
+			for (int j = gameBoard.getLeftBound(); j <= gameBoard
+					.getRightBound(); j++) {
 				if (gameBoard.board[i][j] == null) {
 					System.out.print("0 ");
 				} else {
@@ -751,7 +908,8 @@ public class Board {
 		}
 
 		for (int i = gameBoard.getTopBound(); i <= gameBoard.getBottomBound(); i++) {
-			for (int j = gameBoard.getLeftBound(); j <= gameBoard.getRightBound(); j++) {
+			for (int j = gameBoard.getLeftBound(); j <= gameBoard
+					.getRightBound(); j++) {
 				if (gameBoard.board[i][j] == null) {
 					System.out.print("1 ");
 				} else {
@@ -763,27 +921,34 @@ public class Board {
 		JFrame frame = new JFrame();
 		frame.setPreferredSize(new Dimension(800, 1000));
 
-		JPanel jp = new JPanel(new GridLayout(gameBoard.getBottomBound() - gameBoard.getTopBound() + 1,
-				gameBoard.getRightBound() - gameBoard.getLeftBound() + 1, 0, 0));
+		JPanel jp = new JPanel(new GridLayout(gameBoard.getBottomBound()
+				- gameBoard.getTopBound() + 1, gameBoard.getRightBound()
+				- gameBoard.getLeftBound() + 1, 0, 0));
 
 		for (int i = gameBoard.getTopBound(); i <= gameBoard.getBottomBound(); i++) {
-			for (int j = gameBoard.getLeftBound(); j <= gameBoard.getRightBound(); j++) {
+			for (int j = gameBoard.getLeftBound(); j <= gameBoard
+					.getRightBound(); j++) {
 				if (gameBoard.board[i][j] == null) {
 					JLabel j29 = new JLabel();
-					j29.setIcon(
-							new ImageIcon("C:/Users/Carlyyyyyyyyy/Pictures/Screenshots/CarcassonneTiles/Tile29.png"));
+					j29.setIcon(new ImageIcon(
+							"C:/Users/Carlyyyyyyyyy/Pictures/Screenshots/CarcassonneTiles/Tile29.png"));
 					jp.add(j29);
 				} else {
 					JLabel j1 = new JLabel();
-					ImageIcon II = new ImageIcon("C:/Users/Carlyyyyyyyyy/Pictures/Screenshots/CarcassonneTiles/Tile"
-							+ Integer.toString(gameBoard.board[i][j].getType()) + "."
-							+ Integer.toString(gameBoard.board[i][j].getDegrees()) + ".png");
+					ImageIcon II = new ImageIcon(
+							"C:/Users/Carlyyyyyyyyy/Pictures/Screenshots/CarcassonneTiles/Tile"
+									+ Integer.toString(gameBoard.board[i][j]
+											.getType())
+									+ "."
+									+ Integer.toString(gameBoard.board[i][j]
+											.getDegrees()) + ".png");
 					Image image = II.getImage(); // transform it
-					Image newimg = image.getScaledInstance(60, 60, java.awt.Image.SCALE_SMOOTH); // scale
-																									// it
-																									// the
-																									// smooth
-																									// way
+					Image newimg = image.getScaledInstance(60, 60,
+							java.awt.Image.SCALE_SMOOTH); // scale
+															// it
+															// the
+															// smooth
+															// way
 					II = new ImageIcon(newimg);
 					j1.setIcon(II);
 					jp.add(j1);
