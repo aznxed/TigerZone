@@ -23,15 +23,23 @@ public class tigerzoneClientProtocol {
     private int matchTotal = -1;
     private String opponent = "";
 
+<<<<<<< Upstream, based on origin/tcpconnection
     public String readLine(String theInput) {
     	System.out.println(theInput);
+=======
+    public String processMessage(String theInput) {
+    	System.out.println("Client Protocol Called");
+>>>>>>> c084a59 Fix TCP Client
         String theOutput = null;
 
         if (state == WAITING) {
         	if (theInput.equals("THIS IS SPARTA!")) {
+        		System.out.println("Found Sparta.");
         		theOutput = "JOIN " + serverPassword;
-        		//number1 = 2;
                 state = SentJoin;
+        	}
+        	else {
+        		System.out.println("Waiting for Sparta.");
         	}
         }
         else if (state == SentJoin) {

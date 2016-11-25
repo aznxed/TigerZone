@@ -5,6 +5,7 @@ import java.io.*;
 
 public class tcpClient {
 	public static void main(String[] args) throws IOException {
+		System.out.println("Starting Client");
 		
 		String hostName;
 		int portNumber;
@@ -21,28 +22,33 @@ public class tcpClient {
 		}
 		else {
 				//TODO: Host name is unknown
-				hostName = "tigerzoneServer";
+				hostName = "192.168.1.2";
 				portNumber = 10;
 		}
 		
+		System.out.println("Connecting to " + hostName + " at port " + portNumber);
 		try (
 		    Socket tzSocket = new Socket(hostName, portNumber);
 		    PrintWriter out = new PrintWriter(tzSocket.getOutputStream(), true);
 		    BufferedReader in = new BufferedReader(new InputStreamReader(tzSocket.getInputStream()));
 		) {
-		    BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
+			System.out.println("Connected");
 		    String serverMessage;
 		    String userMessage;
+		    tigerzoneClientProtocol clientp = new tigerzoneClientProtocol();
 		
 		    while ((serverMessage = in.readLine()) != null) {
 		        System.out.println("Server: " + serverMessage);
 		        if (serverMessage.equals("Bye."))
 		            break;
 		        
-		        userMessage = stdIn.readLine();
+		        userMessage = clientp.processMessage(serverMessage);
 		        if (userMessage != null) {
 		            System.out.println("User: " + userMessage);
 		            out.println(userMessage);
+		        }
+		        else {
+		        	System.out.println("NULL MESSAGE");
 		        }
 		    }
 		//Unknown host
@@ -56,3 +62,12 @@ public class tcpClient {
 		}
 	}
 }
+/*
+tigerzoneServerProtocol serverp = new tigerzoneServerProtocol();
+outputLine = serverp.processInput(null);
+out.println(outputLine);
+
+while ((inputLine = in.readLine()) != null) {
+	outputLine = serverp.processInput(inputLine);
+	out.println(outputLine);
+*/
