@@ -5,15 +5,24 @@ import java.io.*;
 
 public class tcpServer {
 	public static void main(String[] args) throws IOException {
+		System.out.println("Starting Server");
 		
-		if (args.length != 1) {
-			System.err.println("Usage: java tcpServer <port number>");
-			System.exit(1);
+		int portNumber;
+		
+		if (false) {
+			if (args.length != 1) {
+				System.err.println("Usage: java tcpServer <port number>");
+				System.exit(1);
+			}
+			
+			//portNumber is specified in first command line argument
+			portNumber = Integer.parseInt(args[0]);
+		}
+		else {
+				portNumber = 10;
 		}
 		
-		//portNumber is specified in first command line argument
-		int portNumber = Integer.parseInt(args[0]);
-		
+		System.out.println("Connecting to Port: " + portNumber);
 		//TODO: Do I need to support multiple clients? 
 		try (
 			//Create ServerSocket object to listen on port portNumber
@@ -24,6 +33,7 @@ public class tcpServer {
 			PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
 			BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 		) {
+			System.out.println("Connected");
 			String inputLine, outputLine;
 	
 			//Initiate conversation with client by writing to the socket
@@ -40,10 +50,12 @@ public class tcpServer {
 			//while loop iterates on the read from the input stream until
 			//the client responds by writing to its output stream
 			while ((inputLine = in.readLine()) != null) {
+				System.out.println("Received Message " + inputLine);
 				//ask the KnockKnockProtocol for a suitable reply
 				outputLine = serverp.processInput(inputLine);
 				//send reply
 				out.println(outputLine);
+				System.out.println("Sent Message " + outputLine);
 				//if reply is bye then quit the loop
 				//java runtime automatically closes the input and output streams, the
 				//client socket and server socket because it was created in the try-with-
