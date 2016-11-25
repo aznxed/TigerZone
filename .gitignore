@@ -43,7 +43,8 @@ local.properties
 .cproject
 
 # JDT-specific (Eclipse Java Development Tools)
-.classpath
+#.classpath
+#Important
 
 # Java annotation processor (APT)
 .factorypath
