@@ -44,6 +44,7 @@ public class tigerzoneServerProtocol {
 	private move playerMove;
 	private String botID = "TeamFoo";
 	private String currentTile = "";
+	private String playerName = "";
 	
 	//Used for sending current game
 	private boolean gameID = true;
@@ -91,8 +92,9 @@ public class tigerzoneServerProtocol {
             if (split[0].equals("I") && split[1].equals("AM")) {
             	//TODO: Check if player ID and password are correct
             	if (true) {
-                theOutput = "WELCOME " + split[2] + " PLEASE WAIT FOR THE NEXT CHALLENGE";
-                state = SentWelcome;
+            		playerName = split[2];
+            		theOutput = "WELCOME " + playerName + " PLEASE WAIT FOR THE NEXT CHALLENGE";
+            		state = SentWelcome;
             	}
             } else {
                 theOutput = "ERROR: Unknown Reply";
@@ -117,8 +119,7 @@ public class tigerzoneServerProtocol {
         //Send opponent name player
         //TODO: Send to both players
         else if (state == SentBeginRound) {
-        	String playerName = "Blue";
-            theOutput = "YOUR OPPONENT IS PLAYER " + playerName;
+            theOutput = "YOUR OPPONENT IS PLAYER " + botID;
             state = SentOpponent;
         }
         //Send starting tile
@@ -204,13 +205,12 @@ public class tigerzoneServerProtocol {
         	}
         }
         else if (state == SentMoveMade) {
-        	//TODO: Remove Constants
-        	String gameID = "Z";
-        	String player1 = "player1";
-        	String player2 = "player2";
+        	//TODO: Remove Constant
         	int player1Score = -1;
         	int player2Score = -2;
-        	theOutput = "GAME " + gameID + " OVER PLAYER " + player1 + " " + player1Score + " PLAYER " + player2 + " " + player2Score;
+        	//Output score for both games
+        	theOutput = "GAME " + "A" + " OVER PLAYER " + playerName + " " + player1Score + " PLAYER " + botID + " " + player2Score;
+        	theOutput = "GAME " + "B" + " OVER PLAYER " + playerName + " " + player1Score + " PLAYER " + botID + " " + player2Score;
             state = SentScore;
         }
         else if (state == SentScore) {

@@ -117,11 +117,28 @@ public class tigerzoneClientProtocol {
         	if (split[0].equals("MAKE")) {
         		//player needs to make a move
             	playerMove = bot.makeMove(split[5], Integer.valueOf(split[7]), split[12]);
-        		theOutput = "Game " + split[5] + " MOVE " + split[10] + " PLACE " + split[12]
-						+ " AT " + playerMove.xPos + " " + playerMove.yPos + " " + playerMove.rot;
-            	if(!(playerMove.meep).equals("")){
-            		theOutput = theOutput + " " + playerMove.meep + " " + playerMove.meepPos;
-            	}
+        		theOutput = "Game " + split[5] + " MOVE " + split[10];
+        		if ((playerMove.rot) != -1){
+            		theOutput = theOutput + " PLACE " + split[12]+ " AT "
+            					+ playerMove.xPos + " " + playerMove.yPos + " " + playerMove.rot;
+                	if(!(playerMove.meep).equals("")){
+                		theOutput = theOutput + " " + playerMove.meep + " " + playerMove.meepPos;
+                	}
+        		}
+        		if ((playerMove.meep).equals("PASS")){
+        			theOutput = theOutput + " UNPLACEABLE PASS";
+        		}
+        		else if ((playerMove.meep).equals("RETRIEVE")){
+        			theOutput = theOutput + " UNPLACEABLE RETRIEVE TIGER AT "
+        						+ playerMove.xPos + " " + playerMove.yPos;
+        		}
+        		else if ((playerMove.meep).equals("ADD")){
+        			theOutput = theOutput + " UNPLACEABLE ADD ANOTHER TIGER AT "
+        						+ playerMove.xPos + " " + playerMove.yPos;
+        		}
+        		else {
+        			System.out.println("ERROR Player Move");
+        		}
         		state = MoveMade;
         	}
         	else if (split[0].equals("GAME")) {
@@ -146,11 +163,34 @@ public class tigerzoneClientProtocol {
         	String[] split = theInput.split(" ");
         	if (split[0].equals("GAME")) {
         		if (!split[5].equals(playerName)){
-        			if (split.length < (12 + 1)) {
-        				bot.placeTile(split[1], split[7], Integer.valueOf(split[9]), Integer.valueOf(split[10]), Integer.valueOf(split[11]), "", -1);
+        			//Opponent placed a tile
+        			//GAME <gid> MOVE <#> PLAYER <pid> TILE <tile> UNPLACEABLE RETRIEVE TIGER AT <x> <y>
+        			if (split[6].equals("PLACED")){
+	        			if (split.length < (12 + 1)) {
+	        				bot.placeTile(split[1], split[7], Integer.valueOf(split[9]), Integer.valueOf(split[10]), Integer.valueOf(split[11]), "", -1);
+	        				}
+	        			else {
+	        				bot.placeTile(split[1], split[7], Integer.valueOf(split[9]), Integer.valueOf(split[10]), Integer.valueOf(split[11]), split[12], Integer.valueOf(split[13]));
+	        			}
+        			}
+        			//Tile is Unplaceable
+        			//TODO: Make sure this is correct format
+        			else if(split[6].equals("TILE")){
+        				//Pass
+        				if (split[9].equals("PASS")){
+        					//Do Nothing
         				}
+        				//Retrieve Tiger
+        				else if (split[9].equals("RETRIEVE")){
+        					bot.removeMeep(Integer.valueOf(split[12]), Integer.valueOf(split[13]));
+        				}
+        				//Add Tiger
+        				else if (split[9].equals("ADD")){
+        					bot.placeMeep(Integer.valueOf(split[13]), Integer.valueOf(split[14]));
+        				}
+        			}
         			else {
-        				bot.placeTile(split[1], split[7], Integer.valueOf(split[9]), Integer.valueOf(split[10]), Integer.valueOf(split[11]), split[12], Integer.valueOf(split[13]));
+        				System.out.println("ERROR Opponents Message: " + theInput);
         			}
 	        		state = MakeAMove;
         		}
@@ -179,11 +219,11 @@ public class tigerzoneClientProtocol {
         else if (state == ChallengeOver) {
         	String[] split = theInput.split(" ");
         	if (split[0].equals("THANK")) {
+            	theOutput = "Bye.";
         		state = Finished;
         	}
         }
         else if (state == Finished) {
-        	theOutput = "Bye.";
         }
         return theOutput;
     }

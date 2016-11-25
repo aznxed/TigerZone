@@ -9,13 +9,10 @@ public class protocolTest {
 		String sOut = " ";
 		String aIn = " ";
 		String aOut = " ";
-		String bIn = " ";
-		String bOut = " ";
 		
 		//Create server and two clients
 		tigerzoneServerProtocol serverP = new tigerzoneServerProtocol();
 		tigerzoneClientProtocol playerA = new tigerzoneClientProtocol();
-		tigerzoneClientProtocol playerB = new tigerzoneClientProtocol();
 		
 		while (!stop) {
 			aOut = playerA.processMessage(sOut);

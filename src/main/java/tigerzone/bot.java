@@ -1,7 +1,5 @@
 package tigerzone;
 
-
-
 public class bot {
 	
 	//Initialize the deck of tiles
@@ -23,16 +21,27 @@ public class bot {
 	}
 	//Play a tile
 	public static move makeMove(String game, int time, String tile){
-		//TODO: Return something that is not a string
-		//Return something that includes int xPos, int yPos, int rot, String meep, int meepPos
+		//Move is in form (int xPos, int yPos, int rot, String meep, int meepPos)
+		//To Pass Set meep equal to "PASS" and rot to -1
+		//To Retrieve Meep Set meep equal to "RETRIEVE" and rot to -1. Use x and y for coor
+		//To ADD Meep Set meep equal to "ADD" and rot to -1. Use x and y for coor
 		move moveMade = new move(999, 999, 360, "", -1);
 		return moveMade;
 	}
-	//Place a tile
+	//Place a tile ALWAYS ENEMY TILE
 	public static void placeTile(String game, String tile, int x, int y, int rot, String meep, int meepPos){
 		return;
 	}
-	//Extra Processing Time
+	//Tile couldn't be placed
+	//Place Tiger at x y
+	public static void placeMeep(int x, int y) {
+		return;
+	}
+	//Remove Tiger at x y
+	public static void removeMeep(int x, int y) {
+		return;
+	}
+	//Extra Processing Time Do Whatever
 	public static void botProcess(int time){
 		return;
 	}
