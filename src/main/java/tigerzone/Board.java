@@ -927,6 +927,7 @@ public class Board {
 				- gameBoard.getTopBound() + 1, gameBoard.getRightBound()
 				- gameBoard.getLeftBound() + 1, 0, 0));
 
+		frame.pack();
 		for (int i = gameBoard.getTopBound(); i <= gameBoard.getBottomBound(); i++) {
 			for (int j = gameBoard.getLeftBound(); j <= gameBoard
 					.getRightBound(); j++) {
@@ -943,7 +944,12 @@ public class Board {
 									+ Integer.toString(gameBoard.board[i][j]
 											.getDegrees()) + ".png");
 					Image image = II.getImage(); // transform it
-					Image newimg = image.getScaledInstance(60, 60,
+					int tileHeight = gameBoard.getBottomBound() - gameBoard.getTopBound();
+					int tileWidth = gameBoard.getRightBound() - gameBoard.getLeftBound();
+					//System.out.println("Height: " + tileHeight);
+					//System.out.println("Width: " + tileWidth);
+					Image newimg = image.getScaledInstance(frame.getContentPane().getWidth() / (tileWidth * (13 / 8)),
+							frame.getContentPane().getHeight() / (tileHeight * (13 / 8)) ,
 							java.awt.Image.SCALE_SMOOTH); // scale
 															// it
 															// the
@@ -957,7 +963,6 @@ public class Board {
 		}
 
 		frame.add(jp);
-		frame.pack();
 		frame.setVisible(true);
 	}
 
