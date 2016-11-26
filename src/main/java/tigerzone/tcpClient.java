@@ -47,8 +47,8 @@ public class tcpClient {
 		        
 		        userMessage = clientp.processMessage(serverMessage);
 		        if (userMessage != null) {
+		            out.println(userMessage + "\r \n");
 		            System.out.println("User: " + userMessage);
-		            out.println(userMessage);
 		        }
 		        else {
 		        	System.out.println("NULL MESSAGE");
