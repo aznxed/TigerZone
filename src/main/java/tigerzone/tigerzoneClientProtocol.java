@@ -56,7 +56,6 @@ public class tigerzoneClientProtocol {
         else if (state == SentName) {
         	String[] split = theInput.split(" ");
         	if (split[0].equals("WELCOME")) {
-        		matchNum = 1;
                 state = WasWelcomed;
         	}
         }
@@ -65,6 +64,7 @@ public class tigerzoneClientProtocol {
         	String[] split = theInput.split(" ");
         	if (split[0].equals("NEW") && split[1].equals("CHALLENGE")) {
                 //TODO: Not sure if challengeNum should be an ID (String)
+        		matchNum = 1;
         		challengeNum = Integer.valueOf(split[2]);
         		matchTotal = Integer.valueOf(split[6]);
         		state = ReceivedChallenge;
@@ -117,7 +117,7 @@ public class tigerzoneClientProtocol {
         	if (split[0].equals("MAKE")) {
         		//player needs to make a move
             	playerMove = bot.makeMove(split[5], Integer.valueOf(split[7]), split[12]);
-        		theOutput = "Game " + split[5] + " MOVE " + split[10];
+        		theOutput = "GAME " + split[5] + " MOVE " + split[10];
         		if ((playerMove.rot) != -1){
             		theOutput = theOutput + " PLACE " + split[12]+ " AT "
             					+ playerMove.xPos + " " + playerMove.yPos + " " + playerMove.rot;
@@ -125,7 +125,7 @@ public class tigerzoneClientProtocol {
                 		theOutput = theOutput + " " + playerMove.meep + " " + playerMove.meepPos;
                 	}
         		}
-        		if ((playerMove.meep).equals("PASS")){
+        		else if ((playerMove.meep).equals("PASS")){
         			theOutput = theOutput + " UNPLACEABLE PASS";
         		}
         		else if ((playerMove.meep).equals("RETRIEVE")){
@@ -139,30 +139,19 @@ public class tigerzoneClientProtocol {
         		else {
         			System.out.println("ERROR Player Move");
         		}
-        		state = MoveMade;
         	}
         	else if (split[0].equals("GAME")) {
-        		//One Game is over
-        		gamesOver++;
-        		if (gamesOver > 1) {
-        			state = MatchesOver;
-        		}
-        	}
-        	//Something has gone wrong if you're here
-        	else if (split[0].equals("END") && split[2].equals("ROUND")) {
-        		if (matchNum == matchTotal) {
-        			state = RoundsOver;
-        		}
-        		else {
-        			state = ReceivedChallenge;
-        		}
-        	}
-        }
-        //Place the Opponents Tile
-        else if (state == MoveMade) {
-        	String[] split = theInput.split(" ");
-        	if (split[0].equals("GAME")) {
-        		if (!split[5].equals(playerName)){
+            	if (split[2].equals("OVER")) {
+            		//One Game is over
+            		gamesOver++;
+            		if (gamesOver > 1) {
+            			state = MatchesOver;
+            		}
+            		else {
+            			state = ReceivedChallenge;
+            		}
+            	}
+            	else if (!split[5].equals(playerName)){
         			//Opponent placed a tile
         			//GAME <gid> MOVE <#> PLAYER <pid> TILE <tile> UNPLACEABLE RETRIEVE TIGER AT <x> <y>
         			if (split[6].equals("PLACED")){
@@ -192,21 +181,33 @@ public class tigerzoneClientProtocol {
         			else {
         				System.out.println("ERROR Opponents Message: " + theInput);
         			}
-	        		state = MakeAMove;
         		}
         		else {
         			//Wait for other players move
         		}
         	}
+        	//Something has gone wrong if you're here
+        	else if (split[0].equals("END") && split[2].equals("ROUND")) {
+        		if (matchNum < matchTotal) {
+        			System.out.println("-2--------" + matchNum + " " + matchTotal);
+        			state = ReceivedChallenge;
+        		}
+        		else {
+        			state = RoundsOver;
+        		}
+        	}
         }
+        //END OF ROUND 1 OF 1
         else if (state == MatchesOver) {
         	String[] split = theInput.split(" ");
         	if (split[0].equals("END") && split[2].equals("ROUND")) {
-        		if (matchNum == matchTotal) {
-        			state = RoundsOver;
+        		if (matchNum < matchTotal) {
+        			System.out.println("---------" + matchNum + " " + matchTotal);
+        			state = ReceivedChallenge;
         		}
         		else {
-        			state = ReceivedChallenge;
+        			System.out.println("---------" + matchNum + " " + matchTotal);
+        			state = RoundsOver;
         		}
         	}
         }

@@ -16,6 +16,7 @@ public class tigerzoneServerProtocol {
     private static final int SentMatchBeginTime = 9;
     private static final int SentMakeAMove = 10;
     private static final int SentMoveMade = 11;
+    private static final int SendSecondScore = 12;
     
     private static final int SentScore = 20;
     private static final int SentEndRound = 21;
@@ -25,11 +26,10 @@ public class tigerzoneServerProtocol {
     private int state = WAITING;
     private int connectedPlayers = 0;
     
-    //TODO: MAKE non constant
     private int challengeNum = 1;
     private int matchNum = 1;
     private int roundNum = 1;
-    private int roundTotal = 1;
+    private int roundTotal = 5;
     private int moveTime = 1;
     private boolean gameOver = false;
 
@@ -45,6 +45,8 @@ public class tigerzoneServerProtocol {
 	private String botID = "TeamFoo";
 	private String currentTile = "";
 	private String playerName = "";
+	private int player1Score = 0;
+	private int player2Score = 0;
 	
 	//Used for sending current game
 	private boolean gameID = true;
@@ -124,7 +126,6 @@ public class tigerzoneServerProtocol {
         }
         //Send starting tile
         else if (state == SentOpponent) {
-        	//TODO: Make non-constant
         	int xPos = 0;
         	int yPos = 0;
         	int rot = 0;
@@ -140,7 +141,6 @@ public class tigerzoneServerProtocol {
         }
         //Send time till match starts
         else if (state == SentRemainingTiles) {
-        	//TODO: Make non-constant
         	moveNum = 1;
             gameID = true;
         	if (timeToMatch > 1){
@@ -153,7 +153,6 @@ public class tigerzoneServerProtocol {
         }
         //Send move request to player
         else if (state == SentMatchBeginTime) {
-        	//TODO: Make non-constant
             //TODO: Set timer for response
         	currentTile = deck[moveNum - 1];
         	//Send Move to player
@@ -170,7 +169,19 @@ public class tigerzoneServerProtocol {
         	if(!(botMove.meep).equals("")){
         		theOutput = theOutput + " " + botMove.meep + " " + botMove.meepPos;
         	}
+        	if (deck.length > moveNum){
+        		state = SentMatchBeginTime;
+            	moveNum++;
+        	}
+        	else {
+        		state = SentMoveMade;
+        	}
         	//Receive playerMove
+        	//TODO: Remove later
+        	if (theInput == null){
+        		System.out.println("FORFEITED: ILLEGAL TILE PLACEMENT");
+        		state = SentEndChallenges;
+        	}
         	/*
         	if (true) {
             	String[] split = theInput.split(" ");
@@ -196,29 +207,25 @@ public class tigerzoneServerProtocol {
         	else if (true) {
         	theOutput = theOutput + "FORFEITED: ILLEGAL MESSAGE RECEIVED";
         	}*/
-        	if (deck.length > moveNum){
-        		state = SentMatchBeginTime;
-            	moveNum++;
-        	}
-        	else {
-        		state = SentMoveMade;
-        	}
         }
         else if (state == SentMoveMade) {
-        	//TODO: Remove Constant
-        	int player1Score = -1;
-        	int player2Score = -2;
         	//Output score for both games
         	theOutput = "GAME " + "A" + " OVER PLAYER " + playerName + " " + player1Score + " PLAYER " + botID + " " + player2Score;
+        	state = SendSecondScore;
+        }
+        else if (state == SendSecondScore){
         	theOutput = "GAME " + "B" + " OVER PLAYER " + playerName + " " + player1Score + " PLAYER " + botID + " " + player2Score;
             state = SentScore;
         }
         else if (state == SentScore) {
-        	//TODO: Remove Constants
-        	int round = 1;
-        	int roundTotal = 1;
-        	theOutput = "END OF ROUND " + round + " OF " + roundTotal;
-            state = SentEndRound;
+        	theOutput = "END OF ROUND " + roundNum + " OF " + roundTotal;
+        	if(roundNum < roundTotal){
+        		roundNum++;
+        		state = SentNewChallenge;
+        	}
+        	else {
+        		state = SentEndRound;
+        	}
         }
         else if (state == SentEndRound) {
         	theOutput = "END OF CHALLENGES";

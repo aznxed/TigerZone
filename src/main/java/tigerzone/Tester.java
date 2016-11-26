@@ -43,70 +43,114 @@ public class Tester {
 			TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.GAMETRAIL,
 			TerrainType.GAMETRAIL, TerrainType.JUNGLE, TerrainType.JUNGLE,
 			TerrainType.JUNGLE };
+	
+	
+	static TerrainType[] tileLake1 = { TerrainType.JUNGLE, TerrainType.LAKE,  TerrainType.LAKE, 
+		                              TerrainType.JUNGLE, TerrainType.LAKE,  TerrainType.LAKE, 
+		                              TerrainType.JUNGLE, TerrainType.JUNGLE,TerrainType.JUNGLE };
+	
+	
+	static TerrainType[] tileLake2 = { TerrainType.JUNGLE, TerrainType.LAKE,  TerrainType.JUNGLE, 
+                                       TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.LAKE, 
+                                       TerrainType.JUNGLE, TerrainType.JUNGLE,TerrainType.JUNGLE };
+	
+	static TerrainType[] tileLake2b = { TerrainType.JUNGLE, TerrainType.LAKE,   TerrainType.JUNGLE, 
+                                        TerrainType.LAKE,   TerrainType.JUNGLE, TerrainType.JUNGLE, 
+                                        TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE };
+	
+	static TerrainType[] tileLake3 = { TerrainType.JUNGLE, TerrainType.JUNGLE,  TerrainType.JUNGLE, 
+        							   TerrainType.LAKE, TerrainType.LAKE,  TerrainType.JUNGLE, 
+        							   TerrainType.LAKE, TerrainType.LAKE,TerrainType.JUNGLE };
+	
+	static TerrainType[] tileLake4 = { TerrainType.JUNGLE, TerrainType.JUNGLE,  TerrainType.JUNGLE, 
+		                               TerrainType.JUNGLE, TerrainType.LAKE,  TerrainType.LAKE, 
+		                               TerrainType.JUNGLE, TerrainType.LAKE,TerrainType.LAKE };
+	
+	static TerrainType[] tileLake5 = { TerrainType.LAKE, TerrainType.LAKE,  TerrainType.JUNGLE, 
+                                       TerrainType.LAKE, TerrainType.LAKE,  TerrainType.JUNGLE, 
+                                       TerrainType.JUNGLE, TerrainType.JUNGLE,TerrainType.JUNGLE };
+	
+	
+	static TerrainType[] tileLake6 = { TerrainType.JUNGLE, TerrainType.LAKE,  TerrainType.JUNGLE, 
+        							   TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE, 
+        							   TerrainType.JUNGLE, TerrainType.JUNGLE,TerrainType.JUNGLE };
+	
+	static TerrainType[] tileLake7 = { TerrainType.JUNGLE, TerrainType.LAKE,  TerrainType.JUNGLE, 
+		                               TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE, 
+		                               TerrainType.JUNGLE, TerrainType.LAKE,TerrainType.JUNGLE };
+	
+	static TerrainType[] tileLake7b = { TerrainType.JUNGLE, TerrainType.JUNGLE,  TerrainType.JUNGLE, 
+                                        TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.LAKE, 
+                                        TerrainType.JUNGLE, TerrainType.JUNGLE,TerrainType.JUNGLE };
+	
+	static TerrainType[] tileLake8 = { TerrainType.JUNGLE, TerrainType.JUNGLE,  TerrainType.JUNGLE, 
+		                               TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE, 
+		                               TerrainType.JUNGLE, TerrainType.LAKE,TerrainType.JUNGLE };
+	
+	static TerrainType[] tileLakeHG = { TerrainType.JUNGLE, TerrainType.LAKE,  TerrainType.JUNGLE, 
+                                        TerrainType.JUNGLE, TerrainType.LAKE, TerrainType.JUNGLE, 
+                                        TerrainType.JUNGLE, TerrainType.LAKE,TerrainType.JUNGLE };
+	
+	static TerrainType[] tileDen =    { TerrainType.JUNGLE, TerrainType.JUNGLE,  TerrainType.JUNGLE, 
+                                        TerrainType.JUNGLE, TerrainType.DEN, TerrainType.JUNGLE, 
+                                        TerrainType.JUNGLE, TerrainType.JUNGLE,TerrainType.JUNGLE };
+	static TerrainType[] tileDen1 =    { TerrainType.JUNGLE, TerrainType.JUNGLE,  TerrainType.JUNGLE, 
+                                         TerrainType.JUNGLE, TerrainType.DEN, TerrainType.JUNGLE, 
+                                         TerrainType.JUNGLE, TerrainType.JUNGLE,TerrainType.JUNGLE };
+	
+	static TerrainType[] tileJungle =    { TerrainType.JUNGLE, TerrainType.JUNGLE,  TerrainType.JUNGLE, 
+        								TerrainType.JUNGLE, TerrainType.JUNGLE, TerrainType.JUNGLE, 
+        								TerrainType.JUNGLE, TerrainType.JUNGLE,TerrainType.JUNGLE };
+	
+	
+	static TerrainType[] tileCanal = { TerrainType.JUNGLE, TerrainType.JUNGLE,  TerrainType.JUNGLE, 
+        							   TerrainType.LAKE, TerrainType.LAKE, TerrainType.LAKE, 
+        							   TerrainType.JUNGLE, TerrainType.JUNGLE,TerrainType.JUNGLE };
+
+	
 
 	public static void main(String[] args) {
 
 		Board board = new Board();
 
-		// Adding tiles to deck
-		/*
-		Tile tile1 = new Tile(tileF, 1);
-		Tile tile2 = new Tile(tileG, 1);
-
-		System.out.println(tile1.getTrailEdgeCount());
-		System.out.println(tile1.isContinuation());
-
-		System.out.println(board.addXTile(0, 0, tile2));
-		System.out.println(tile2.getRow() + " " + tile2.getCol());
-		System.out.println(tile2.getTrailScore());
-
-		System.out.println();
-		System.out.println(board.addXTile(0, 1, tile1));
-		System.out.println(tile1.getTrailScore());
-		*/
-		
 		Tile tl = new Tile(tileTL, 1);
-		Tile tl2 = new Tile(tileTL, 1);
-		Tile tr = new Tile(tileTR, 1);
-		Tile tr2 = new Tile(tileTR, 1);
-		Tile bl = new Tile(tileBL, 1);
-		Tile bl2 = new Tile(tileBL, 1);
-		Tile br = new Tile(tileBR, 1);		
-		Tile br2 = new Tile(tileBR, 1);		
 		
-		
-		
-		Tile mrtee = new Tile(tileMRTEE, 1);
-		Tile bmrtee = new Tile(tileBMRTEE, 1);
-		Tile mrj = new Tile(tileMRJ, 1);
-
+		Tile lake1 = new Tile(tileLake1, 2);
+		Tile lake4 = new Tile(tileLake4, 3);
+		Tile lake3 = new Tile(tileLake3, 4);
+		Tile lake5 = new Tile(tileLake5, 5);
+		Tile lakeCanal = new Tile(tileCanal, 6);
+		Tile lake7b = new Tile(tileLake7b, 7);
+			
 		board = new Board();
-		//System.out.println(board.addXTile(0, 0, tl));
+			
 		
-		System.out.println(board.addXTile(0, 1, tl));
-		System.out.println(board.addXTile(0, 2, tr));
+		/*
+		System.out.println(board.addXTile(0, 0, den));	
+		System.out.println(board.addXTile(0, 1, lake4));
+		System.out.println(board.addXTile(1, 0, den1));	
+		System.out.println(board.addXTile(1, 1, lake1));
+		System.out.println(lake4.collectDenScores());
+		System.out.println(lake1.collectDenScores());
+		System.out.println(den.collectDenScores());
+		System.out.println(den1.collectDenScores());
+		System.out.println();
+		System.out.println(den.getDenScore());
+		System.out.println(den1.getDenScore());
+		*/
+		//System.out.println(board.addXTile(1, 1, lake5));
+		//System.out.println(lake5.collectDenScores());		
+		//System.out.println(den.getDenScore());
+		//System.out.println(den1.getDenScore());
 		
-		System.out.println(board.addXTile(1, 2, br));
-		System.out.println(board.addXTile(1, 1, mrj));
-		
-		System.out.println(board.addXTile(1, 0, tl2));
+		System.out.println(board.addXTile(0, 0, lake4));
+		System.out.println(board.addXTile(0, 1, lakeCanal));
+		System.out.println(board.addXTile(0, 2, lake3));
+		System.out.println(board.addXTile(1, 0, lake1));
+		System.out.println(board.addXTile(1, 1, lake7b));
+		System.out.println(board.addXTile(1, 2, lake5));
+		System.out.println(lake5.getLakeScore());
 				
-		System.out.println(board.addXTile(2, 0, bl));
-		System.out.println(board.addXTile(2, 1, br2));
 		
-		
-		
-		//System.out.println(board.addXTile(1, 0, bl));
-		//System.out.println(board.addXTile(1, 0, mrtee));
-		//System.out.println(board.addXTile(1, 1, br));
-		//System.out.println(board.addXTile(2, 0, bmrtee));	
-		
-		
-		System.out.println(mrj.getTrailScore());
-		//System.out.println(mrtee.getTrailScore());
-		
-		
-		// System.out.println(board.addXTile(0, 1, tile2));
-
 	}
 }

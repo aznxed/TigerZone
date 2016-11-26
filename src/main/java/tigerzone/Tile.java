@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import static tigerzone.Utils.*;
-
 import tigerzone.TerrainType;
 
 enum TerrainType {
@@ -35,6 +34,7 @@ public class Tile {
 	private TerrainType[] tilePortionType = new TerrainType[9];
 
 	private int trailEdgeCount;
+	private int lakeEdgeCount;
 
 	private int[] clusterIndices = new int[9];
 
@@ -53,6 +53,21 @@ public class Tile {
 			if (i % 2 != 0) {
 				if (tilePortionType[i] == TerrainType.GAMETRAIL) {
 					trailEdgeCount++;
+				}
+			}
+		}
+
+		// count number of lake edges for this tile
+		// if there is a lake center, then its all one continuous lake else
+		// they're separate lakes represents the center of an edge
+		if (isLakeCenter()) {
+			lakeEdgeCount = 1;
+		} else {
+			for (int i = 0; i < tilePortionType.length; i++) {
+				if (i % 2 != 0) {
+					if (tilePortionType[i] == TerrainType.LAKE) {
+						lakeEdgeCount++;
+					}
 				}
 			}
 		}
@@ -99,8 +114,8 @@ public class Tile {
 
 		// get the number of trails emanating from this tile
 		int trailCount = getTrailEdgeCount();
-		
-		//System.out.println("trailCount1 = " + trailCount);
+
+		// System.out.println("trailCount1 = " + trailCount);
 
 		if (trailCount == 2) {
 			--trailCount;
@@ -159,14 +174,14 @@ public class Tile {
 			addDistinctList(uniqueTrails, originalTrail);
 		}
 
-		System.out.println("uniqueTrails size = " + uniqueTrails.size());
-		System.out.println("trailCount = " + trailCount);
+		// System.out.println("uniqueTrails size = " + uniqueTrails.size());
+		// System.out.println("trailCount = " + trailCount);
 
 		// set score to trailCount - the number of trails emanating from tile.
 		// Each of the trails will be scored individually
 		score = trailCount - uniqueTrails.size();
 
-		System.out.println("score = " + score);
+		// System.out.println("score = " + score);
 
 		// Set used to determine if multiple trails share the same end tile
 		Set<Tile> endTiles = new HashSet<Tile>();
@@ -177,7 +192,7 @@ public class Tile {
 			Tile endTile = cTrail.get(cTrail.size() - 1);
 			endTiles.add(endTile);
 
-			System.out.println("cTrail.size = " + cTrail.size());
+			// System.out.println("cTrail.size = " + cTrail.size());
 			score += cTrail.size();
 			// if the trail has a proper ending, then see if there is a tiger in
 			// the trail
@@ -195,7 +210,7 @@ public class Tile {
 					score--;
 				}
 			}
-			System.out.println("score2 = " + score);
+			// System.out.println("score2 = " + score);
 
 		}
 
@@ -207,15 +222,16 @@ public class Tile {
 
 		// compensate for the fact that all the trails share the same
 		// starting tile, thus its counted multiple times.
-		//if (uniqueTrails.size() > 0) {
-		//	score -= (uniqueTrails.size() - 1);
-		//}
+		// if (uniqueTrails.size() > 0) {
+		// score -= (uniqueTrails.size() - 1);
+		// }
 		return score;
 	}
 
 	// Get the score if this is a den tile
 	// Return 0 if it's not a den
 	public int getDenScore() {
+
 		int score = 0;
 
 		// If this is not a den tile, just return
@@ -226,6 +242,7 @@ public class Tile {
 		// Else get all its possible 8 neighbors
 		List<Tile> neighbors = this.getBoard().getDenNeighbors(this.getRow(),
 				this.getCol());
+
 		// Return the size of that list plus one to include itself
 		return neighbors.size() + 1;
 	}
@@ -244,10 +261,14 @@ public class Tile {
 			return 0;
 		}
 
+		// return 0 if this is not a lake tile
 		if (!isLake()) {
 			return score;
 		}
 
+		// System.out.println("lake score1 = " + score);
+
+		// Create a list of possible lakes emanating from this tile
 		List<List<Tile>> lakes = new ArrayList<List<Tile>>();
 		List<Tile> lake;
 
@@ -264,7 +285,7 @@ public class Tile {
 			this.setVisited(true);
 			lake = new ArrayList<Tile>();
 			lake.add(this);
-			isTrailComplete(lake, getBoard().getTile(row + 1, col));
+			isLakeComplete(lake, getBoard().getTile(row + 1, col));
 			lakes.add(lake);
 		}
 		if (this.getRightEdge() == TerrainType.LAKE) {
@@ -272,7 +293,7 @@ public class Tile {
 			this.setVisited(true);
 			lake = new ArrayList<Tile>();
 			lake.add(this);
-			isTrailComplete(lake, getBoard().getTile(row, col + 1));
+			isLakeComplete(lake, getBoard().getTile(row, col + 1));
 			lakes.add(lake);
 		}
 		if (this.getLeftEdge() == TerrainType.LAKE) {
@@ -280,57 +301,127 @@ public class Tile {
 			this.setVisited(true);
 			lake = new ArrayList<Tile>();
 			lake.add(this);
-			isTrailComplete(lake, getBoard().getTile(row, col - 1));
+			isLakeComplete(lake, getBoard().getTile(row, col - 1));
 			lakes.add(lake);
 		}
+
+		// System.out.println("lakes size = " + lakes.size());
 
 		// Filtered list of lakes based on the original lakes list
 		// We'll be using addDistinctList() to filter out any duplicates and
 		// non-existent lakes (lakes of only size 1)
 		List<List<Tile>> uniqueLakes = new ArrayList<List<Tile>>();
 
+		// Begin the filtering process
 		for (List<Tile> originalLake : lakes) {
 			addDistinctList(uniqueLakes, originalLake);
 		}
 
+		// if this tile is a lake center, then do not touch its base score,
+		// which should be 1
+		if (!isLakeCenter()) {
+			score = getLakeEdgeCount() - uniqueLakes.size();
+		} else {
+			score = getLakeEdgeCount();
+		}
+
+		// System.out.println("unique lakes size = " + uniqueLakes.size());
+		// System.out.println("getLakeEdgeCount = " + getLakeEdgeCount());
+		// System.out.println("lake score2 = " + score);
+		// System.out.println("lake center = " + isLakeCenter());
+		// System.out.println();
+
 		boolean lakeComplete = true;
-		if (this.isLakeCenter()) {
+		// if this tile contains a lake center, then all lakes emanating from
+		// this tile should represent one lake
+		if (isLakeCenter()) {
+
+			// Set used to determine if multiple lakes share the same end tile
+			Set<Tile> endTiles = new HashSet<Tile>();
+
+			// iterate through all the lake channels and see if they all
+			// complete. we must iterate through all the channel regardless of
+			// complete or not because they must all be scored
 			for (List<Tile> l : uniqueLakes) {
+
+				// System.out.println("unique lake size = " + l.size());
+
+				// get the first and last tile in the channel to see if the
+				// channel makes a complete loop
 				Tile startTile = l.get(0);
 				Tile endTile = l.get(l.size() - 1);
-				if (!endTile.isLakeCenter()) {
+				endTiles.add(endTile);
+
+				// if the channel does not complete in a lake center, then its
+				// not a complete lake, so the channels emanating from this tile
+				// do not represent one contiguous lake
+				if (endTile.isLakeCenter()) {
 					lakeComplete = false;
 				}
+				// does this one channel form a loop
 				if (startTile != endTile) {
-					score += l.size();
-				} else {
 					score += l.size() - 1;
+				} else {
+					score += l.size() - 2;
+					// we must do this because looping around to the same tile
+					// also completes a lake!!
+					lakeComplete = true;
 				}
 			}
-			if (lakeComplete) {
+
+			// System.out.println("endTiles size = " + endTiles.size());
+
+			// compensate for those lakes that shared the same end tile, thus
+			// it was counted multiple times
+			score -= (uniqueLakes.size() - endTiles.size());
+
+			// if all the channels collectively form one lake, then update the
+			// score accordingly. Note that if there are no surrounding lake
+			// tiles, then no need to check for completeness
+			if (uniqueLakes.size() > 0 && lakeComplete) {
 				score *= 2;
 			}
+
 			return (score == 0) ? 1 : score;
 		}
 
+		// System.out.println("not lake center");
+
+		// Base score must be 0 when working with separate lakes.
+		score = 0;
+
+		// tile does not contain a lake center, therefore all lake channel
+		// emanating from this tile must be treated as separate lakes/channels.
 		for (List<Tile> l : uniqueLakes) {
+
+			int lakeScore = 0;
+
+			// System.out.println("unique lake size = " + l.size());
 			lakeComplete = true;
+
 			Tile startTile = l.get(0);
 			Tile endTile = l.get(l.size() - 1);
-			if (!endTile.isLakeCenter()) {
+
+			if (endTile.isLakeCenter()) {
 				lakeComplete = false;
 			}
-			if (startTile != endTile) {
-				score += l.size();
-			} else {
-				score += l.size() - 1;
-			}
-			if (lakeComplete) {
-				score *= 2;
-			}
-		}
-		return score;
+			// System.out.println("lake complete = " + lakeComplete);
 
+			if (startTile != endTile) {
+				lakeScore += l.size();
+			} else {
+				lakeScore += l.size() - 1;
+			}
+
+			if (lakeComplete) {
+				lakeScore *= 2;
+			}
+
+			// update the base score with this separate lake's score
+			score += lakeScore;
+		}
+
+		return score;
 	}
 
 	/**
@@ -351,6 +442,46 @@ public class Tile {
 		}
 
 		return false;
+	}
+
+	/**
+	 * This method finds all neigboring Dens and collects their scores
+	 * 
+	 * @return
+	 */
+	public int collectDenScores() {
+		int score = 0;
+
+		if (this.getBoard() == null) {
+			return score;
+		}
+
+		//System.out.println("collectDenScores: isDen returns " + this.isDen());
+		
+		// get my score if I'm a Den
+		if (this.isDen()) {
+			score += this.getDenScore();
+		}
+
+		// Look for neighbors that are Dens and get their score
+		List<Tile> allDenNeighbors = getBoard().getDenNeighbors(getRow(),
+				getCol());
+
+		//System.out.println("collectDenScores: allDenNeighbors size = " + allDenNeighbors.size());
+
+		// return if there are no Den neighbors
+		if (allDenNeighbors.isEmpty()) {
+			return score;
+		}
+
+		for (Tile n : allDenNeighbors) {
+			if (!n.isDen()) {
+				continue;
+			}
+			score += n.getDenScore();
+		}
+		
+		return score;
 	}
 
 	public TerrainType[] getTilePortionType() {
@@ -458,5 +589,20 @@ public class Tile {
 		System.out.println(t1 == t3);
 		System.out.println(t1 == t2);
 
+	}
+
+	/**
+	 * @return the lakeEdgeCount
+	 */
+	public int getLakeEdgeCount() {
+		return lakeEdgeCount;
+	}
+
+	/**
+	 * @param lakeEdgeCount
+	 *            the lakeEdgeCount to set
+	 */
+	public void setLakeEdgeCount(int lakeEdgeCount) {
+		this.lakeEdgeCount = lakeEdgeCount;
 	}
 }

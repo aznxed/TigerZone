@@ -72,7 +72,7 @@ public class Board {
 
 	/**
 	 * Return this tile's immediate neighbors
-	 * 
+	 *
 	 * @param x
 	 * @param y
 	 * @return
@@ -108,42 +108,61 @@ public class Board {
 	}
 
 	/**
-	 * Returns the 8 possible neighbors that surround this tile. Note that not
-	 * all 8 may be returned, since some may not exist
-	 * 
+	 * Returns the 8 possible neighbors that surround the tile at the given
+	 * coordinates. Note that not all 8 may be returned.
+	 *
 	 * @param x
 	 * @param y
 	 * @return
 	 */
 	public List<Tile> getDenNeighbors(int x, int y) {
-		// Get the list of "immediate" 4 neighbors for the tile at x, y. There
-		// may be up to 4 possible neighbors
-		List<Tile> nList = getNeighbors(x, y);
 
 		// List of all possible 8 neighbors
-		List<Tile> denNeighbors = new ArrayList<Tile>(nList);
+		List<Tile> denNeighbors = new ArrayList<Tile>();
 
-		// Go through each tile in nList
-		for (Tile n : nList) {
-			// Check if this tile is a top or bottom neighbor
-			if (n.getRow() == x + 1 || n.getRow() == x - 1) {
-				// See if this tile has a left neighbor
-				if (board[n.getRow()][n.getCol() - 1] != null) {
-					denNeighbors.add(board[n.getRow()][n.getCol() - 1]);
+		//System.out.println("getDenNeighbors: called with coords " + x + " " + y);
+
+		// return an empty list if either of the coordinates are not valid
+		if (x < 0 || x >= MAX_ROWS || y < 0 || y >= MAX_COLS) {
+			return denNeighbors;
+		}
+
+		// return an empty list if ther is no Tile at the given coordinates
+		if (board[x][y] == null) {
+			return denNeighbors;
+		}
+
+		//System.out.println("getDenNeighbors: collecting neighbors");
+		// iterate the three possible rows and their columns. we skip the tile
+		// whose coordinates are passed in
+		for (int i = x - 1; i <= x + 1; i++) {
+			// skip this row if it is out of bounds
+			if (i < 0 || i >= MAX_ROWS) {
+				continue;
+			}
+			// iterate the three possible columns for this row
+			for (int j = y - 1; j <= y + 1; j++) {
+				// skip this column if it is out of bounds
+				if (j < 0 || j >= MAX_COLS) {
+					continue;
 				}
-				// See if this tile has a right neighbor
-				if (board[n.getRow()][n.getCol() + 1] != null) {
-					denNeighbors.add(board[n.getRow()][n.getCol() + 1]);
+				// skip this cell if its coordinates are those of x and y
+				if (i == x && j == y) {
+					continue;
+				}
+				if (board[i][j] != null) {
+					denNeighbors.add(board[i][j]);
 				}
 			}
 		}
+
 		return denNeighbors;
 	}
 
 	/**
 	 * Checks to see if the tile being placed at the x-y coordinate is valid
 	 * with respect to its potential neighbors
-	 * 
+	 *
 	 * @param x
 	 * @param y
 	 * @param tile
@@ -219,7 +238,7 @@ public class Board {
 	/**
 	 * Add a Tile to the board. It will first validate that the Tile can be
 	 * added to that position.
-	 * 
+	 *
 	 * @param x
 	 * @param y
 	 * @param tile
@@ -425,7 +444,7 @@ public class Board {
 	public void addTile(Tile tile) {
 		// For now just take the first possible tile
 
-		/** I don't get this! Comments please! **/
+		// I don't get this! Comments please!
 		if (!(getPossibleMoves(tile).isEmpty())) {
 
 			// Keep a list of all the tiles placed on the board
@@ -433,9 +452,9 @@ public class Board {
 			tile.setBoard(this);
 
 			Random rand = new Random();
-			/**This doesn't make sense to me. Shouldn't we be adding the tile
+			// This doesn't make sense to me. Shouldn't we be adding the tile
 			// passed in and not the tile you're getting from the possible moves
-			list? **/
+			// list?
 			Tile addTile = getPossibleMoves(tile).get(
 					rand.nextInt(getPossibleMoves(tile).size()));
 			int x = addTile.getRow();
@@ -444,24 +463,24 @@ public class Board {
 
 			/*
 			 * List<Tile> nbors = getNeighbors(tile.getRow(), tile.getCol());
-			 * 
+			 *
 			 * //First tile placed on board if(nbors.size() == 0){
-			 * 
+			 *
 			 * //Start clusters //Call switch statement
-			 * 
+			 *
 			 * } else{ for(int i = 0; i < nbors.size(); i++){
-			 * 
+			 *
 			 * List<TerrainType> t = possibleClusters(nbors.get(i).getCode());
-			 * 
+			 *
 			 * //based on what switch statement gives us //jungleClusters //Add
 			 * tile to Cluster cluster = new Cluster(TerrainType.JUNGLE);
 			 * jungleClusters.add(cluster);
-			 * 
-			 * 
+			 *
+			 *
 			 * }
-			 * 
-			 * 
-			 * 
+			 *
+			 *
+			 *
 			 * }
 			 */
 
@@ -486,7 +505,7 @@ public class Board {
 
 	/**
 	 * Removes the Tile at the given coordinates
-	 * 
+	 *
 	 * @param x
 	 * @param y
 	 */
@@ -888,7 +907,7 @@ public class Board {
 		gameBoard.setBottomBound(CENTER_CELL + 1);
 		gameBoard.setLeftBound(CENTER_CELL - 1);
 		gameBoard.setRightBound(CENTER_CELL + 1);
-		
+
 		String imagePath = "src/main/CarcassonneTiles/";
 
 		gameBoard.initTiles(tiles);

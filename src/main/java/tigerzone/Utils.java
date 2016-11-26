@@ -181,7 +181,7 @@ public class Utils {
 	public static boolean isLakeComplete(List<Tile> lake, Tile current) {
 
 		// do nothing if there is no current tile
-		if (current == null) {
+		if (current == null) {			
 			return false;
 		}
 
@@ -193,7 +193,7 @@ public class Utils {
 
 		// if there is no lake in the middle, then the lake cannot continiue and
 		// is complete
-		if (!current.isLakeCenter()) {
+		if (!current.isLakeCenter()) {			
 			return true;
 		}
 
@@ -202,7 +202,7 @@ public class Utils {
 
 		// if this current tile was previously visited, then the lake has
 		// looped and its complete
-		if (current.isVisited()) {
+		if (current.isVisited()) {			
 			return true;
 		}
 
@@ -287,6 +287,9 @@ public class Utils {
 	 * @param list
 	 */
 	public static void addDistinctList(List<List<Tile>> lists, List<Tile> list) {
+		
+		//System.out.println("addDistinctList: lists size = " + lists.size());
+		//System.out.println("addDistinctList: list size = " + list.size());
 
 		// Don't want to add empty lists
 		if (list.size() == 1) {
