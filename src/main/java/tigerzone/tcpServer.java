@@ -57,7 +57,7 @@ public class tcpServer {
 				else{
 					inputLine = "";
 				}*/
-				if (inputLine.equals("")){
+				if (inputLine.equals("") || inputLine.equals(" ")){
 					System.out.println("Error empty input");
 					outputLine = serverp.processInput("");
 					out.println(outputLine);
@@ -68,7 +68,7 @@ public class tcpServer {
 					//ask the KnockKnockProtocol for a suitable reply
 					outputLine = serverp.processInput(inputLine);
 					//send reply
-					out.println(outputLine + "\r \n");
+					out.println(outputLine + " \r \n");
 					System.out.println("Sent: " + outputLine);
 					//if reply is bye then quit the loop
 					//java runtime automatically closes the input and output streams, the
