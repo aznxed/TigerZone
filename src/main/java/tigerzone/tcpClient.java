@@ -7,23 +7,25 @@ public class tcpClient {
 	public static void main(String[] args) throws IOException {
 		System.out.println("Starting Client");
 		
-		String hostName;
-		int portNumber;
+		String hostName = "";
+		int portNumber = -1;
+		String serverPassword = "";
+		String userName = "";
+		String userPassword = "";
 		
-		if (false) {
-			if (args.length != 2) {
-			    System.err.println(
-			        "Usage: java EchoClient <host name> <port number>");
-			    System.exit(1);
-			}
-			
+		//if no command argument
+		if (args.length != 0) {
 			hostName = args[0];
-			portNumber = Integer.parseInt(args[1]);
+			portNumber = Integer.valueOf(args[1]);
+			serverPassword = args[2];
+			userName = args[3];
+			userPassword = args[4];
 		}
 		else {
-				//TODO: Host name is unknown
-				hostName = "192.168.1.2";
-				portNumber = 10;
+			//No command arguments given
+			System.out.println("No Commandline Arguments Given " + args.length);
+			hostName = "192.168.1.2";
+			portNumber = 10;
 		}
 		
 		System.out.println("Connecting to " + hostName + " at port " + portNumber);
@@ -36,6 +38,7 @@ public class tcpClient {
 		    String serverMessage;
 		    String userMessage;
 		    tigerzoneClientProtocol clientp = new tigerzoneClientProtocol();
+		    clientp.initInfo(serverPassword, userName, userPassword);
 		
 		    while ((serverMessage = in.readLine()) != null) {
 		        System.out.println("Server: " + serverMessage);

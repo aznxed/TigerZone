@@ -34,8 +34,25 @@ public class tigerzoneClientProtocol {
     private move playerMove;
     
     bot bot = new bot();
+    
+    public void initInfo(String servPass, String playName, String playPass) {
+    	serverPassword = servPass;
+    	playerName = playName;
+    	playerPassword = playPass;
+    }
+    /*
+	private String servPass;
+	private String playName;
+	private String playPass;
+	*/
 
     public String processMessage(String theInput) {
+    	//Default to something
+    	if (serverPassword.equals("")){
+    		serverPassword = "PersiaRocks!";
+    	    playerName = "TeamO";
+    	    playerPassword = "password";
+    	}
         String theOutput = null;
 
         if (state == WAITING) {
