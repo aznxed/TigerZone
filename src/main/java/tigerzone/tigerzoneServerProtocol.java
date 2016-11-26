@@ -136,7 +136,7 @@ public class tigerzoneServerProtocol {
             state = SentStartTile;
         }
         else if (state == SentStartTile) {
-            theOutput = "REMAINING " + deck.length + " TILES ARE [ " + tileString + " ]";
+            theOutput = "THE REMAINING " + deck.length + " TILES ARE [ " + tileString + " ]";
             state = SentRemainingTiles;
         }
         //Send time till match starts
@@ -149,6 +149,9 @@ public class tigerzoneServerProtocol {
         	else {
         		theOutput = "MATCH BEGINS IN " + timeToMatch + " SECOND";
         	}
+			try {Thread.sleep(timeToMatch * 100);} catch(InterruptedException ex){
+				Thread.currentThread().interrupt();
+			}
             state = SentMatchBeginTime;
         }
         //Send move request to player

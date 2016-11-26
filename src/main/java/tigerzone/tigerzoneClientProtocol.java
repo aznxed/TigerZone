@@ -115,10 +115,10 @@ public class tigerzoneClientProtocol {
         }
         else if (state == ReceivedStartTile) {
         	String[] split = theInput.split(" ");
-        	if (split[0].equals("REMAINING")) {
-        		for (int i = 0; i < Integer.valueOf(split[1]); i++) {
+        	if (split[0].equals("THE")) {
+        		for (int i = 0; i < Integer.valueOf(split[2]); i++) {
         			//Add tile to deck
-        			bot.addDeck(split[5 + i]);
+        			bot.addDeck(split[6 + i]);
         		}
         		state = ReceivedRemainingTiles;
         	}
@@ -208,6 +208,7 @@ public class tigerzoneClientProtocol {
         	}
         	//Something has gone wrong if you're here
         	else if (split[0].equals("END") && split[2].equals("ROUND")) {
+        		System.out.println("ERROR DIDN'T DETECT MATCH END");
         		if (matchNum < matchTotal) {
         			state = ReceivedChallenge;
         		}

@@ -39,7 +39,8 @@ public class Tile {
 	private int[] clusterIndices = new int[9];
 
 	public Tile() {
-
+		//TODO: MAKE SURE TO DELETE THIS
+		this.type = 0;
 	}
 
 	public Tile(TerrainType[] tilePortionType, int type) {
