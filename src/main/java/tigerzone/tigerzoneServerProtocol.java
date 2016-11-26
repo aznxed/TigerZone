@@ -29,7 +29,7 @@ public class tigerzoneServerProtocol {
     private int challengeNum = 1;
     private int matchNum = 1;
     private int roundNum = 1;
-    private int roundTotal = 5;
+    private int roundTotal = 3;
     private int moveTime = 1;
     private boolean gameOver = false;
 
@@ -105,11 +105,11 @@ public class tigerzoneServerProtocol {
         //Begin tournament
         //Begin Challenge
         else if (state == SentWelcome) {
-        	if (matchNum > 1) {
-        		theOutput = "NEW CHALLENGE " + challengeNum + " YOU WILL PLAY " + matchNum + " MATCHES";
+        	if (roundTotal > 1) {
+        		theOutput = "NEW CHALLENGE " + challengeNum + " YOU WILL PLAY " + roundTotal + " MATCHES";
         	}
         	else {
-        		theOutput = "NEW CHALLENGE " + challengeNum + " YOU WILL PLAY " + matchNum + " MATCH";
+        		theOutput = "NEW CHALLENGE " + challengeNum + " YOU WILL PLAY " + roundTotal + " MATCH";
         	}
             state = SentNewChallenge;
         }

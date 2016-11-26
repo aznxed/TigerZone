@@ -1,3 +1,7 @@
+package tigerzone;
+
+import java.io.IOException;
+
 //********PSEUDOCODE FOR AI V 0.0.1 ***********/
 //---------INPUT---------//
 //possiblePlaces []
@@ -88,5 +92,7 @@
 //-------GAME TRAIL ------//
 //calculate the length  
 //calculate the prey
-
+public class AI {
+	
+}
 

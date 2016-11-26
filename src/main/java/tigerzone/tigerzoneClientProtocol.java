@@ -73,6 +73,7 @@ public class tigerzoneClientProtocol {
         //Input: BEGIN ROUND 1 OF 1
         else if (state == ReceivedChallenge) {
         	String[] split = theInput.split(" ");
+        	gamesOver = 0;
         	if (split[0].equals("BEGIN")) {
         		matchNum = Integer.valueOf(split[2]);
                 state = ReceivedRounds;
@@ -121,8 +122,11 @@ public class tigerzoneClientProtocol {
         		if ((playerMove.rot) != -1){
             		theOutput = theOutput + " PLACE " + split[12]+ " AT "
             					+ playerMove.xPos + " " + playerMove.yPos + " " + playerMove.rot;
-                	if(!(playerMove.meep).equals("")){
+                	if((playerMove.meep).equals("TIGER")){
                 		theOutput = theOutput + " " + playerMove.meep + " " + playerMove.meepPos;
+                	}
+                	else if((playerMove.meep).equals("CROCODILE")){
+                		theOutput = theOutput + " " + playerMove.meep;
                 	}
         		}
         		else if ((playerMove.meep).equals("PASS")){
@@ -144,11 +148,9 @@ public class tigerzoneClientProtocol {
             	if (split[2].equals("OVER")) {
             		//One Game is over
             		gamesOver++;
+            		System.out.println("Games over: " + gamesOver);
             		if (gamesOver > 1) {
             			state = MatchesOver;
-            		}
-            		else {
-            			state = ReceivedChallenge;
             		}
             	}
             	else if (!split[5].equals(playerName)){
@@ -189,7 +191,6 @@ public class tigerzoneClientProtocol {
         	//Something has gone wrong if you're here
         	else if (split[0].equals("END") && split[2].equals("ROUND")) {
         		if (matchNum < matchTotal) {
-        			System.out.println("-2--------" + matchNum + " " + matchTotal);
         			state = ReceivedChallenge;
         		}
         		else {
@@ -202,11 +203,9 @@ public class tigerzoneClientProtocol {
         	String[] split = theInput.split(" ");
         	if (split[0].equals("END") && split[2].equals("ROUND")) {
         		if (matchNum < matchTotal) {
-        			System.out.println("---------" + matchNum + " " + matchTotal);
         			state = ReceivedChallenge;
         		}
         		else {
-        			System.out.println("---------" + matchNum + " " + matchTotal);
         			state = RoundsOver;
         		}
         	}
