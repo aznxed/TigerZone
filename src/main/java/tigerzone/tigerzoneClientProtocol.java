@@ -62,12 +62,13 @@ public class tigerzoneClientProtocol {
         	}
         }
         else if (state == SentJoin) {
-            if (theInput.equals("HELLO!")) {
+        	String[] split = theInput.split(" ");
+            if (split[0].equals("HELLO!")) {
                 theOutput = "I AM " + playerName + " " + playerPassword;
                 state = SentName;
             } 
             else {
-                theOutput = "Error Invalid Message Hello";
+                System.out.println("Error Invalid Message Hello");
             }
         }
         else if (state == SentName) {

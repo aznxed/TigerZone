@@ -45,9 +45,15 @@ public class tcpClient {
 		        if (serverMessage.equals("Bye."))
 		            break;
 		        
-		        userMessage = clientp.processMessage(serverMessage);
+		        if (serverMessage.equals("") || serverMessage.equals(" ")){
+		        	System.out.println("ERROR EMPTY SERVER MESSAGE");
+		        	userMessage = clientp.processMessage("");
+		        }
+		        else {
+		        	userMessage = clientp.processMessage(serverMessage);
+		        }
 		        if (userMessage != null) {
-		            out.println(userMessage + "\r \n");
+		            out.println(userMessage + " \r \n");
 		            System.out.println("User: " + userMessage);
 		        }
 		        else {
