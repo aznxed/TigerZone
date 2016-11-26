@@ -1,18 +1,26 @@
 package tigerzone;
 
+import java.util.ArrayDeque;
+import java.util.Queue;
+
 public class bot {
 	
 	//Initialize the deck of tiles
 	public static void initDeck(){
+		Queue<Tile> tileDeck = new ArrayDeque<>();
 		return;
 	}
 	//Add a tile to the Deck
 	public static void addDeck(String tile){
+		//tile in form jttp-
+		//needs to be translated before adding to deck
 		System.out.println("Added " + tile + " to deck");
 		return;
 	}
 	//Initialize the board
 	public static void initBoards(){
+		Board boardA = new Board();
+		Board boardB = new Board();
 		return;
 	}
 	//Place first tile
@@ -25,6 +33,14 @@ public class bot {
 		//To Pass Set meep equal to "PASS" and rot to -1
 		//To Retrieve Meep Set meep equal to "RETRIEVE" and rot to -1. Use x and y for coor
 		//To ADD Meep Set meep equal to "ADD" and rot to -1. Use x and y for coor
+		
+		//get starttime in millisecond
+		//current move = "";
+		//while (time * 0.8 > (currenttime - starttime)){
+		// 		Check for next valid move
+		// }
+		//while (currentMove = "") { check valid tile placements }
+		
 		move moveMade = new move(999, 999, 360, "", -1);
 		return moveMade;
 	}
