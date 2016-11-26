@@ -50,18 +50,33 @@ public class tcpServer {
 			//while loop iterates on the read from the input stream until
 			//the client responds by writing to its output stream
 			while ((inputLine = in.readLine()) != null) {
-				System.out.println("Received Message " + inputLine);
-				//ask the KnockKnockProtocol for a suitable reply
-				outputLine = serverp.processInput(inputLine);
-				//send reply
-				out.println(outputLine);
-				System.out.println("Sent Message " + outputLine);
-				//if reply is bye then quit the loop
-				//java runtime automatically closes the input and output streams, the
-				//client socket and server socket because it was created in the try-with-
-				//resources statement
-				if (outputLine.equals("Bye."))
-					break;
+			//while(true) {
+				/*if ((inputLine = in.readLine()) != null) {
+					//Do Nothing
+				}
+				else{
+					inputLine = "";
+				}*/
+				if (inputLine.equals("")){
+					System.out.println("Error empty input");
+					outputLine = serverp.processInput("");
+					out.println(outputLine);
+					System.out.println("Sent: " + outputLine);
+				}
+				else {
+					System.out.println("Got:  " + inputLine);
+					//ask the KnockKnockProtocol for a suitable reply
+					outputLine = serverp.processInput(inputLine);
+					//send reply
+					out.println(outputLine + "\r \n");
+					System.out.println("Sent: " + outputLine);
+					//if reply is bye then quit the loop
+					//java runtime automatically closes the input and output streams, the
+					//client socket and server socket because it was created in the try-with-
+					//resources statement
+					if (outputLine.equals("Bye."))
+						break;
+				}
 			}
 			
 		}
