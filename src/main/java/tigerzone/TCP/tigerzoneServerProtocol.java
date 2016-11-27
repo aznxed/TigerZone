@@ -25,7 +25,6 @@ public class tigerzoneServerProtocol {
     private static final int SentEndRound = 21;
     private static final int SentEndChallenges = 22;
     private static final int SentEndConnection = 23;
-    private static final int END = 24;
     
     private int state = WAITING;
     private int connectedPlayers = 0;
@@ -51,6 +50,7 @@ public class tigerzoneServerProtocol {
 	private String playerName = "";
 	private int player1Score = 0;
 	private int player2Score = 0;
+	private long moveStartTime;
 	
 	//Used for sending current game
 	private boolean gameID = true;
@@ -166,7 +166,7 @@ public class tigerzoneServerProtocol {
         
         else if (state == SentMatchBeginTime) {
         	//Wait timeToMatch for game to start
-			try {Thread.sleep(timeToMatch * 100);} catch(InterruptedException ex){
+			try {Thread.sleep(timeToMatch * 1000);} catch(InterruptedException ex){
 				Thread.currentThread().interrupt();
 			}
         	state = StartMatch;
@@ -177,9 +177,10 @@ public class tigerzoneServerProtocol {
             //TODO: Set timer for response
         	currentTile = deck[moveNum - 1];
         	//Send Move to player
-        	theOutput = moveMess((gameID ? "A" : "B"), moveTime, moveNum, currentTile);
-        	//Send Move to bot
         	botMove = serverBot.makeMove((gameID ? "B" : "A"), moveTime, currentTile);
+        	theOutput = moveMess((gameID ? "A" : "B"), moveTime, moveNum, currentTile);
+    		moveStartTime = System.currentTimeMillis();
+        	//Send Move to bot
             state = SentMakeAMove;
         }
         
@@ -199,8 +200,25 @@ public class tigerzoneServerProtocol {
         		state = SentMoveMade;
         	}
         	//Receive playerMove
+        	//Check valid move by player
+        	String[] split = theInput.split(" ");
         	//TODO: Remove later
         	if (theInput == null){
+        		System.out.println("FORFEITED: ILLEGAL TILE PLACEMENT");
+        		state = SentEndChallenges;
+        	}
+        	if (split[0].equals("GAME") && split[2].equals("MOVE")) {
+        		if (!((moveTime * 1000) < (System.currentTimeMillis() - moveStartTime))){
+        			
+        		}
+        		//Out of time Forfeit
+        		else {
+                	theOutput = theOutput + "FORFEITED: TIMEOUT";
+            		System.out.println("FORFEITED: TIMEOUT");
+                	state = SentEndChallenges;
+        		}
+        	}
+        	else {
         		System.out.println("FORFEITED: ILLEGAL TILE PLACEMENT");
         		state = SentEndChallenges;
         	}
@@ -223,7 +241,6 @@ public class tigerzoneServerProtocol {
         	}
         	//Timeout
         	else if (true) {
-        	theOutput = theOutput + "FORFEITED: TIMEOUT";
         	}
         	//Illegal Message Received
         	else if (true) {
@@ -260,9 +277,9 @@ public class tigerzoneServerProtocol {
         
         else if (state == SentEndChallenges) {
         	theOutput = "THANK YOU FOR PLAYING! GOODBYE";
-        	state = END;
+        	state = SentEndConnection;
         }
-        else if (state == END){
+        else if (state == SentEndConnection){
         	theOutput = "Bye.";
         }
         
