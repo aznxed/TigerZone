@@ -53,8 +53,10 @@ public class tigerzoneClientProtocol {
     	    playerName = "TeamO";
     	    playerPassword = "password";
     	}
+        if (theInput == null){
+        	return null;
+        }
         String theOutput = null;
-
         if (state == WAITING) {
         	if (theInput.equals("THIS IS SPARTA!")) {
         		theOutput = "JOIN " + serverPassword;
@@ -86,6 +88,13 @@ public class tigerzoneClientProtocol {
         		challengeNum = Integer.valueOf(split[2]);
         		matchTotal = Integer.valueOf(split[6]);
         		state = ReceivedChallenge;
+        		theOutput = "";
+        	}
+        	//Wait for next challenge
+        	//If game over 
+        	else if (split[0].equals("THANK")) {
+            	theOutput = "Bye.";
+        		state = Finished;
         	}
         }
         //Input: BEGIN ROUND 1 OF 1
@@ -106,6 +115,7 @@ public class tigerzoneClientProtocol {
                 state = ReceivedOpponent;
         	}
         }
+        
         else if (state == ReceivedOpponent) {
         	String[] split = theInput.split(" ");
         	if (split[0].equals("STARTING")) {
@@ -113,6 +123,7 @@ public class tigerzoneClientProtocol {
                 state = ReceivedStartTile;
         	}
         }
+        
         else if (state == ReceivedStartTile) {
         	String[] split = theInput.split(" ");
         	if (split[0].equals("THE")) {
@@ -120,9 +131,11 @@ public class tigerzoneClientProtocol {
         			//Add tile to deck
         			bot.addDeck(split[6 + i]);
         		}
+        		theOutput = "";
         		state = ReceivedRemainingTiles;
         	}
         }
+        
         else if (state == ReceivedRemainingTiles) {
         	String[] split = theInput.split(" ");
         	if (split[0].equals("MATCH")) {
@@ -130,6 +143,7 @@ public class tigerzoneClientProtocol {
         		state = MakeAMove;
         	}
         }
+        
         //MAKE YOUR MOVE IN GAME A WITHIN 1 SECOND: MOVE 1 PLACE TLTTP
         else if (state == MakeAMove) {
         	String[] split = theInput.split(" ");
@@ -186,15 +200,15 @@ public class tigerzoneClientProtocol {
         			//TODO: Make sure this is correct format
         			else if(split[6].equals("TILE")){
         				//Pass
-        				if (split[9].equals("PASS")){
+        				if (split[9].equals("PASSED")){
         					//Do Nothing
         				}
         				//Retrieve Tiger
-        				else if (split[9].equals("RETRIEVE")){
+        				else if (split[9].equals("RETRIEVED")){
         					bot.removeMeep(Integer.valueOf(split[12]), Integer.valueOf(split[13]));
         				}
         				//Add Tiger
-        				else if (split[9].equals("ADD")){
+        				else if (split[9].equals("ADDED")){
         					bot.placeMeep(Integer.valueOf(split[13]), Integer.valueOf(split[14]));
         				}
         			}
@@ -229,12 +243,14 @@ public class tigerzoneClientProtocol {
         		}
         	}
         }
+        
         else if (state == RoundsOver) {
         	String[] split = theInput.split(" ");
         	if (split[0].equals("END") && split[2].equals("CHALLENGES")) {
-        		state = ChallengeOver;
+        		state = WasWelcomed;
         	}
         }
+        //This can probably be deleted
         else if (state == ChallengeOver) {
         	String[] split = theInput.split(" ");
         	if (split[0].equals("THANK")) {

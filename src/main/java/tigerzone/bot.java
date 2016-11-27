@@ -43,14 +43,8 @@ public class bot {
 		//Tile bar = myDeck.get(tileDeck);
 		//Tile tempTile = myDeck.transTile(tile);
 		
-		//get starttime in millisecond
-		//current move = "";
-		//while (time * 0.8 > (currenttime - starttime)){
-		// 		Check for next valid move
-		// }
-		//while (currentMove = "") { check valid tile placements }
 		move currMove = new move(0, 0, 0, "", -2);
-		long timeLeft = (long) (time * 0.8);
+		long timeLeft = (long) ((double) time * 0.8 * 1000);
 		while (timeLeft > (System.currentTimeMillis() - startTime)) {
 			//Check for next best move
 		}

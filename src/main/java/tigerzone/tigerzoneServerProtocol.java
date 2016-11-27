@@ -17,11 +17,13 @@ public class tigerzoneServerProtocol {
     private static final int SentMakeAMove = 10;
     private static final int SentMoveMade = 11;
     private static final int SendSecondScore = 12;
+    private static final int StartMatch = 13;
     
     private static final int SentScore = 20;
     private static final int SentEndRound = 21;
     private static final int SentEndChallenges = 22;
     private static final int SentEndConnection = 23;
+    private static final int END = 24;
     
     private int state = WAITING;
     private int connectedPlayers = 0;
@@ -71,7 +73,8 @@ public class tigerzoneServerProtocol {
         if (state == WAITING) {
             theOutput = "THIS IS SPARTA!";
             state = SentSparta;
-        } 
+        }
+        
         //Ask for tournament password
         else if (state == SentSparta) {
         	//First arg must be JOIN, Second is the password
@@ -88,6 +91,7 @@ public class tigerzoneServerProtocol {
         		state = WAITING;
         	}
         }
+        
         //Get player id and player password
         else if (state == SentHello) {
         	String[] split = theInput.split(" ");
@@ -99,9 +103,10 @@ public class tigerzoneServerProtocol {
             		state = SentWelcome;
             	}
             } else {
-                theOutput = "ERROR: Unknown Reply";
+                System.out.println("ERROR: Unknown Reply");
             }
         } 
+        
         //Begin tournament
         //Begin Challenge
         else if (state == SentWelcome) {
@@ -113,17 +118,20 @@ public class tigerzoneServerProtocol {
         	}
             state = SentNewChallenge;
         }
+        
         //Begin Round
         else if (state == SentNewChallenge) {
             theOutput = "BEGIN ROUND " + roundNum + " OF " + roundTotal;
             state = SentBeginRound;
         }
+        
         //Send opponent name player
         //TODO: Send to both players
         else if (state == SentBeginRound) {
             theOutput = "YOUR OPPONENT IS PLAYER " + botID;
             state = SentOpponent;
         }
+        
         //Send starting tile
         else if (state == SentOpponent) {
         	int xPos = 0;
@@ -135,10 +143,12 @@ public class tigerzoneServerProtocol {
             serverBot.firstTile(startingTile, xPos, yPos, rot);
             state = SentStartTile;
         }
+        
         else if (state == SentStartTile) {
             theOutput = "THE REMAINING " + deck.length + " TILES ARE [ " + tileString + " ]";
             state = SentRemainingTiles;
         }
+        
         //Send time till match starts
         else if (state == SentRemainingTiles) {
         	moveNum = 1;
@@ -149,13 +159,19 @@ public class tigerzoneServerProtocol {
         	else {
         		theOutput = "MATCH BEGINS IN " + timeToMatch + " SECOND";
         	}
+            state = SentMatchBeginTime;
+        }
+        
+        else if (state == SentMatchBeginTime) {
+        	//Wait timeToMatch for game to start
 			try {Thread.sleep(timeToMatch * 100);} catch(InterruptedException ex){
 				Thread.currentThread().interrupt();
 			}
-            state = SentMatchBeginTime;
+        	state = StartMatch;
         }
+        
         //Send move request to player
-        else if (state == SentMatchBeginTime) {
+        else if (state == StartMatch) {
             //TODO: Set timer for response
         	currentTile = deck[moveNum - 1];
         	//Send Move to player
@@ -164,6 +180,7 @@ public class tigerzoneServerProtocol {
         	botMove = serverBot.makeMove((gameID ? "B" : "A"), moveTime, currentTile);
             state = SentMakeAMove;
         }
+        
         //Send Move Opponent Made
         else if (state == SentMakeAMove) {
         	//Sent botmove to player
@@ -172,8 +189,8 @@ public class tigerzoneServerProtocol {
         	if(!(botMove.meep).equals("")){
         		theOutput = theOutput + " " + botMove.meep + " " + botMove.meepPos;
         	}
-        	if (deck.length > moveNum){
-        		state = SentMatchBeginTime;
+        	if (deck.length > moveNum) {
+        		state = StartMatch;
             	moveNum++;
         	}
         	else {
@@ -211,15 +228,18 @@ public class tigerzoneServerProtocol {
         	theOutput = theOutput + "FORFEITED: ILLEGAL MESSAGE RECEIVED";
         	}*/
         }
+        
         else if (state == SentMoveMade) {
         	//Output score for both games
         	theOutput = "GAME " + "A" + " OVER PLAYER " + playerName + " " + player1Score + " PLAYER " + botID + " " + player2Score;
         	state = SendSecondScore;
         }
+        
         else if (state == SendSecondScore){
         	theOutput = "GAME " + "B" + " OVER PLAYER " + playerName + " " + player1Score + " PLAYER " + botID + " " + player2Score;
             state = SentScore;
         }
+        
         else if (state == SentScore) {
         	theOutput = "END OF ROUND " + roundNum + " OF " + roundTotal;
         	if(roundNum < roundTotal){
@@ -230,14 +250,20 @@ public class tigerzoneServerProtocol {
         		state = SentEndRound;
         	}
         }
+        
         else if (state == SentEndRound) {
         	theOutput = "END OF CHALLENGES";
         	state = SentEndChallenges;
         }
+        
         else if (state == SentEndChallenges) {
         	theOutput = "THANK YOU FOR PLAYING! GOODBYE";
-        	state = WAITING;
+        	state = END;
         }
+        else if (state == END){
+        	theOutput = "Bye.";
+        }
+        
         return theOutput;
     }
 }
