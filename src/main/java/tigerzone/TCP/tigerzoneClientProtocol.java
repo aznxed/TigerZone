@@ -1,6 +1,7 @@
 package tigerzone.TCP;
 
 import tigerzone.bot;
+import tigerzone.fakeBot;
 import tigerzone.move;
 import java.net.*;
 import java.io.*;
@@ -35,7 +36,7 @@ public class tigerzoneClientProtocol {
     private int gamesOver = 0;
     private move playerMove;
     
-    bot bot = new bot();
+    fakeBot bot = new fakeBot();
     
     public void initInfo(String servPass, String playName, String playPass) {
     	serverPassword = servPass;

@@ -1,6 +1,7 @@
 package tigerzone.TCP;
 
 import tigerzone.bot;
+import tigerzone.fakeBot;
 import tigerzone.move;
 import java.net.*;
 import java.io.*;
@@ -55,7 +56,7 @@ public class tigerzoneServerProtocol {
 	//Used for sending current game
 	private boolean gameID = true;
 	
-	bot serverBot = new bot();
+	fakeBot serverBot = new fakeBot();
 	
 	public String moveMess(String gID, int time, int num, String tiles){
 		String mess = "";
