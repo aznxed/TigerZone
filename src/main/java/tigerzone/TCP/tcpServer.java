@@ -1,4 +1,4 @@
-package tigerzone;
+package tigerzone.TCP;
 
 import java.net.*;
 import java.io.*;

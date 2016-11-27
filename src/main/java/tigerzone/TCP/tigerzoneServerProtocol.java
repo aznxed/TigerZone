@@ -1,6 +1,10 @@
-package tigerzone;
+package tigerzone.TCP;
 
 import java.net.*;
+
+import tigerzone.bot;
+import tigerzone.move;
+
 import java.io.*;
 
 public class tigerzoneServerProtocol {

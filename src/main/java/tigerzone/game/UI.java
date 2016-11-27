@@ -1,4 +1,4 @@
-package tigerzone;
+package tigerzone.game;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;

@@ -1,4 +1,4 @@
-package tigerzone;
+package tigerzone.game;
 
 
 import java.util.ArrayList;
@@ -102,58 +102,7 @@ public class Board {
 		return n;
 	}
 
-	/**
-	 * Returns the 8 possible neighbors that surround the tile at the given
-	 * coordinates. Note that not all 8 may be returned.
-	 *
-	 * @param x
-	 * @param y
-	 * @return
-	 */
-	public List<Tile> getDenNeighbors(int x, int y)//moveto AI
-	{
-
-		// List of all possible 8 neighbors
-		List<Tile> denNeighbors = new ArrayList<Tile>();
-
-		//System.out.println("getDenNeighbors: called with coords " + x + " " + y);
-
-		// return an empty list if either of the coordinates are not valid
-		if (x < 0 || x >= MAX_ROWS || y < 0 || y >= MAX_COLS) {
-			return denNeighbors;
-		}
-
-		// return an empty list if ther is no Tile at the given coordinates
-		if (board[x][y] == null) {
-			return denNeighbors;
-		}
-
-		//System.out.println("getDenNeighbors: collecting neighbors");
-		// iterate the three possible rows and their columns. we skip the tile
-		// whose coordinates are passed in
-		for (int i = x - 1; i <= x + 1; i++) {
-			// skip this row if it is out of bounds
-			if (i < 0 || i >= MAX_ROWS) {
-				continue;
-			}
-			// iterate the three possible columns for this row
-			for (int j = y - 1; j <= y + 1; j++) {
-				// skip this column if it is out of bounds
-				if (j < 0 || j >= MAX_COLS) {
-					continue;
-				}
-				// skip this cell if its coordinates are those of x and y
-				if (i == x && j == y) {
-					continue;
-				}
-				if (board[i][j] != null) {
-					denNeighbors.add(board[i][j]);
-				}
-			}
-		}
-
-		return denNeighbors;
-	}
+	
 
 	/**
 	 * Checks to see if the tile being placed at the x-y coordinate is valid
@@ -164,7 +113,7 @@ public class Board {
 	 * @param tile
 	 * @return
 	 */
-	public boolean isValid(int x, int y, Tile tile)//moveto Bot.java
+	public boolean isValid(int x, int y, Tile tile)
 	{
 
 		// Tile already exists in that position

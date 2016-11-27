@@ -1,4 +1,4 @@
-package tigerzone;
+package tigerzone.AI;
 
 import java.io.IOException;
 

@@ -3,6 +3,9 @@ package tigerzone;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
+import tigerzone.game.Board;
+import tigerzone.game.Tile;
+
 public class bot {
 	
 	//Initialize the deck of tiles
