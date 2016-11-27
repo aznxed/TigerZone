@@ -30,9 +30,9 @@ public class tigerzoneServerProtocol {
     private int connectedPlayers = 0;
     
     private int challengeNum = 1;
-    private int matchNum = 1;
+    private int challengeTotal = 2;
     private int roundNum = 1;
-    private int roundTotal = 3;
+    private int roundTotal = 2;
     private int moveTime = 1;
     private boolean gameOver = false;
 
@@ -45,7 +45,7 @@ public class tigerzoneServerProtocol {
 	private int moveNum = 0;
 	private move botMove;
 	private move playerMove;
-	private String botID = "TeamFoo";
+	private String botID = "TEAMFOO";
 	private String currentTile = "";
 	private String playerName = "";
 	private int player1Score = 0;
@@ -203,12 +203,13 @@ public class tigerzoneServerProtocol {
         	//Check valid move by player
         	String[] split = theInput.split(" ");
         	//TODO: Remove later
-        	if (theInput == null){
-        		System.out.println("FORFEITED: ILLEGAL TILE PLACEMENT");
+        	if (theInput.equals(null)){
+        		System.out.println("FORFEITED: ILLEGAL MESSAGE RECEIVED");
         		state = SentEndChallenges;
         	}
-        	if (split[0].equals("GAME") && split[2].equals("MOVE")) {
+        	else if (split[0].equals("GAME") && split[2].equals("MOVE")) {
         		if (!((moveTime * 1000) < (System.currentTimeMillis() - moveStartTime))){
+        			//Check player move
         			
         		}
         		//Out of time Forfeit
@@ -238,9 +239,6 @@ public class tigerzoneServerProtocol {
         	//Invalid Meeple Placement
         	else if (true) {
         	theOutput = theOutput + "FORFEITED: ILLEGAL INVALID MEEPLE PLACEMENT";
-        	}
-        	//Timeout
-        	else if (true) {
         	}
         	//Illegal Message Received
         	else if (true) {
@@ -272,7 +270,13 @@ public class tigerzoneServerProtocol {
         
         else if (state == SentEndRound) {
         	theOutput = "END OF CHALLENGES";
-        	state = SentEndChallenges;
+        	if (challengeTotal > challengeNum) {
+        		state = SentWelcome;
+        		challengeNum++;
+        	}
+        	else {
+        		state = SentEndChallenges;
+        	}
         }
         
         else if (state == SentEndChallenges) {
