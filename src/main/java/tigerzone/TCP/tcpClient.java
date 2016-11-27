@@ -13,20 +13,17 @@ public class tcpClient {
 		String userName = "";
 		String userPassword = "";
 		
-		//if no command argument
-		if (args.length != 0) {
-			hostName = args[0];
-			portNumber = Integer.valueOf(args[1]);
-			serverPassword = args[2];
-			userName = args[3];
-			userPassword = args[4];
+		//If not enough command arguments
+		if (args.length < 5 ) {
+			System.err.println("Usage: java tcpServer <port number>");
+			System.exit(1);
 		}
-		else {
-			//No command arguments given
-			System.out.println("No Commandline Arguments Given " + args.length);
-			hostName = "192.168.1.2";
-			portNumber = 10;
-		}
+		
+		hostName = args[0];
+		portNumber = Integer.valueOf(args[1]);
+		serverPassword = args[2];
+		userName = args[3];
+		userPassword = args[4];
 		
 		System.out.println("Connecting to " + hostName + " at port " + portNumber);
 		try (
@@ -41,15 +38,15 @@ public class tcpClient {
 		    clientp.initInfo(serverPassword, userName, userPassword);
 		
 		    while ((serverMessage = in.readLine()) != null) {
-		        System.out.println("Server: " + serverMessage);
 		        if (serverMessage.equals("Bye."))
 		            break;
 		        
 		        if (serverMessage.equals("") || serverMessage.equals(" ")){
-		        	System.out.println("ERROR EMPTY SERVER MESSAGE");
-		        	userMessage = clientp.processMessage("");
+		        	//System.out.println("ERROR EMPTY SERVER MESSAGE");
+		        	userMessage = null;
 		        }
 		        else {
+			        System.out.println("Server: " + serverMessage);
 		        	userMessage = clientp.processMessage(serverMessage);
 		        }
 		        if (userMessage != null) {

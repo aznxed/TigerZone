@@ -1,6 +1,26 @@
 package tigerzone.AI;
+import tigerzone.game.Deck;
+import tigerzone.game.Tile;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-import java.io.IOException;
+public class AI {
+	private 
+    
+	class option{
+		int score; //calculated score
+		int ref;//refers to the tile position in possible moves
+	}
+	private ArrayList<option> scores = new ArrayList<option>();  
+	public AI (Tile []possiblePlaces, Deck deck ){
+		
+	}
+	void makeMove()
+	{
+		//takes best move from the priority queue
+	}
+}
 
 //********PSEUDOCODE FOR AI V 0.0.1 ***********/
 //---------INPUT---------//
@@ -92,7 +112,5 @@ import java.io.IOException;
 //-------GAME TRAIL ------//
 //calculate the length  
 //calculate the prey
-public class AI {
-	
-}
+
 
