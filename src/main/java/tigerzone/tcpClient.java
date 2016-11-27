@@ -38,8 +38,6 @@ public class tcpClient {
 		    clientp.initInfo(serverPassword, userName, userPassword);
 		
 		    while ((serverMessage = in.readLine()) != null) {
-		        if (serverMessage.equals("Bye."))
-		            break;
 		        
 		        if (serverMessage.equals("") || serverMessage.equals(" ")){
 		        	//System.out.println("ERROR EMPTY SERVER MESSAGE");
@@ -50,6 +48,9 @@ public class tcpClient {
 		        	userMessage = clientp.processMessage(serverMessage);
 		        }
 		        if (userMessage != null) {
+			        if (userMessage.equals("Bye.")) {
+			        	break;
+			        }
 		            out.println(userMessage + " \r \n");
 		            System.out.println("User: " + userMessage);
 		        }
