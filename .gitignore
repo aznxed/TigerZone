@@ -16,6 +16,7 @@ hs_err_pid*
 #Eclipse
 
 .metadata
+.classpath
 bin/
 tmp/
 *.tmp
