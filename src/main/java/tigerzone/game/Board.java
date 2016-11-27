@@ -10,7 +10,6 @@ public class Board {
 
 	public static int MAX_ROWS = 153;
 	public static int MAX_COLS = 153;
-
 	public static int CENTER_CELL = MAX_ROWS / 2 + 1;
 
 	private int topBound;
