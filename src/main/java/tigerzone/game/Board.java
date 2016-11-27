@@ -4,7 +4,7 @@ package tigerzone.game;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
+import tigerzone.game.Deck;
 
 public class Board {
 
@@ -390,7 +390,7 @@ public class Board {
 		board[x][y] = null;
 	}
 
-	public void initTiles(List<Tile> tiles) {
+	public void initTiles(Deck tiles) {
 		//this will be moved to deck.java
 		Tile startTile = new Tile("TLTJ-", 19, 0, CENTER_CELL, CENTER_CELL);
 		board[CENTER_CELL][CENTER_CELL] = startTile;
@@ -400,21 +400,23 @@ public class Board {
 	public static void main(String[] args)
 	{
 		Board gameBoard = new Board();
-		List<Tile> tiles = new ArrayList<Tile>(); //change to deck
+		Deck deck = new Deck();
+		
 		Tile temp = new Tile("TLTJ-",1);//test code
-		tiles.add(temp);//test code
+		deck.addTile(temp);//test code
 		temp = new Tile("JJJJ-",1);//test code
-		tiles.add(temp);//test code
+		deck.addTile(temp);//test code
+		
 		gameBoard.setTopBound(CENTER_CELL - 1);
 		gameBoard.setBottomBound(CENTER_CELL + 1);
 		gameBoard.setLeftBound(CENTER_CELL - 1);
 		gameBoard.setRightBound(CENTER_CELL + 1);
 
 
-		gameBoard.initTiles(tiles);//change to deck
+		gameBoard.initTiles(deck);//change to deck
 
-		for (int i = 0; i < tiles.size(); i++) {
-			gameBoard.addTile(tiles.get(i)); 
+		for (int i = 0; i < deck.getSize()+1; i++) {
+			gameBoard.addTile(deck.getTop());
 		}
 		UI test = new UI();
 		test.createUIBoard(gameBoard);

@@ -5,22 +5,17 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 
 public class Deck {
-	public Queue<Tile> init() {
-		Queue<Tile> tileDeck = new ArrayDeque<>();
-		return tileDeck;
+	private Queue<Tile> tileDeck = new ArrayDeque<>();
+
+	public void addTile(Tile tile) {
+		tileDeck.add(tile);
 	}
-	public void addTile(Queue<Tile> tileDecks, Tile tile) {
-		//System.out.println("Add Tile to deck");
-		//tileDecks.offer(tile);
-		//System.out.println("Tile added");
+	public Tile getTop() {
+		return tileDeck.remove();
 	}
-	public Tile get(Queue<Tile> tileDecks) {
-		return tileDecks.remove();
+	public int getSize()
+	{
+		return tileDeck.size();
 	}
-	public Tile transTile( String tile ) {
-		//WHAT IS TILE!?
-		//Placeholder code
-		Tile tempTile = new Tile();
-		return tempTile;
-	}
+
 }

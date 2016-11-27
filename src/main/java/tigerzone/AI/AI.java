@@ -13,9 +13,9 @@ public class AI {
 		int ref;//refers to the tile position in possible moves
 	}
 	private ArrayList<option> scores = new ArrayList<option>();  
-	public AI (Tile []possiblePlaces, Deck deck ){
+	//public AI (possiblePlaces List<Tile>, Deck deck ){
 		
-	}
+	//}
 	void makeMove()
 	{
 		//takes best move from the priority queue
