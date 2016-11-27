@@ -58,7 +58,7 @@ public class tcpServer {
 					inputLine = "";
 				}*/
 				if (inputLine.equals("") || inputLine.equals(" ")){
-					//System.out.println("Error empty input");
+					System.out.println("Error empty input");
 					outputLine = serverp.processInput("");
 				}
 				else {

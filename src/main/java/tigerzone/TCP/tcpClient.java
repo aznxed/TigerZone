@@ -47,7 +47,7 @@ public class tcpClient {
 			        System.out.println("Server: " + serverMessage);
 		        	userMessage = clientp.processMessage(serverMessage);
 		        }
-		        if (userMessage != null) {
+		        if (userMessage != null && userMessage != "") {
 			        if (userMessage.equals("Bye.")) {
 			        	break;
 			        }
