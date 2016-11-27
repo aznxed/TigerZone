@@ -1,18 +1,10 @@
 package tigerzone;
 
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.Image;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 public class Board {
 
@@ -34,7 +26,9 @@ public class Board {
 	public int getTopBound() {
 		return this.topBound;
 	}
-
+	public Tile[][] getBoard(){
+		return this.board;
+	}
 	public int getBottomBound() {
 		return this.bottomBound;
 	}
@@ -116,7 +110,8 @@ public class Board {
 	 * @param y
 	 * @return
 	 */
-	public List<Tile> getDenNeighbors(int x, int y) {
+	public List<Tile> getDenNeighbors(int x, int y)//moveto AI
+	{
 
 		// List of all possible 8 neighbors
 		List<Tile> denNeighbors = new ArrayList<Tile>();
@@ -169,7 +164,8 @@ public class Board {
 	 * @param tile
 	 * @return
 	 */
-	public boolean isValid(int x, int y, Tile tile) {
+	public boolean isValid(int x, int y, Tile tile)//moveto Bot.java
+	{
 
 		// Tile already exists in that position
 		if (board[x][y] != null) {
@@ -245,7 +241,8 @@ public class Board {
 	 * @param tile
 	 * @return
 	 */
-	public boolean addXTile(int x, int y, Tile tile) {
+	public boolean addXTile(int x, int y, Tile tile)
+	{
 		if (!isValid(x, y, tile)) {
 			return false;
 		}
@@ -379,52 +376,18 @@ public class Board {
 		return validOrients;
 	}
 
-	public Tile rotateTile(Tile tile, int degrees) {
-		Tile rotateTile = new Tile(tile.getTilePortionType(), tile.getType(),
-				degrees, tile.getRow(), tile.getCol());
-
-		TerrainType[] rotateArr = new TerrainType[9];
-		if (degrees == 90) {
-			rotateArr[0] = tile.getTilePortionType()[2];
-			rotateArr[1] = tile.getTilePortionType()[5];
-			rotateArr[2] = tile.getTilePortionType()[8];
-			rotateArr[3] = tile.getTilePortionType()[1];
-			rotateArr[5] = tile.getTilePortionType()[7];
-			rotateArr[6] = tile.getTilePortionType()[0];
-			rotateArr[7] = tile.getTilePortionType()[3];
-			rotateArr[8] = tile.getTilePortionType()[6];
-		}
-		if (degrees == 180) {
-			for (int i = 0; i < 9; i++) {
-				rotateArr[i] = tile.getTilePortionType()[8 - i];
-			}
-		}
-		if (degrees == 270) {
-			rotateArr[0] = tile.getTilePortionType()[6];
-			rotateArr[1] = tile.getTilePortionType()[3];
-			rotateArr[2] = tile.getTilePortionType()[0];
-			rotateArr[3] = tile.getTilePortionType()[7];
-			rotateArr[5] = tile.getTilePortionType()[1];
-			rotateArr[6] = tile.getTilePortionType()[8];
-			rotateArr[7] = tile.getTilePortionType()[5];
-			rotateArr[8] = tile.getTilePortionType()[2];
-		}
-		rotateTile.setTilePortionType(rotateArr);
-		return rotateTile;
-	}
+	
 
 	public List<Tile> getPossibleMoves(Tile tile) {
 		List<Tile> possibleMoves = new ArrayList<Tile>();
-		for (int i = getTopBound(); i <= getBottomBound(); i++) {
+	    for (int i = getTopBound(); i <= getBottomBound(); i++) {
 			for (int j = getLeftBound(); j <= getRightBound(); j++) {
 				if (isValid(i, j, tile)) {
 					tile.setRow(i);
 					tile.setCol(j);
 					List<Integer> validOrients = getValidOrients(i, j, tile);
 					for (int k = 0; k < validOrients.size(); k++) {
-						possibleMoves
-								.add(rotateTile(tile, validOrients.get(k)));
-
+						possibleMoves.add(tile.rotateTile(tile, validOrients.get(k)));
 					}
 				}
 			}
@@ -441,11 +404,10 @@ public class Board {
 		}
 
 	}
-
-	public void addTile(Tile tile) {
-		// For now just take the first possible tile
-
-		// I don't get this! Comments please!
+	//Places random Tile
+	public void addTile(Tile tile)// moveto AI
+	{
+		
 		if (!(getPossibleMoves(tile).isEmpty())) {
 
 			// Keep a list of all the tiles placed on the board
@@ -453,41 +415,12 @@ public class Board {
 			tile.setBoard(this);
 
 			Random rand = new Random();
-			// This doesn't make sense to me. Shouldn't we be adding the tile
-			// passed in and not the tile you're getting from the possible moves
-			// list?
+
 			Tile addTile = getPossibleMoves(tile).get(
 					rand.nextInt(getPossibleMoves(tile).size()));
 			int x = addTile.getRow();
 			int y = addTile.getCol();
 			board[x][y] = addTile;
-
-			/*
-			 * List<Tile> nbors = getNeighbors(tile.getRow(), tile.getCol());
-			 *
-			 * //First tile placed on board if(nbors.size() == 0){
-			 *
-			 * //Start clusters //Call switch statement
-			 *
-			 * } else{ for(int i = 0; i < nbors.size(); i++){
-			 *
-			 * List<TerrainType> t = possibleClusters(nbors.get(i).getCode());
-			 *
-			 * //based on what switch statement gives us //jungleClusters //Add
-			 * tile to Cluster cluster = new Cluster(TerrainType.JUNGLE);
-			 * jungleClusters.add(cluster);
-			 *
-			 *
-			 * }
-			 *
-			 *
-			 *
-			 * }
-			 */
-
-			if (true) {
-
-			}
 
 			if (x == getTopBound() && x > 0) {
 				setTopBound(x - 1);
@@ -504,27 +437,9 @@ public class Board {
 		}
 	}
 
-	/**
-	 * Removes the Tile at the given coordinates
-	 *
-	 * @param x
-	 * @param y
-	 */
+
 	public void removeTile(int x, int y) {
 		board[x][y] = null;
-	}
-
-	// Pass in tile and number of jungle clusters to start
-	public void addJungleCluster(Tile tile, int x) {
-
-	}
-
-	public void addRoadCluster(Tile tile) {
-
-	}
-
-	public void addLakeCluster(Tile tile) {
-
 	}
 
 	public void initTiles(List<Tile> tiles) {
@@ -534,90 +449,26 @@ public class Board {
 	}
 	
 
-	public static void main(String[] args) {
+	public static void main(String[] args)
+	{
 		Board gameBoard = new Board();
-		List<Tile> tiles = new ArrayList<Tile>();
-
+		List<Tile> tiles = new ArrayList<Tile>(); //change to deck
+		Tile temp = new Tile("TLTJ-",1);//test code
+		tiles.add(temp);//test code
+		temp = new Tile("JJJJ-",1);//test code
+		tiles.add(temp);//test code
 		gameBoard.setTopBound(CENTER_CELL - 1);
 		gameBoard.setBottomBound(CENTER_CELL + 1);
 		gameBoard.setLeftBound(CENTER_CELL - 1);
 		gameBoard.setRightBound(CENTER_CELL + 1);
 
-		String imagePath = "src/main/CarcassonneTiles/";
 
-		gameBoard.initTiles(tiles);
+		gameBoard.initTiles(tiles);//change to deck
 
 		for (int i = 0; i < tiles.size(); i++) {
-			gameBoard.addTile(tiles.get(i));
+			gameBoard.addTile(tiles.get(i)); 
 		}
-
-		for (int i = gameBoard.getTopBound(); i <= gameBoard.getBottomBound(); i++) {
-			for (int j = gameBoard.getLeftBound(); j <= gameBoard
-					.getRightBound(); j++) {
-				if (gameBoard.board[i][j] == null) {
-					System.out.print("0 ");
-				} else {
-					System.out.print(gameBoard.board[i][j].getType() + " ");
-				}
-			}
-			System.out.print("\n");
-		}
-
-		for (int i = gameBoard.getTopBound(); i <= gameBoard.getBottomBound(); i++) {
-			for (int j = gameBoard.getLeftBound(); j <= gameBoard
-					.getRightBound(); j++) {
-				if (gameBoard.board[i][j] == null) {
-					System.out.print("1 ");
-				} else {
-					System.out.print(gameBoard.board[i][j].getDegrees() + " ");
-				}
-			}
-			System.out.print("\n");
-		}
-		JFrame frame = new JFrame();
-		frame.setPreferredSize(new Dimension(800, 1000));
-
-		JPanel jp = new JPanel(new GridLayout(gameBoard.getBottomBound()
-				- gameBoard.getTopBound() + 1, gameBoard.getRightBound()
-				- gameBoard.getLeftBound() + 1, 0, 0));
-
-		frame.pack();
-		for (int i = gameBoard.getTopBound(); i <= gameBoard.getBottomBound(); i++) {
-			for (int j = gameBoard.getLeftBound(); j <= gameBoard
-					.getRightBound(); j++) {
-				if (gameBoard.board[i][j] == null) {
-					JLabel j29 = new JLabel();
-					j29.setIcon(new ImageIcon(imagePath + "Tile29.png"));
-					jp.add(j29);
-				} else {
-					JLabel j1 = new JLabel();
-					ImageIcon II = new ImageIcon(imagePath + "Tile"
-									+ Integer.toString(gameBoard.board[i][j]
-											.getType())
-									+ "."
-									+ Integer.toString(gameBoard.board[i][j]
-											.getDegrees()) + ".png");
-					Image image = II.getImage(); // transform it
-					int tileHeight = gameBoard.getBottomBound() - gameBoard.getTopBound();
-					int tileWidth = gameBoard.getRightBound() - gameBoard.getLeftBound();
-					//System.out.println("Height: " + tileHeight);
-					//System.out.println("Width: " + tileWidth);
-					Image newimg = image.getScaledInstance(frame.getContentPane().getWidth() / (tileWidth * (13 / 8)),
-							frame.getContentPane().getHeight() / (tileHeight * (13 / 8)) ,
-							java.awt.Image.SCALE_SMOOTH); // scale
-															// it
-															// the
-															// smooth
-															// way
-					II = new ImageIcon(newimg);
-					j1.setIcon(II);
-					jp.add(j1);
-				}
-			}
-		}
-
-		frame.add(jp);
-		frame.setVisible(true);
+		UI test = new UI();
+		test.createUIBoard(gameBoard);
 	}
-
 }
