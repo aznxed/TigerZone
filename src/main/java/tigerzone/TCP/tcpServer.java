@@ -57,9 +57,8 @@ public class tcpServer {
 				else{
 					inputLine = "";
 				}*/
-				System.out.println("LOOP");
 				if (inputLine.equals("") || inputLine.equals(" ")){
-					System.out.println("Error empty input");
+					//System.out.println("Error empty input");
 					outputLine = serverp.processInput("");
 				}
 				else {
@@ -74,11 +73,11 @@ public class tcpServer {
 					//java runtime automatically closes the input and output streams, the
 					//client socket and server socket because it was created in the try-with-
 					//resources statement
+				}
+				if (outputLine != null){
 					if (outputLine.equals("Bye.")) {
 						break;
 					}
-				}
-				if (outputLine != null){
 					out.println(outputLine + " \r \n");
 					System.out.println("Sent: " + outputLine + "\n");
 				}

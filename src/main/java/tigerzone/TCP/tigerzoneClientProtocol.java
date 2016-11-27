@@ -248,6 +248,7 @@ public class tigerzoneClientProtocol {
         
         else if (state == RoundsOver) {
         	String[] split = theInput.split(" ");
+        	//Challenge is over Wait for new challenge
         	if (split[0].equals("END") && split[2].equals("CHALLENGES")) {
         		state = WasWelcomed;
         	}
