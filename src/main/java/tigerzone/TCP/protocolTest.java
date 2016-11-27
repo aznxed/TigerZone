@@ -1,4 +1,4 @@
-package tigerzone.TCP;
+package tigerzone;
 
 import java.io.IOException;
 
@@ -16,7 +16,7 @@ public class protocolTest {
 		
 		while (!stop) {
 			aOut = playerA.processMessage(sOut);
-			System.out.println("PlayerA: " + aOut);
+			System.out.println("PlayerA: " + aOut + "\n");
 			sOut = serverP.processInput(aOut);
 			System.out.println("ServerA: " + sOut);
 			try {

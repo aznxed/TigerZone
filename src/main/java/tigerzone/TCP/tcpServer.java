@@ -1,4 +1,4 @@
-package tigerzone.TCP;
+package tigerzone;
 
 import java.net.*;
 import java.io.*;
@@ -57,25 +57,30 @@ public class tcpServer {
 				else{
 					inputLine = "";
 				}*/
+				System.out.println("LOOP");
 				if (inputLine.equals("") || inputLine.equals(" ")){
 					System.out.println("Error empty input");
 					outputLine = serverp.processInput("");
-					out.println(outputLine);
-					System.out.println("Sent: " + outputLine);
 				}
 				else {
 					System.out.println("Got:  " + inputLine);
 					//ask the KnockKnockProtocol for a suitable reply
 					outputLine = serverp.processInput(inputLine);
 					//send reply
-					out.println(outputLine + " \r \n");
-					System.out.println("Sent: " + outputLine);
+					//out.println(outputLine + " \r \n");
+					//System.out.println(outputLine);
+					//System.out.println("Sent: " + outputLine);
 					//if reply is bye then quit the loop
 					//java runtime automatically closes the input and output streams, the
 					//client socket and server socket because it was created in the try-with-
 					//resources statement
-					if (outputLine.equals("Bye."))
+					if (outputLine.equals("Bye.")) {
 						break;
+					}
+				}
+				if (outputLine != null){
+					out.println(outputLine + " \r \n");
+					System.out.println("Sent: " + outputLine + "\n");
 				}
 			}
 			
