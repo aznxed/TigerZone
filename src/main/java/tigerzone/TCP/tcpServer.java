@@ -57,8 +57,13 @@ public class tcpServer {
 				else{
 					inputLine = "";
 				}*/
-				if (inputLine.equals("") || inputLine.equals(" ")){
-					System.out.println("Error empty input");
+				//if (inputLine.equals("") || inputLine.equals(" ")){
+				if (!serverp.getReply) {
+					try {Thread.sleep(50);} catch(InterruptedException ex){
+						Thread.currentThread().interrupt();
+					}
+					//System.out.println("Error empty input");
+					System.out.println("Input not expected");
 					outputLine = serverp.processInput("");
 				}
 				else {
@@ -82,7 +87,7 @@ public class tcpServer {
 					System.out.println("Sent: " + outputLine + "\n");
 				}
 			}
-			
+			System.out.println("ERROR OUT OF WHILE LOOP SERVER");
 		}
 	}
 }

@@ -47,8 +47,10 @@ public class tcpClient {
 			        System.out.println("Server: " + serverMessage);
 		        	userMessage = clientp.processMessage(serverMessage);
 		        }
-		        if (userMessage != null && userMessage != "") {
+		        //if (userMessage != null && userMessage != "") {
+		        if (userMessage != null) {
 			        if (userMessage.equals("Bye.")) {
+			        	
 			        	break;
 			        }
 		            out.println(userMessage + " \r \n");
@@ -58,6 +60,7 @@ public class tcpClient {
 		        	System.out.println("NULL MESSAGE");
 		        }
 		    }
+			System.out.println("ERROR OUT OF WHILE LOOP CLIENT");
 		//Unknown host
 		} catch (UnknownHostException e) {
 		    System.err.println("Don't know about host " + hostName);

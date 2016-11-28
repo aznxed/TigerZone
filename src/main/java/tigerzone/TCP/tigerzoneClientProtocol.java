@@ -25,9 +25,9 @@ public class tigerzoneClientProtocol {
 
     private int state = WAITING;
 
-	private String serverPassword = "PersiaRocks!";
-    private String playerName = "TeamO";
-    private String playerPassword = "password";
+	private String serverPassword = "";
+    private String playerName;
+    private String playerPassword;
     
     private int challengeNum = -1;
     private int matchNum = -1;
@@ -35,6 +35,22 @@ public class tigerzoneClientProtocol {
     private String opponent = "";
     private int gamesOver = 0;
     private move playerMove;
+	
+    private int gamesPlayed;
+	private int myForfeit = 0;
+	private int enemyForfeit = 0;
+	
+	private int boardWin = 0;
+	private int boardLoss = 0;
+	private int boardTie = 0;
+	
+	private int matchWin = 0;
+	private int matchTie = 0;
+	private int matchLoss = 0;
+	
+	private int boardWinTotal = 0;
+	private int boardTieTotal = 0;
+	private int boardLossTotal = 0;
     
     fakeBot bot = new fakeBot();
     
@@ -43,11 +59,6 @@ public class tigerzoneClientProtocol {
     	playerName = playName;
     	playerPassword = playPass;
     }
-    /*
-	private String servPass;
-	private String playName;
-	private String playPass;
-	*/
 
     public String processMessage(String theInput) {
     	//Default to something
@@ -97,6 +108,11 @@ public class tigerzoneClientProtocol {
         	//If game over 
         	else if (split[0].equals("THANK")) {
             	theOutput = "Bye.";
+            	System.out.println("Games Played:     " + gamesPlayed);
+            	System.out.println("Match Record:     " + matchWin + " - " + matchTie + " - " + matchLoss);
+            	System.out.println("Game Record:      " + boardWinTotal + " - " + boardTieTotal + " - " + boardLossTotal);
+            	System.out.println("Forfeited:        " + myForfeit);
+            	System.out.println("Enemy Forfeited:  " + enemyForfeit);
         		state = Finished;
         	}
         }
@@ -183,8 +199,64 @@ public class tigerzoneClientProtocol {
             	if (split[2].equals("OVER")) {
             		//One Game is over
             		gamesOver++;
+            		gamesPlayed++;
             		System.out.println("Games over: " + gamesOver);
+            		//Compare score
+            		if (split[4].equals(playerName)) {
+            			if (split[5].equals("WIN")) {
+            				boardWin++; //YAY!
+            				enemyForfeit++;
+            			}
+            			else if (split[5].equals("FORFEITED")) {
+            				boardLoss++; //Aww
+            				myForfeit++;
+            			}
+            			else if (Integer.valueOf(split[5]) > Integer.valueOf(split[8])){
+                			boardWin++; //YAY!
+                		}
+                		else if (Integer.valueOf(split[5]) == Integer.valueOf(split[8])){
+                			boardTie++;
+                		}
+                		else {
+                			boardLoss++; //Aww
+                		}
+            		}
+            		else {
+            			if (split[5].equals("WIN")) {
+            				boardLoss++; //Aww
+            				myForfeit++;
+            			}
+            			else if (split[5].equals("FORFEITED")) {
+            				boardWin++; //YAY!
+            				enemyForfeit++;
+            			}
+            			else if (Integer.valueOf(split[5]) > Integer.valueOf(split[8])){
+                			boardLoss++; //Aww
+                		}
+                		else if (Integer.valueOf(split[5]) == Integer.valueOf(split[8])){
+                			boardTie++;
+                		}
+                		else {
+                			boardWin++; //YAY!
+                		}
+            		}
             		if (gamesOver > 1) {
+            			if (boardWin > boardLoss){
+            				matchWin++;
+            			}
+            			else if (boardLoss > boardWin) {
+            				matchLoss++;
+            			}
+            			else {
+            				matchTie++;
+            			}
+            			boardWinTotal += boardWin;
+            			boardTieTotal += boardTie;
+            			boardLossTotal += boardLoss;
+            			boardWin = 0;
+            			boardLoss = 0;
+            			boardTie = 0;
+            			
             			state = MatchesOver;
             		}
             	}
@@ -259,6 +331,10 @@ public class tigerzoneClientProtocol {
         	String[] split = theInput.split(" ");
         	if (split[0].equals("THANK")) {
             	theOutput = "Bye.";
+            	System.out.println("Games Played:      " + gamesPlayed);
+            	System.out.println("Tournament Record: " + boardWin + " - " + boardTie + " - " + boardLoss);
+            	System.out.println("Forfeited:         " + myForfeit);
+            	System.out.println("Enemy Forfeited:   " + enemyForfeit);
         		state = Finished;
         	}
         }
