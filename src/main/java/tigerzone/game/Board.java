@@ -145,9 +145,10 @@ public class Board {
 	 */
 	public boolean addXTile(int x, int y, Tile tile)
 	{
-		if (!isValid(x, y, tile)) {
+		/*if (!isValid(x, y, tile)) {
 			return false;
-		}
+		}*/
+		
 		// add tile to board
 		// give tile coords
 		placedTiles.add(tile);
