@@ -33,7 +33,7 @@ public class tcpServer {
 			PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
 			BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 		) {
-			System.out.println("Connected");
+			System.out.println("Connected to Port: " + portNumber + "\n");
 			String inputLine = null, outputLine;
 	
 			//Initiate conversation with client by writing to the socket
@@ -59,38 +59,26 @@ public class tcpServer {
 					inputLine = "";
 				}*/
 				//if (inputLine.equals("") || inputLine.equals(" ")){
-				System.out.println(serverp.getReply);
 				if (!serverp.getReply) {
-					try {Thread.sleep(4);} catch(InterruptedException ex){
-						Thread.currentThread().interrupt();
-					}
 					//System.out.println("Error empty input");
-					System.out.println("Input not expected");
-					outputLine = serverp.processInput("");
+					//System.out.println("Input not expected");
+					outputLine = serverp.processInput(inputLine);
 				}
 				else {
-					System.out.println("Got:  " + inputLine);
-					//ask the KnockKnockProtocol for a suitable reply
+					System.out.println("\nGot:  " + inputLine + "\n");
+					//ask the tcpServerProtocol for a suitable reply
 					outputLine = serverp.processInput(inputLine);
-					//send reply
-					//out.println(outputLine + " \r \n");
-					//System.out.println(outputLine);
-					//System.out.println("Sent: " + outputLine);
 					//if reply is bye then quit the loop
 					//java runtime automatically closes the input and output streams, the
 					//client socket and server socket because it was created in the try-with-
 					//resources statement
 				}
 				if (outputLine != null){
-					if (outputLine.equals("Bye.")) {
+					out.println(outputLine);
+					System.out.println("Sent: " + outputLine);
+					if (outputLine.equals("THANK YOU FOR PLAYING! GOODBYE")) {
 						break;
 					}
-					out.println(outputLine + " \r \n");
-					System.out.println("Sent: " + outputLine + "\n");
-				}
-				System.out.println(serverp.getReply);
-				try {Thread.sleep(4);} catch(InterruptedException ex){
-					Thread.currentThread().interrupt();
 				}
 			}
 			System.out.println("ERROR OUT OF WHILE LOOP SERVER");

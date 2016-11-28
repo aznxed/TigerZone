@@ -17,7 +17,6 @@ public class tigerzoneClientProtocol {
     private static final int ReceivedStartTile = 7;
     private static final int ReceivedRemainingTiles = 8;
     private static final int MakeAMove = 9;
-    private static final int MoveMade = 10;
     private static final int MatchesOver = 11;
     private static final int RoundsOver = 12;
     private static final int ChallengeOver = 13;
@@ -320,7 +319,7 @@ public class tigerzoneClientProtocol {
         else if (state == RoundsOver) {
         	String[] split = theInput.split(" ");
         	//Challenge is over Wait for new challenge
-        	if (split[0].equals("END") && split[2].equals("CHALLENGES")) {
+        	if (split[0].equals("END") && (split[2].equals("CHALLENGES") || split[2].equals("CHALLENGE"))) {
         		state = WasWelcomed;
         	}
         }
