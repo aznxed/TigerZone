@@ -102,7 +102,6 @@ public class tigerzoneClientProtocol {
         		challengeNum = Integer.valueOf(split[2]);
         		matchTotal = Integer.valueOf(split[6]);
         		state = ReceivedChallenge;
-        		theOutput = "";
         	}
         	//Wait for next challenge
         	//If game over 
@@ -150,7 +149,6 @@ public class tigerzoneClientProtocol {
         			//Add tile to deck
         			bot.addDeck(split[6 + i]);
         		}
-        		theOutput = "";
         		state = ReceivedRemainingTiles;
         	}
         }

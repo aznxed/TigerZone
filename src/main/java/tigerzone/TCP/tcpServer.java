@@ -34,13 +34,14 @@ public class tcpServer {
 			BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 		) {
 			System.out.println("Connected");
-			String inputLine, outputLine;
+			String inputLine = null, outputLine;
 	
 			//Initiate conversation with client by writing to the socket
 			//Create object that keeps track of the current joke, the current state within the joke
 			tigerzoneServerProtocol serverp = new tigerzoneServerProtocol();
 			//Get the first message that the server sends to the client
 			outputLine = serverp.processInput(null);
+			System.out.println("Sent: " + outputLine);
 			//Write the information to the client socket, therefore sending the message to the client
 			out.println(outputLine);
 			
@@ -49,7 +50,7 @@ public class tcpServer {
 			//read and write to the socket
 			//while loop iterates on the read from the input stream until
 			//the client responds by writing to its output stream
-			while ((inputLine = in.readLine()) != null) {
+			while (!serverp.getReply || (inputLine = in.readLine()) != null) {
 			//while(true) {
 				/*if ((inputLine = in.readLine()) != null) {
 					//Do Nothing
@@ -58,8 +59,9 @@ public class tcpServer {
 					inputLine = "";
 				}*/
 				//if (inputLine.equals("") || inputLine.equals(" ")){
+				System.out.println(serverp.getReply);
 				if (!serverp.getReply) {
-					try {Thread.sleep(50);} catch(InterruptedException ex){
+					try {Thread.sleep(4);} catch(InterruptedException ex){
 						Thread.currentThread().interrupt();
 					}
 					//System.out.println("Error empty input");
@@ -85,6 +87,10 @@ public class tcpServer {
 					}
 					out.println(outputLine + " \r \n");
 					System.out.println("Sent: " + outputLine + "\n");
+				}
+				System.out.println(serverp.getReply);
+				try {Thread.sleep(4);} catch(InterruptedException ex){
+					Thread.currentThread().interrupt();
 				}
 			}
 			System.out.println("ERROR OUT OF WHILE LOOP SERVER");

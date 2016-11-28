@@ -53,7 +53,9 @@ public class tcpClient {
 			        	
 			        	break;
 			        }
-		            out.println(userMessage + " \r \n");
+		            //out.println(userMessage + "\r \n");
+			        //TODO: Change back
+			        out.println(userMessage);
 		            System.out.println("User: " + userMessage);
 		        }
 		        else {
