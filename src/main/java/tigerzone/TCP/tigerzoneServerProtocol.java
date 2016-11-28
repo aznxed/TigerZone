@@ -25,18 +25,15 @@ public class tigerzoneServerProtocol {
     private static final int SentScore = 20;
     private static final int SentEndRound = 21;
     private static final int SentEndChallenges = 22;
-    private static final int SentEndConnection = 23;
     
     private int state = WAITING;
     public boolean getReply = true;
-    private int connectedPlayers = 0;
     
     private int challengeNum = 1;
     private int challengeTotal = 2;
     private int roundNum = 1;
-    private int roundTotal = 2;
+    private int roundTotal = 3;
     private int moveTime = 1;
-    private boolean gameOver = false;
 
 	private int timeToMatch = 3;
     private String tourPassword = "PersiaRocks!";
@@ -118,6 +115,7 @@ public class tigerzoneServerProtocol {
         //Begin Challenge
         else if (state == SentWelcome) {
         	getReply = false;
+        	roundNum = 1;
         	if (roundTotal > 1) {
         		theOutput = "NEW CHALLENGE " + challengeNum + " YOU WILL PLAY " + roundTotal + " MATCHES";
         	}
@@ -196,7 +194,7 @@ public class tigerzoneServerProtocol {
             state = SentMakeAMove;
         }
         
-        //Send Move Opponent Made
+        //Send Move Opponent Made and Process Player Move
         else if (state == SentMakeAMove) {
         	getReply = false;
         	//Sent botmove to player
@@ -216,7 +214,7 @@ public class tigerzoneServerProtocol {
         	//Check valid move by player
         	String[] split = theInput.split(" ");
         	//TODO: Remove later
-        	if (theInput.equals(null)){
+        	if (theInput.equals(null) || theInput.equals("")){
         		System.out.println("FORFEITED: ILLEGAL MESSAGE RECEIVED");
         		theOutput = "GAME " + (gameID ? "A" : "B") + " OVER PLAYER " + playerName + " " + "FORFEITED" + " PLAYER " + botID + " " + "WIN"; 
         		state = SentEndChallenges;
@@ -300,11 +298,6 @@ public class tigerzoneServerProtocol {
         else if (state == SentEndChallenges) {
         	getReply = false;
         	theOutput = "THANK YOU FOR PLAYING! GOODBYE";
-        	state = SentEndConnection;
-        }
-        else if (state == SentEndConnection){
-        	getReply = false;
-        	theOutput = "Bye.";
         }
         
         return theOutput;

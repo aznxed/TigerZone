@@ -40,26 +40,20 @@ public class tcpClient {
 		    while ((serverMessage = in.readLine()) != null) {
 		        
 		        if (serverMessage.equals("") || serverMessage.equals(" ")){
-		        	//System.out.println("ERROR EMPTY SERVER MESSAGE");
+		        	System.out.println("ERROR EMPTY SERVER MESSAGE");
 		        	userMessage = null;
 		        }
 		        else {
 			        System.out.println("Server: " + serverMessage);
 		        	userMessage = clientp.processMessage(serverMessage);
 		        }
-		        //if (userMessage != null && userMessage != "") {
 		        if (userMessage != null) {
 			        if (userMessage.equals("Bye.")) {
 			        	
 			        	break;
 			        }
-		            //out.println(userMessage + "\r \n");
-			        //TODO: Change back
-			        out.println(userMessage);
-		            System.out.println("User: " + userMessage);
-		        }
-		        else {
-		        	System.out.println("NULL MESSAGE");
+		            out.println(userMessage);
+		            System.out.println("\nUser: " + userMessage + "\n");
 		        }
 		    }
 			System.out.println("ERROR OUT OF WHILE LOOP CLIENT");
