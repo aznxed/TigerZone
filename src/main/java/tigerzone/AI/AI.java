@@ -29,7 +29,7 @@ public class AI {
 	private Tile tile;
 	private List <Tile> possiblePlaces;
 	private ArrayList<option> scores = new ArrayList<option>(); //keeps an array list of scores
-	boolean[] done = new boolean[1];//array of false
+	boolean[] done = new boolean[2];//array of false
 	
 	
 	public AI (){	

@@ -350,10 +350,16 @@ public class Board {
 		}
 
 	}
+	public void addNewTile(Tile tile)
+	{
+		int x = tile.getRow();
+		int y = tile.getCol();
+		board[x][y] = tile;
+	}
 	//Places random Tile
 	public void addTile(Tile tile)// moveto AI
 	{
-		
+	
 		if (!(getPossibleMoves(tile).isEmpty())) {
 
 			// Keep a list of all the tiles placed on the board
@@ -381,6 +387,7 @@ public class Board {
 				setRightBound(y + 1);
 			}
 		}
+		
 	}
 
 

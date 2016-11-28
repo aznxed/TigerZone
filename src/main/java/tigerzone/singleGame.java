@@ -14,7 +14,7 @@ public class singleGame {
 	{
 		Tile temp = new Tile(tile,toXArray(x),toYArray(y),rot);
 		myDeck.addTile(temp);
-		gameBoard.addTile(temp);
+		gameBoard.addNewTile(temp);
 		//TODO: make function for first tile in board // of find one 
 	}
 	public void StartAI(String tile)
@@ -40,7 +40,7 @@ public class singleGame {
 	{
 		Tile temp = new Tile(tile,toXArray(x),toYArray(y),rot);
 		myDeck.addTile(temp);
-		gameBoard.addTile(temp);
+		gameBoard.addNewTile(temp);
 		
 	}
 	public void placeTiger()
@@ -54,11 +54,11 @@ public class singleGame {
 	}
 	public int toYArray(int y)
 	{
-		return y - 77;
+		return 77-y;
 	}
 	public int toXCartesian(int x)
 	{
-		return x - 77;
+		return 77-x;
 	}
 	public int toYCartesian(int y)
 	{
