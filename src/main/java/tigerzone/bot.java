@@ -25,13 +25,11 @@ public class bot {
 		
 		long startTime = System.currentTimeMillis();
 		long timeLeft = (long) ((double) time * 0.8 * 1000);
-		while (true) {
-			if(timeLeft == (System.currentTimeMillis() - startTime))
-			{
-				currMove = gameA.getMove();//returns tile and meeple in move notation 
-				break;
-			}
+		while (timeLeft > (System.currentTimeMillis() - startTime)) {
+			gameA.runAI();
 		}
+		currMove = gameA.getMove();//returns tile and meeple in move notation 
+		
 		makeMove(game, tile, 0,0,0,"placeHolder",0);
 		System.out.println("Got a move in: " + (System.currentTimeMillis() - startTime));
 		return currMove;

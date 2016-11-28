@@ -12,26 +12,33 @@ public class singleGame {
 	
 	public void placeFirstTile(String tile, int x,int y, int rot)
 	{
-		Tile temp = new Tile(tile,x,y,rot);
+		Tile temp = new Tile(tile,toXArray(x),toYArray(y),rot);
 		myDeck.addTile(temp);
 		gameBoard.addTile(temp);
 		//TODO: make function for first tile in board // of find one 
 	}
 	public void StartAI(String tile)
 	{
-		Tile temp = new Tile(tile); //remove the 1
+		Tile temp = new Tile(tile); 
 		gameAI.setUp(gameBoard, myDeck, temp);
-		gameAI.runMainAI();
 	}
 	public move getMove()
 	{
-		move currMove = new move(0,0,0,"string",0); // will be filled in with move data
-		gameAI.makeMove();
+		Tile temp =  gameAI.makeMove();
+		move currMove = new move(0,0,0,"",0); // will be filled in with move data
+		currMove.xPos = toXCartesian(temp.getRow());
+		currMove.yPos = toYCartesian(temp.getCol());
+		currMove.rot = temp.getDegrees();
 		return currMove;
 	}
+	public void runAI()
+	{
+		gameAI.runMainAI();
+	}
+	
 	public void placeTile(String tile, int x,int y, int rot)
 	{
-		Tile temp = new Tile(tile,x,y,rot);
+		Tile temp = new Tile(tile,toXArray(x),toYArray(y),rot);
 		myDeck.addTile(temp);
 		gameBoard.addTile(temp);
 		
@@ -40,7 +47,22 @@ public class singleGame {
 	{
 		//TODO: ADD this
 	}
-	//TODO: write function to take input of cartesian to array
 	
+	public int toXArray(int x)
+	{
+		return x + 77;
+	}
+	public int toYArray(int y)
+	{
+		return y - 77;
+	}
+	public int toXCartesian(int x)
+	{
+		return x - 77;
+	}
+	public int toYCartesian(int y)
+	{
+		return y + 77;
+	}
 	
 }
