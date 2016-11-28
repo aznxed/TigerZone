@@ -133,75 +133,6 @@ public class Board {
 
 		return true;
 	}
-	
-	/*
-	public boolean isValid(int x, int y, Tile tile)
-	{
-
-		// Tile already exists in that position
-		if (board[x][y] != null) {
-			return false;
-		}
-
-		// return true if the board is empty
-		if (placedTiles.isEmpty()) {
-			return true;
-		}
-
-		// Get the neighbors of this position
-		List<Tile> nbors = getNeighbors(x, y);
-
-		// If there are no neighbors, then its not a valid
-		// position in which to place a tile.
-		if (nbors.isEmpty()) {
-			return false;
-		}
-
-		// Ensure that all the neighbors are compatible.
-		boolean valid = true;
-		// Iterate through all its potential neighbors
-		for (Tile neighbor : nbors) {
-
-			// Check if neighbor is in same row
-			if (neighbor.getRow() == x) {
-				if (neighbor.getCol() > y) {
-					// This is right neighbor
-					if (neighbor.getLeftEdge() != tile.getRightEdge()) {
-						valid = false;
-						// no need to continue checking other
-						// neighbors
-						break;
-					}
-				} else {
-					// This is left neighbor
-					if (neighbor.getRightEdge() != tile.getLeftEdge()) {
-						valid = false;
-						break;
-					}
-				}
-			}
-
-			// If not in the same row, it must be in the same column
-			if (neighbor.getCol() == y) {
-				if (neighbor.getRow() > x) {
-					// This is bottom neighbor
-					if (neighbor.getTopEdge() != tile.getBottomEdge()) {
-						valid = false;
-						break;
-					}
-
-				} else {
-					// This is top neighbor
-					if (neighbor.getBottomEdge() != tile.getTopEdge()) {
-						valid = false;
-						break;
-					}
-				}
-			}
-
-		} // Iterate thru neighbors
-		return valid;
-	}*/
 
 	/**
 	 * Add a Tile to the board. It will first validate that the Tile can be
@@ -451,7 +382,14 @@ public class Board {
 				tempMove.xPos = x;
 				tempMove.yPos = y;
 				tempMove.rot = addTile.getDegrees();
-				tempMove.meepPos = 0;
+				if (tile.getTilePortionType()[4] == (TerrainType.DEN)){
+					tempMove.meepPos = 5;
+					tempMove.meep = "TIGER";
+				}
+				else {
+					tempMove.meepPos = 0;
+					tempMove.meep = "";
+				}
 				System.out.println("X: " + x + " Y: " + y + " Rot: " + tempMove.rot);
 				
 				if (x == getTopBound() && x > 0) {
@@ -469,6 +407,13 @@ public class Board {
 			}
 			else {
 				System.out.println("WARNING NO POSSIBLE MOVES");
+				tempMove.xPos = 0;
+				tempMove.yPos = 0;
+				tempMove.rot = 0; 
+				tempMove.meep = "PASS";
+				tempMove.meepPos = -1;
+				System.out.println("3X: " + tempMove.xPos + " Y: " + tempMove.yPos + " Rot: " + tempMove.rot);
+				return tempMove;
 			}
 			System.out.println("1X: " + tempMove.xPos + " Y: " + tempMove.yPos + " Rot: " + tempMove.rot);
 			return tempMove;

@@ -77,8 +77,11 @@ public class bot2 {
 		//Place a tile ALWAYS ENEMY TILE
 		public void placeTile(String game, String tile, int x, int y, int rot, String meep, int meepPos){
 			Tile newTile = new Tile(tile);
-			if (game.equals("A")){
+			if (game.equals("A")) {
 				boardA.placeTileBoard(newTile, x, y, rot);
+			}
+			else {
+				boardB.placeTileBoard(newTile, x, y, rot);
 			}
 			return;
 		}

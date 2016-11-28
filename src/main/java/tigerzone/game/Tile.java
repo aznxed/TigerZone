@@ -228,7 +228,7 @@ public class Tile {
 						TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.LAKE,
 						TerrainType.LAKE }; 
 				return tileX;
-			case"TLLTB-":	
+			case"TLLTB":	
 				TerrainType[] tileY = { TerrainType.JUNGLE, TerrainType.GAMETRAIL,
 						TerrainType.JUNGLE, TerrainType.GAMETRAIL, TerrainType.LAKE,
 						TerrainType.LAKE, TerrainType.JUNGLE, TerrainType.LAKE,

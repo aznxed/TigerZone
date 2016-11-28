@@ -32,14 +32,15 @@ public class tigerzoneServerProtocol {
     private int challengeNum = 1;
     private int challengeTotal = 2;
     private int roundNum = 1;
-    private int roundTotal = 3;
+    private int roundTotal = 2;
     private int moveTime = 1;
 
 	private int timeToMatch = 3;
     private String tourPassword = "PersiaRocks!";
     private String playPassword = "Obiwan77";
 	private String startingTile = "TLTJ-";
-	private String tileString = "TLTTP LJTJ- JLJL- JJTJX TLLL- TLLT-";
+	//private String tileString = "LJJJ- LJTJD TLTTP LJTJ- JLJL- JJTJX TLLL- TLLT- TTTT- JJJJX LLLL- JJTJX TLTT-";
+	private String tileString = "JJJJ- JJJJX JJTJX TTTT- TJTJ- TJJT- TJTT- LLLL- JLLL- LLJJ- JLJL- LJLJ- LJJJ- JLLJ- TLJT- TLJTP JLTT- JLTTB TLTJ- TLTJD TLLL- TLTT- TLTTP TLLT- TLLTB LJTJ- LJTJD TLLLC";
 	private String[] deck = tileString.split(" ");
 	private int moveNum = 0;
 	private move botMove;
@@ -190,7 +191,12 @@ public class tigerzoneServerProtocol {
         	currentTile = deck[moveNum - 1];
         	//Send Move to player
         	botMove = serverBot.makeMove((gameID ? "B" : "A"), moveTime, currentTile);
-        	theOutput = moveMess((gameID ? "A" : "B"), moveTime, moveNum, currentTile);
+    		//if ((playerMove.meepPos) != -1){
+    			theOutput = moveMess((gameID ? "A" : "B"), moveTime, moveNum, currentTile);
+    		/*}
+    		else {
+        		theOutput = "GAME " + (gameID ? "A" : "B") + " MOVE " + moveNum + " UNPLACEABLE PASS";
+    		}*/
     		moveStartTime = System.currentTimeMillis();
         	//Send Move to bot
             state = SentMakeAMove;

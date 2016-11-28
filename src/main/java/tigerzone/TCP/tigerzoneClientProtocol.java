@@ -50,6 +50,8 @@ public class tigerzoneClientProtocol {
 	private int boardWinTotal = 0;
 	private int boardTieTotal = 0;
 	private int boardLossTotal = 0;
+	
+	private int tigerMeep = 7;
     
     bot2 bot = new bot2();
     
@@ -140,6 +142,7 @@ public class tigerzoneClientProtocol {
         		bot.initBoards();
         		bot.botProcess(3);
                 bot.firstTile(split[3], 77, 77, 0);
+                tigerMeep = 7;
         		state = ReceivedStartTile;
         	}
         }
@@ -169,11 +172,12 @@ public class tigerzoneClientProtocol {
         		//player needs to make a move
             	playerMove = bot.makeMove(split[5], Integer.valueOf(split[7]), split[12]);
         		theOutput = "GAME " + split[5] + " MOVE " + split[10];
-        		if ((playerMove.rot) != -1){
+        		if ((playerMove.meepPos) != -1){
             		theOutput = theOutput + " PLACE " + split[12]+ " AT "
             					+ playerMove.xPos + " " + playerMove.yPos + " " + playerMove.rot;
-                	if((playerMove.meep).equals("TIGER")){
+                	if((playerMove.meep).equals("TIGER") && tigerMeep > 0){
                 		theOutput = theOutput + " " + playerMove.meep + " " + playerMove.meepPos;
+                		tigerMeep--;
                 	}
                 	else if((playerMove.meep).equals("CROCODILE")){
                 		theOutput = theOutput + " " + playerMove.meep;
