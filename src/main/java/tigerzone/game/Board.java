@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import tigerzone.game.Deck;
+import tigerzone.move;
 
 public class Board {
 
@@ -16,6 +17,8 @@ public class Board {
 	private int bottomBound;
 	private int leftBound;
 	private int rightBound;
+	
+	private boolean startTile = true;
 
 	private Tile[][] board = new Tile[MAX_ROWS][MAX_COLS];
 
@@ -112,6 +115,24 @@ public class Board {
 	 * @param tile
 	 * @return
 	 */
+	
+	public boolean isValid(int x, int y, Tile tile) {
+		// Space already has tile
+		if (board[x][y] != null) {
+			return false;
+		}
+
+		List<Tile> nbors = getNeighbors(x, y);
+
+		// No neighbors
+		if (nbors.isEmpty()) {
+			return false;
+		}
+
+		return true;
+	}
+	
+	/*
 	public boolean isValid(int x, int y, Tile tile)
 	{
 
@@ -178,7 +199,7 @@ public class Board {
 
 		} // Iterate thru neighbors
 		return valid;
-	}
+	}*/
 
 	/**
 	 * Add a Tile to the board. It will first validate that the Tile can be
@@ -357,7 +378,7 @@ public class Board {
 		board[x][y] = tile;
 	}
 	//Places random Tile
-	public void addTile(Tile tile)// moveto AI
+	public boolean addTile(Tile tile)// moveto AI
 	{
 	
 		if (!(getPossibleMoves(tile).isEmpty())) {
@@ -386,8 +407,64 @@ public class Board {
 			if (y == getRightBound() && y < MAX_COLS) {
 				setRightBound(y + 1);
 			}
+			return true;
+		}
+		else {
+			return false;
 		}
 		
+	}
+	
+	//Places random Tile
+	public move makeMoveBoard(Tile tile)// moveto AI
+	{
+		move tempMove;
+		tempMove = new move(0, 0, 0, "", -1);
+		if (startTile){
+			startTile = false;
+			board[CENTER_CELL][CENTER_CELL] = tile;
+		}
+		else {
+		
+			if (!(getPossibleMoves(tile).isEmpty())) {
+				
+				// Keep a list of all the tiles placed on the board
+				placedTiles.add(tile);
+				tile.setBoard(this);
+	
+				Random rand = new Random();
+	
+				Tile addTile = getPossibleMoves(tile).get(
+						rand.nextInt(getPossibleMoves(tile).size()));
+				int x = addTile.getRow();
+				int y = addTile.getCol();
+				board[x][y] = addTile;
+				//tempMove = new move(x, y, addTile.getDegrees(), "", -1);
+				tempMove.xPos = x;
+				tempMove.yPos = y;
+				tempMove.rot = addTile.getDegrees();
+				tempMove.meepPos = 0;
+				System.out.println("X: " + x + " Y: " + y + " Rot: " + tempMove.rot);
+				
+				if (x == getTopBound() && x > 0) {
+					setTopBound(x - 1);
+				}
+				if (x == getBottomBound() && x < MAX_ROWS) {
+					setBottomBound(x + 1);
+				}
+				if (y == getLeftBound() && y > 0) {
+					setLeftBound(y - 1);
+				}
+				if (y == getRightBound() && y < MAX_COLS) {
+					setRightBound(y + 1);
+				}
+			}
+			else {
+				System.out.println("WARNING NO POSSIBLE MOVES");
+			}
+			return tempMove;
+		}
+		return tempMove;
 	}
 
 
@@ -398,6 +475,12 @@ public class Board {
 	public void initTiles(Deck tiles) {
 		//this will be moved to deck.java
 		Tile startTile = new Tile("TLTJ-", 0, CENTER_CELL, CENTER_CELL);
+		board[CENTER_CELL][CENTER_CELL] = startTile;
+	}
+
+	public void placeStartTile(String tile) {
+		//this will be moved to deck.java
+		Tile startTile = new Tile(tile, 0, CENTER_CELL, CENTER_CELL);
 		board[CENTER_CELL][CENTER_CELL] = startTile;
 	}
 	

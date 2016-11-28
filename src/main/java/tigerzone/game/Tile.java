@@ -53,7 +53,8 @@ public class Tile {
 		// count number of lake edges for this tile
 		// if there is a lake center, then its all one continuous lake else
 		// they're separate lakes represents the center of an edge
-		if (isLakeCenter()) {
+		//if (isLakeCenter()) {
+		if (false) {
 			lakeEdgeCount = 1;
 		} else {
 			for (int i = 0; i < tilePortionType.length; i++) {

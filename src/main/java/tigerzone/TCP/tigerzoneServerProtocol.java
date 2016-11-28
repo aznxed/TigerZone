@@ -1,6 +1,6 @@
 package tigerzone.TCP;
 
-import tigerzone.bot;
+import tigerzone.bot2;
 import tigerzone.fakeBot;
 import tigerzone.move;
 import java.net.*;
@@ -54,7 +54,7 @@ public class tigerzoneServerProtocol {
 	//Used for sending current game
 	private boolean gameID = true;
 	
-	bot serverBot = new bot();
+	bot2 serverBot = new bot2();
 	
 	public String moveMess(String gID, int time, int num, String tiles){
 		String mess = "";
@@ -148,8 +148,8 @@ public class tigerzoneServerProtocol {
         	int rot = 0;
             theOutput = "STARTING TILE IS " + startingTile + " AT " + xPos + " " + yPos + " " + rot;
             //Initialize board and place first for serverBot
-            //serverBot.initBoards();
-            serverBot.placeFirstTile(startingTile, xPos, yPos, rot);
+            serverBot.initBoards();
+            //serverBot.placeFirstTile(startingTile, xPos, yPos, rot);
             state = SentStartTile;
         }
         

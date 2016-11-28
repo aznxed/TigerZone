@@ -17,9 +17,9 @@ public class bot {
 		gameA.StartAI(tile);
 		
 		//Move is in form (int xPos, int yPos, int rot, String meep, int meepPos)
-		//To Pass Set meep equal to "PASS" and rot to -1
-		//To Retrieve Meep Set meep equal to "RETRIEVE" and rot to -1. Use x and y for coor
-		//To ADD Meep Set meep equal to "ADD" and rot to -1. Use x and y for coor
+		//To Pass Set meep equal to "PASS" and meepPos to -1
+		//To Retrieve Meep Set meep equal to "RETRIEVE" and meepPos to -1. Use x and y for coor
+		//To ADD Meep Set meep equal to "ADD" and meepPos to -1. Use x and y for coor
 		
 		move currMove = new move(0,0,0,"placeHolder",0);
 		

@@ -1,6 +1,6 @@
 package tigerzone.TCP;
 
-import tigerzone.bot;
+import tigerzone.bot2;
 import tigerzone.fakeBot;
 import tigerzone.move;
 import java.net.*;
@@ -51,7 +51,7 @@ public class tigerzoneClientProtocol {
 	private int boardTieTotal = 0;
 	private int boardLossTotal = 0;
     
-    bot bot = new bot();
+    bot2 bot = new bot2();
     
     public void initInfo(String servPass, String playName, String playPass) {
     	serverPassword = servPass;
@@ -136,7 +136,7 @@ public class tigerzoneClientProtocol {
         else if (state == ReceivedOpponent) {
         	String[] split = theInput.split(" ");
         	if (split[0].equals("STARTING")) {
-        		bot.placeFirstTile(split[3], Integer.valueOf(split[5]), Integer.valueOf(split[6]), Integer.valueOf(split[7]));
+        		//bot.placeFirstTile(split[3], Integer.valueOf(split[5]), Integer.valueOf(split[6]), Integer.valueOf(split[7]));
                 state = ReceivedStartTile;
         	}
         }
@@ -156,6 +156,7 @@ public class tigerzoneClientProtocol {
         	String[] split = theInput.split(" ");
         	if (split[0].equals("MATCH")) {
         		//bot.botProcess(Integer.valueOf(split[3]));
+        		bot.initBoards();
         		state = MakeAMove;
         	}
         }
@@ -262,10 +263,10 @@ public class tigerzoneClientProtocol {
         			//GAME <gid> MOVE <#> PLAYER <pid> TILE <tile> UNPLACEABLE RETRIEVE TIGER AT <x> <y>
         			if (split[6].equals("PLACED")){
 	        			if (split.length < (12 + 1)) {
-	        				bot.makeMove(split[1], split[7], Integer.valueOf(split[9]), Integer.valueOf(split[10]), Integer.valueOf(split[11]), "", -1);
+	        				bot.placeTile(split[1], split[7], Integer.valueOf(split[9]), Integer.valueOf(split[10]), Integer.valueOf(split[11]), "", -1);
 	        				}
 	        			else {
-	        				bot.makeMove(split[1], split[7], Integer.valueOf(split[9]), Integer.valueOf(split[10]), Integer.valueOf(split[11]), split[12], Integer.valueOf(split[13]));
+	        				bot.placeTile(split[1], split[7], Integer.valueOf(split[9]), Integer.valueOf(split[10]), Integer.valueOf(split[11]), split[12], Integer.valueOf(split[13]));
 	        			}
         			}
         			//Tile is Unplaceable
