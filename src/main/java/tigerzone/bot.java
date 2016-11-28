@@ -1,81 +1,48 @@
 package tigerzone;
-
-import tigerzone.game.Tile;
-import tigerzone.game.Deck;
-import tigerzone.game.Board;
-
-import java.util.ArrayDeque;
-import java.util.Queue;
 import java.lang.System;
 
 public class bot {
-	Deck myDeck = new Deck();
-	Queue<Tile> tileDeck;
+	singleGame gameA = new singleGame();
+	singleGame gameB = new singleGame();
 	
-	//Initialize the deck of tiles
-	public void initDeck(){
-		Deck myDeck = new Deck();
-		return;
+	
+	public void placeFirstTile(String tile, int x, int y, int rot){
+		gameA.placeFirstTile(tile, x, y, rot);
+		gameB.placeFirstTile(tile, x, y, rot);
 	}
-	//Add a tile to the Deck
-	public void addDeck(String tile){
-		//tile in form jttp-
-		//needs to be translated before adding to deck
-		Tile tempTile = new Tile(tile);
-		myDeck.addTile(tempTile);
-		System.out.println("Added " + tile + " to deck");
-		return;
-	}
-	//Initialize the board
-	public void initBoards(){
-		Board boardA = new Board();
-		Board boardB = new Board();
-		return;
-	}
-	//Place first tile
-	public void firstTile(String tile, int x, int y, int rot){
-		return;
-	}
+	
 	//Play a tile
 	public move makeMove(String game, int time, String tile){
+		//TODO: ADD if to switch games.
+		gameA.StartAI(tile);
+		
 		//Move is in form (int xPos, int yPos, int rot, String meep, int meepPos)
 		//To Pass Set meep equal to "PASS" and rot to -1
 		//To Retrieve Meep Set meep equal to "RETRIEVE" and rot to -1. Use x and y for coor
 		//To ADD Meep Set meep equal to "ADD" and rot to -1. Use x and y for coor
+		
+		move currMove = new move(0,0,0,"placeHolder",0);
+		
 		long startTime = System.currentTimeMillis();
-		//Next tile
-		//Tile bar = myDeck.get(tileDeck);
-		//Tile tempTile = myDeck.transTile(tile);
-		
-		move currMove = new move(0, 0, 0, "", -2);
 		long timeLeft = (long) ((double) time * 0.8 * 1000);
-		while (timeLeft > (System.currentTimeMillis() - startTime)) {
-			//Check for next best move
+		while (true) {
+			if(timeLeft == (System.currentTimeMillis() - startTime))
+			{
+				currMove = gameA.getMove();//returns tile and meeple in move notation 
+				break;
+			}
 		}
-		while (currMove.meepPos == -2){
-			//Check for any valid move
-			currMove = new move(0, 0, 0, "", -1);
-		}
-		
+		makeMove(game, tile, 0,0,0,"placeHolder",0);
 		System.out.println("Got a move in: " + (System.currentTimeMillis() - startTime));
 		return currMove;
 	}
 	//Place a tile ALWAYS ENEMY TILE
-	public void placeTile(String game, String tile, int x, int y, int rot, String meep, int meepPos){
-		return;
-	}
-	//Tile couldn't be placed
-	//Place Tiger at x y
-	public void placeMeep(int x, int y) {
-		return;
-	}
-	//Remove Tiger at x y
-	public void removeMeep(int x, int y) {
-		return;
-	}
-	//Extra Processing Time Do Whatever
-	public void botProcess(int time){
-		return;
+	public void makeMove(String game, String tile, int x, int y, int rot, String meep, int meepPos){
+		//TODO: ADD if to switch games.
+		gameA.placeTile(tile, x, y, rot);
+		gameA.placeTiger();
 	}
 	
+	
+
 }

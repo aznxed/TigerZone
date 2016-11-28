@@ -1,25 +1,68 @@
 package tigerzone.AI;
+import tigerzone.game.Board;
 import tigerzone.game.Deck;
 import tigerzone.game.Tile;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
+import java.util.Comparator;
 public class AI {
-	private 
+	 
     
 	class option{
-		int score; //calculated score
-		int ref;//refers to the tile position in possible moves
+		private int score; //calculated score
+		private int ref;//refers to the tile position in possible moves
+		int getRef()
+		{
+			return ref;
+		}
 	}
-	private ArrayList<option> scores = new ArrayList<option>();  
-	//public AI (possiblePlaces List<Tile>, Deck deck ){
+	
+	private Board board;
+	private Deck deck;
+	private Tile tile;
+
+	private ArrayList<option> scores = new ArrayList<option>(); //  
+	public AI (){	
 		
-	//}
-	void makeMove()
-	{
-		//takes best move from the priority queue
 	}
+	public void setUp(Board board, Deck deck, Tile tile)
+	{
+		this.board = board;
+		this.deck = deck;
+		this.tile = tile;
+		List<Tile> possiblePlaces = board.getPossibleMoves(tile);
+	}
+	public void runMainAI()
+	{
+		
+	}
+	
+	/*public void runMoves()
+	{
+		
+		class sortByScore implements Comparator<option> {
+			  @Override
+			  public int compare(option x, option y) {
+			    int startComparison = compare(x.score, y.score);
+			    return startComparison;
+			  }
+
+			  // I don't know why this isn't in Long...
+			  private static int compare(long a, long b) {
+			    return a < b ? -1
+			         : a > b ? 1
+			         : 0;
+			  }
+			}
+		//Collections.sort(scores);
+	}*/
+	public Tile makeMove()
+	{
+		return tile;
+		//scores.get(0).getRef();//takes best move from the array list, returns the refrence to tile placement from possible Places
+	}
+	
 }
 
 //********PSEUDOCODE FOR AI V 0.0.1 ***********/
