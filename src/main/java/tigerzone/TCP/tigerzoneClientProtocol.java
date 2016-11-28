@@ -141,7 +141,7 @@ public class tigerzoneClientProtocol {
         		//bot.placeFirstTile(split[3], Integer.valueOf(split[5]), Integer.valueOf(split[6]), Integer.valueOf(split[7]));
         		bot.initBoards();
         		bot.botProcess(3);
-                bot.firstTile(split[3], 77, 77, 0);
+                bot.firstTile(split[3], 77 - Integer.valueOf(split[6]), Integer.valueOf(split[5]) + 77, Integer.valueOf(split[7]));
                 tigerMeep = 7;
         		state = ReceivedStartTile;
         	}

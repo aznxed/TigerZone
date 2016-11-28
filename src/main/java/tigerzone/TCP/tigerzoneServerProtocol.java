@@ -145,8 +145,8 @@ public class tigerzoneServerProtocol {
         else if (state == SentOpponent) {
         	getReply = false;
         	int xPos = 0;
-        	int yPos = 0;
-        	int rot = 0;
+        	int yPos = 1;
+        	int rot = 90;
             theOutput = "STARTING TILE IS " + startingTile + " AT " + xPos + " " + yPos + " " + rot;
             //Initialize board and place first for serverBot
             serverBot.initBoards();

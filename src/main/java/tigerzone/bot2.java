@@ -28,8 +28,8 @@ public class bot2 {
 		//Place first tile
 		public void firstTile(String tile, int x, int y, int rot){
 			Tile newTile = new Tile(tile);
-			move reportMove = boardA.makeMoveBoard(newTile);
-			boardB.makeMoveBoard(newTile);
+			move reportMove = boardA.makeMoveBoard(newTile, x, y, rot);
+			boardB.makeMoveBoard(newTile, x, y, rot);
 			System.out.println("Report Move: " + reportMove.xPos + " " + reportMove.yPos + " " + reportMove.xPos);
 			return;
 		}
@@ -57,7 +57,7 @@ public class bot2 {
 				tempMove2 = boardB.makeMoveBoard(newTile);
 			}
 			//Translate x and y coordinates and rotation
-			move currMove = new move(tempMove2.yPos - 77, 77 - tempMove2.xPos, (tempMove2.rot + 270) % 360, tempMove2.meep, tempMove2.meepPos);
+			move currMove = new move(tempMove2.yPos - 77, 77 - tempMove2.xPos, tempMove2.rot, tempMove2.meep, tempMove2.meepPos);
 			//Next tile
 			//Tile bar = myDeck.get(tileDeck);
 			//Tile tempTile = myDeck.transTile(tile);

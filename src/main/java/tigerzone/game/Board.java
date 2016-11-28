@@ -355,6 +355,22 @@ public class Board {
 		return;
 	}
 	
+	public move makeMoveBoard(Tile tile, int xs, int ys, int rots)// moveto AI
+	{
+		move tempMove;
+		tempMove = new move(0, 0, 0, "", -1);
+		if (startTile){
+			startTile = false;
+			Tile tempTile;
+			tempTile = tile.rotateTile(tile, rots);
+			board[xs][ys] = tempTile;
+			tempMove.xPos = xs;
+			tempMove.yPos = ys;
+		}
+		System.out.println("5X: " + tempMove.xPos + " Y: " + tempMove.yPos + " Rot: " + tempMove.rot);
+		return tempMove;
+	}
+	
 	//Places random Tile
 	public move makeMoveBoard(Tile tile)// moveto AI
 	{
@@ -438,6 +454,22 @@ public class Board {
 		//this will be moved to deck.java
 		Tile startTile = new Tile(tile, 0, CENTER_CELL, CENTER_CELL);
 		board[CENTER_CELL][CENTER_CELL] = startTile;
+	}
+	
+	public void placeStartTile(Tile tile, int xs, int ys, int rots)// moveto AI
+	{
+		move tempMove;
+		tempMove = new move(0, 0, 0, "", -1);
+		if (startTile){
+			startTile = false;
+			Tile tempTile;
+			tempTile = tile.rotateTile(tile, rots);
+			board[xs][ys] = tempTile;
+			tempMove.xPos = xs;
+			tempMove.yPos = ys;
+		}
+		System.out.println("5X: " + tempMove.xPos + " Y: " + tempMove.yPos + " Rot: " + tempMove.rot);
+		return;
 	}
 	
 	public void addDeck(String tile) {
