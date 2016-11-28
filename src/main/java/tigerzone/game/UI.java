@@ -10,7 +10,71 @@ import javax.swing.JPanel;
 
 public class UI 
 { 
-
+	public int getType(String terrainType){
+		switch(terrainType)
+		{
+			case"JJJJ-":	
+				return 1;
+			case"JJJJX":	
+				return 2;
+			case"JJTJX":	
+				return 3;
+			case"TTTT-":	
+				return 4;
+			case"TJTJ-":	
+				return 5;
+			case"TJJT-":	
+				return 6;
+			case"TJTT-":	
+				return 7;
+			case"LLLL-":	
+				return 8;	
+			case"JLLL-":	
+				return 9;	
+			case"LLJJ-":	
+				return 10;	
+			case"JLJL-":	
+				return 11;
+			case"LJLJ-":	
+				return 12;
+			case"LJJJ-":	
+				return 13;
+			case"JLLJ-":	
+				return 14;
+			case"TLJT-":	
+				return 15;
+			case"TLJTP":	
+				return 16;
+			case"JLTT-":	
+				return 17;
+			case"JLTTB":	
+				return 18;
+			case"TLTJ-":	
+				return 19;
+			case"TLTJD":	
+				return 20;
+			case"TLLL-":	
+				return 21;
+			case"TLTT-":	
+				return 22;
+			case"TLTTP":	
+				return 23;
+			case"TLLT-":	
+				return 24;
+			case"TLLTB-":	
+				return 25;
+			case"LJTJ-":	
+				return 26;
+			case"LJTJD":	
+				return 27;
+			case"TLLLC":	
+				return 28;
+				}
+		
+		return 0;
+		
+	}
+	
 	public void createUIBoard(Board gameBoard)
 	{
 	String imagePath = "src/main/CarcassonneTiles/";
@@ -32,8 +96,7 @@ public class UI
 			} else {
 				JLabel j1 = new JLabel();
 				ImageIcon II = new ImageIcon(imagePath + "Tile"
-								+ Integer.toString(gameBoard.getBoard()[i][j]
-										.getType())
+								+ Integer.toString(getType(gameBoard.getBoard()[i][j].getTerrainTypeString()))
 								+ "."
 								+ Integer.toString(gameBoard.getBoard()[i][j]
 										.getDegrees()) + ".png");

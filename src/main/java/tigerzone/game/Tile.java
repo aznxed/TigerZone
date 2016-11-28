@@ -16,9 +16,6 @@ public class Tile {
 	private int col;
 
 	// string code
-	private String code;
-
-	private int type;
 	private String terrainTypeString;
 	private boolean visited;
 
@@ -37,8 +34,8 @@ public class Tile {
 
 	}
 	
-	public Tile(String terrainTypeString, int type) {
-		this.type = type; //has no apparent use, will be removed
+	public Tile(String terrainTypeString) {
+		//this.type = type; //has no apparent use, will be removed
 		this.terrainTypeString = terrainTypeString;
 		tilePortionType = returnTileTerrain(terrainTypeString);
 
@@ -70,14 +67,14 @@ public class Tile {
 
 	}
 
-	public Tile(String terrainTypeString, int type, int row, int col) {
-		this(terrainTypeString, type);
+	public Tile(String terrainTypeString, int row, int col) {
+		this(terrainTypeString);
 		this.row = row;
 		this.col = col;
 	}
 
-	public Tile(String terrainTypeString, int type, int degrees, int row, int col) {
-		this(terrainTypeString, type, row, col);
+	public Tile(String terrainTypeString, int degrees, int row, int col) {
+		this(terrainTypeString, row, col);
 		this.degrees = degrees;
 
 	}
@@ -258,8 +255,9 @@ public class Tile {
 		TerrainType[] empty = {}; 
 		return empty;
 	}
-	public Tile rotateTile(Tile tile, int degrees) {
-		Tile rotateTile = new Tile(tile.getTerrainTypeString(), tile.getType(), degrees, tile.getRow(), tile.getCol());
+	
+public Tile rotateTile(Tile tile, int degrees) {
+		Tile rotateTile = new Tile(tile.getTerrainTypeString(), degrees, tile.getRow(), tile.getCol());
 
 		TerrainType[] rotateArr = new TerrainType[9];
 		if (degrees == 90) {
@@ -318,9 +316,6 @@ public class Tile {
 		this.clusterIndices = clusterIndices;
 	}
 
-	public int getType() {
-		return type;
-	}
 
 	public int getDegrees() {
 		return degrees;
@@ -364,14 +359,6 @@ public class Tile {
 
 	public boolean isLakeCenter() {
 		return tilePortionType[4] == TerrainType.LAKE;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
 	}
 
 	public boolean isVisited() {

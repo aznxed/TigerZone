@@ -324,8 +324,6 @@ public class Board {
 		return validOrients;
 	}
 
-	
-
 	public List<Tile> getPossibleMoves(Tile tile) {
 		List<Tile> possibleMoves = new ArrayList<Tile>();
 	    for (int i = getTopBound(); i <= getBottomBound(); i++) {
@@ -392,7 +390,7 @@ public class Board {
 
 	public void initTiles(Deck tiles) {
 		//this will be moved to deck.java
-		Tile startTile = new Tile("TLTJ-", 19, 0, CENTER_CELL, CENTER_CELL);
+		Tile startTile = new Tile("TLTJ-", 0, CENTER_CELL, CENTER_CELL);
 		board[CENTER_CELL][CENTER_CELL] = startTile;
 	}
 	
@@ -402,9 +400,9 @@ public class Board {
 		Board gameBoard = new Board();
 		Deck deck = new Deck();
 		
-		Tile temp = new Tile("TLTJ-",1);//test code
+		Tile temp = new Tile("TLTJ-");//test code
 		deck.addTile(temp);//test code
-		temp = new Tile("JJJJ-",1);//test code
+		temp = new Tile("JJJJ-");//test code
 		deck.addTile(temp);//test code
 		
 		gameBoard.setTopBound(CENTER_CELL - 1);
