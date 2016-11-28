@@ -39,7 +39,7 @@ public class tigerzoneServerProtocol {
     private String tourPassword = "PersiaRocks!";
     private String playPassword = "Obiwan77";
 	private String startingTile = "TLTJ-";
-	private String tileString = "TLTTP LJTJ- JLJL- JJTJX LTTJB TLLT-";
+	private String tileString = "TLTTP LJTJ- JLJL- JJTJX TLLL- TLLT-";
 	private String[] deck = tileString.split(" ");
 	private int moveNum = 0;
 	private move botMove;
@@ -149,6 +149,8 @@ public class tigerzoneServerProtocol {
             theOutput = "STARTING TILE IS " + startingTile + " AT " + xPos + " " + yPos + " " + rot;
             //Initialize board and place first for serverBot
             serverBot.initBoards();
+    		serverBot.botProcess(3);
+            serverBot.firstTile(startingTile, 77, 77, 0);
             //serverBot.placeFirstTile(startingTile, xPos, yPos, rot);
             state = SentStartTile;
         }

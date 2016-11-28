@@ -14,6 +14,9 @@ public class bot2 {
 		}
 		//Add a tile to the Deck
 		public void addDeck(String tile){
+			System.out.println("Add " + tile + " to deck");
+			boardA.addDeck(tile);
+			boardB.addDeck(tile);
 			return;
 		}
 		//Initialize the board
@@ -25,8 +28,9 @@ public class bot2 {
 		//Place first tile
 		public void firstTile(String tile, int x, int y, int rot){
 			Tile newTile = new Tile(tile);
-			boardA.makeMoveBoard(newTile);
+			move reportMove = boardA.makeMoveBoard(newTile);
 			boardB.makeMoveBoard(newTile);
+			System.out.println("Report Move: " + reportMove.xPos + " " + reportMove.yPos + " " + reportMove.xPos);
 			return;
 		}
 		//Play a tile
@@ -72,6 +76,10 @@ public class bot2 {
 		}
 		//Place a tile ALWAYS ENEMY TILE
 		public void placeTile(String game, String tile, int x, int y, int rot, String meep, int meepPos){
+			Tile newTile = new Tile(tile);
+			if (game.equals("A")){
+				boardA.placeTileBoard(newTile, x, y, rot);
+			}
 			return;
 		}
 		//Tile couldn't be placed
@@ -85,6 +93,22 @@ public class bot2 {
 		}
 		//Extra Processing Time Do Whatever
 		public void botProcess(int time){
+			boardA.setTopBound(77 - 1);
+			boardA.setBottomBound(77 + 1);
+			boardA.setLeftBound(77 - 1);
+			boardA.setRightBound(77 + 1);
+
+
+			boardA.initTiles(boardA.deck);//change to deck
+
+			
+			boardB.setTopBound(77 - 1);
+			boardB.setBottomBound(77 + 1);
+			boardB.setLeftBound(77 - 1);
+			boardB.setRightBound(77 + 1);
+
+
+			boardB.initTiles(boardB.deck);//change to deck
 			return;
 		}
 }

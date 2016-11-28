@@ -9,9 +9,11 @@ import tigerzone.move;
 
 public class Board {
 
-	public static int MAX_ROWS = 153;
-	public static int MAX_COLS = 153;
-	public static int CENTER_CELL = MAX_ROWS / 2 + 1;
+	public Deck deck = new Deck();
+
+	public static int CENTER_CELL = 77;
+	public static int MAX_ROWS = CENTER_CELL * 2 - 1;
+	public static int MAX_COLS = CENTER_CELL * 2 - 1;
 
 	private int topBound;
 	private int bottomBound;
@@ -415,6 +417,12 @@ public class Board {
 		
 	}
 	
+	public void placeTileBoard(Tile tile, int x, int y, int rot){
+		Tile rotTile = tile.rotateTile(tile, rot);
+		board[77 - y][x + 77] = rotTile;
+		return;
+	}
+	
 	//Places random Tile
 	public move makeMoveBoard(Tile tile)// moveto AI
 	{
@@ -462,8 +470,10 @@ public class Board {
 			else {
 				System.out.println("WARNING NO POSSIBLE MOVES");
 			}
+			System.out.println("1X: " + tempMove.xPos + " Y: " + tempMove.yPos + " Rot: " + tempMove.rot);
 			return tempMove;
 		}
+		System.out.println("2X: " + tempMove.xPos + " Y: " + tempMove.yPos + " Rot: " + tempMove.rot);
 		return tempMove;
 	}
 
@@ -484,13 +494,18 @@ public class Board {
 		board[CENTER_CELL][CENTER_CELL] = startTile;
 	}
 	
+	public void addDeck(String tile) {
+		Tile temp = new Tile(tile);
+		deck.addTile(temp);
+	}
+	
 
 	public static void main(String[] args)
 	{
 		Board gameBoard = new Board();
 		Deck deck = new Deck();
 		
-		Tile temp = new Tile("TLTJ-");//test code
+		Tile temp = new Tile("TLTTP");//test code
 		deck.addTile(temp);//test code
 		temp = new Tile("JJJJ-");//test code
 		deck.addTile(temp);//test code
