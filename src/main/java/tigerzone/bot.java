@@ -21,7 +21,7 @@ public class bot {
 	public void addDeck(String tile){
 		//tile in form jttp-
 		//needs to be translated before adding to deck
-		Tile tempTile = new Tile(tile, 1);
+		Tile tempTile = new Tile(tile);
 		myDeck.addTile(tempTile);
 		System.out.println("Added " + tile + " to deck");
 		return;
