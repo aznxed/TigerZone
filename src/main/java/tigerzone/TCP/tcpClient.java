@@ -25,6 +25,9 @@ public class tcpClient {
 		userName = args[3];
 		userPassword = args[4];
 		
+
+	    tigerzoneClientProtocol clientp = new tigerzoneClientProtocol();;
+		
 		System.out.println("Connecting to " + hostName + " at port " + portNumber);
 		try (
 		    Socket tzSocket = new Socket(hostName, portNumber);
@@ -34,7 +37,6 @@ public class tcpClient {
 			System.out.println("Connected");
 		    String serverMessage;
 		    String userMessage;
-		    tigerzoneClientProtocol clientp = new tigerzoneClientProtocol();
 		    clientp.initInfo(serverPassword, userName, userPassword);
 		
 		    while ((serverMessage = in.readLine()) != null) {
@@ -64,6 +66,7 @@ public class tcpClient {
 		} catch (IOException e) {
 		    System.err.println("Couldn't get I/O for the connection to " +
 		        hostName);
+		    clientp.outputTournamentRecord();
 		    System.exit(1);
 		}
 	}

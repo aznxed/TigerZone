@@ -35,7 +35,7 @@ public class tigerzoneClientProtocol {
     private int gamesOver = 0;
     private move playerMove;
 	
-    private int gamesPlayed;
+    private int gamesPlayed = 0;
 	private int myForfeit = 0;
 	private int enemyForfeit = 0;
 	
@@ -59,6 +59,19 @@ public class tigerzoneClientProtocol {
     	serverPassword = servPass;
     	playerName = playName;
     	playerPassword = playPass;
+    }
+    
+    public void outputTournamentRecord() {
+    	if (gamesPlayed > 0) {
+        	System.out.println("Games Played:     " + gamesPlayed);
+        	System.out.println("Match Record:     " + matchWin + " - " + matchTie + " - " + matchLoss);
+        	System.out.println("Game Record:      " + boardWinTotal + " - " + boardTieTotal + " - " + boardLossTotal);
+        	System.out.println("Forfeited:        " + myForfeit);
+        	System.out.println("Enemy Forfeited:  " + enemyForfeit);
+    	}
+    	else {
+    		System.out.println("No games played");
+    	}
     }
 
     public String processMessage(String theInput) {
@@ -108,11 +121,7 @@ public class tigerzoneClientProtocol {
         	//If game over 
         	else if (split[0].equals("THANK")) {
             	theOutput = "Bye.";
-            	System.out.println("Games Played:     " + gamesPlayed);
-            	System.out.println("Match Record:     " + matchWin + " - " + matchTie + " - " + matchLoss);
-            	System.out.println("Game Record:      " + boardWinTotal + " - " + boardTieTotal + " - " + boardLossTotal);
-            	System.out.println("Forfeited:        " + myForfeit);
-            	System.out.println("Enemy Forfeited:  " + enemyForfeit);
+            	outputTournamentRecord();
         		state = Finished;
         	}
         }

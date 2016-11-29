@@ -260,33 +260,35 @@ public class Tile {
 public Tile rotateTile(Tile tile, int degrees) {
 		Tile rotateTile = new Tile(tile.getTerrainTypeString(), degrees, tile.getRow(), tile.getCol());
 
-		TerrainType[] rotateArr = new TerrainType[9];
-		if (degrees == 90) {
-			rotateArr[0] = tile.getTilePortionType()[2];
-			rotateArr[1] = tile.getTilePortionType()[5];
-			rotateArr[2] = tile.getTilePortionType()[8];
-			rotateArr[3] = tile.getTilePortionType()[1];
-			rotateArr[5] = tile.getTilePortionType()[7];
-			rotateArr[6] = tile.getTilePortionType()[0];
-			rotateArr[7] = tile.getTilePortionType()[3];
-			rotateArr[8] = tile.getTilePortionType()[6];
-		}
-		if (degrees == 180) {
-			for (int i = 0; i < 9; i++) {
-				rotateArr[i] = tile.getTilePortionType()[8 - i];
+		if(degrees != 0) {
+			TerrainType[] rotateArr = new TerrainType[9];
+			if (degrees == 90) {
+				rotateArr[0] = tile.getTilePortionType()[2];
+				rotateArr[1] = tile.getTilePortionType()[5];
+				rotateArr[2] = tile.getTilePortionType()[8];
+				rotateArr[3] = tile.getTilePortionType()[1];
+				rotateArr[5] = tile.getTilePortionType()[7];
+				rotateArr[6] = tile.getTilePortionType()[0];
+				rotateArr[7] = tile.getTilePortionType()[3];
+				rotateArr[8] = tile.getTilePortionType()[6];
 			}
+			if (degrees == 180) {
+				for (int i = 0; i < 9; i++) {
+					rotateArr[i] = tile.getTilePortionType()[8 - i];
+				}
+			}
+			if (degrees == 270) {
+				rotateArr[0] = tile.getTilePortionType()[6];
+				rotateArr[1] = tile.getTilePortionType()[3];
+				rotateArr[2] = tile.getTilePortionType()[0];
+				rotateArr[3] = tile.getTilePortionType()[7];
+				rotateArr[5] = tile.getTilePortionType()[1];
+				rotateArr[6] = tile.getTilePortionType()[8];
+				rotateArr[7] = tile.getTilePortionType()[5];
+				rotateArr[8] = tile.getTilePortionType()[2];
+			}
+			rotateTile.setTilePortionType(rotateArr);
 		}
-		if (degrees == 270) {
-			rotateArr[0] = tile.getTilePortionType()[6];
-			rotateArr[1] = tile.getTilePortionType()[3];
-			rotateArr[2] = tile.getTilePortionType()[0];
-			rotateArr[3] = tile.getTilePortionType()[7];
-			rotateArr[5] = tile.getTilePortionType()[1];
-			rotateArr[6] = tile.getTilePortionType()[8];
-			rotateArr[7] = tile.getTilePortionType()[5];
-			rotateArr[8] = tile.getTilePortionType()[2];
-		}
-		rotateTile.setTilePortionType(rotateArr);
 		return rotateTile;
 	}
 	// returns true if this Tile includes a trail continuation
