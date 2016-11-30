@@ -94,11 +94,13 @@ public class UI
 					jp.add(j29);
 				} else {
 					JLabel j1 = new JLabel();
-					ImageIcon II = new ImageIcon(imagePath + "Tile"
-									+ Integer.toString(getType(gameBoard.getBoard()[i][j].getTerrainTypeString()))
-									+ "."
-									+ Integer.toString(gameBoard.getBoard()[i][j]
-											.getDegrees()) + ".png");
+					String iconPath = imagePath + "Tile"
+							+ Integer.toString(getType(gameBoard.getBoard()[i][j].getTerrainTypeString()))
+							+ "."
+							+ Integer.toString(gameBoard.getBoard()[i][j]
+									.getDegrees()) + ".png";
+					System.out.println(iconPath + "\n");
+					ImageIcon II = new ImageIcon(iconPath);
 					Image image = II.getImage(); // transform it
 					int tileHeight = gameBoard.getBottomBound() - gameBoard.getTopBound();
 					int tileWidth = gameBoard.getRightBound() - gameBoard.getLeftBound();

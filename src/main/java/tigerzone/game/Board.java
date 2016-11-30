@@ -456,63 +456,55 @@ public class Board {
 	{
 		move tempMove;
 		tempMove = new move(0, 0, 0, "", -1);
-		if (startTile){
-			startTile = false;
-			board[CENTER_CELL][CENTER_CELL] = tile;
-		}
-		else {
 		
-			if (!(getPossibleMoves(tile).isEmpty())) {
-				
-				// Keep a list of all the tiles placed on the board
-				placedTiles.add(tile);
-				tile.setBoard(this);
+		if (!(getPossibleMoves(tile).isEmpty())) {
+			
+			// Keep a list of all the tiles placed on the board
+			placedTiles.add(tile);
+			tile.setBoard(this);
 	
-				Random rand = new Random();
+			Random rand = new Random();
 	
-				Tile addTile = getPossibleMoves(tile).get(
-						rand.nextInt(getPossibleMoves(tile).size()));
-				int x = addTile.getRow();
-				int y = addTile.getCol();
-				board[x][y] = addTile;
-				//tempMove = new move(x, y, addTile.getDegrees(), "", -1);
-				tempMove.xPos = x;
-				tempMove.yPos = y;
-				tempMove.rot = addTile.getDegrees();
-				if (tile.getTilePortionType()[4] == (TerrainType.DEN)){
-					tempMove.meepPos = 5;
-					tempMove.meep = "TIGER";
-				}
-				else {
-					tempMove.meepPos = 0;
-					tempMove.meep = "";
-				}
-				System.out.println("X: " + x + " Y: " + y + " Rot: " + tempMove.rot);
-				
-				if (x == getTopBound() && x > 0) {
-					setTopBound(x - 1);
-				}
-				if (x == getBottomBound() && x < MAX_ROWS) {
-					setBottomBound(x + 1);
-				}
-				if (y == getLeftBound() && y > 0) {
-					setLeftBound(y - 1);
-				}
-				if (y == getRightBound() && y < MAX_COLS) {
-					setRightBound(y + 1);
-				}
+			Tile addTile = getPossibleMoves(tile).get(
+					rand.nextInt(getPossibleMoves(tile).size()));
+			int x = addTile.getRow();
+			int y = addTile.getCol();
+			board[x][y] = addTile;
+			//tempMove = new move(x, y, addTile.getDegrees(), "", -1);
+			tempMove.xPos = x;
+			tempMove.yPos = y;
+			tempMove.rot = addTile.getDegrees();
+			if (tile.getTilePortionType()[4] == (TerrainType.DEN)){
+				tempMove.meepPos = 5;
+				tempMove.meep = "TIGER";
 			}
 			else {
-				System.out.println("WARNING NO POSSIBLE MOVES");
-				tempMove.xPos = 0;
-				tempMove.yPos = 0;
-				tempMove.rot = 0; 
-				tempMove.meep = "PASS";
-				tempMove.meepPos = -1;
-				System.out.println("3X: " + tempMove.xPos + " Y: " + tempMove.yPos + " Rot: " + tempMove.rot);
-				return tempMove;
+				tempMove.meepPos = 0;
+				tempMove.meep = "";
 			}
-			System.out.println("1X: " + tempMove.xPos + " Y: " + tempMove.yPos + " Rot: " + tempMove.rot);
+			System.out.println("X: " + x + " Y: " + y + " Rot: " + tempMove.rot);
+			
+			if (x == getTopBound() && x > 0) {
+				setTopBound(x - 1);
+			}
+			if (x == getBottomBound() && x < MAX_ROWS) {
+				setBottomBound(x + 1);
+			}
+			if (y == getLeftBound() && y > 0) {
+				setLeftBound(y - 1);
+			}
+			if (y == getRightBound() && y < MAX_COLS) {
+				setRightBound(y + 1);
+			}
+		}
+		else {
+			System.out.println("WARNING NO POSSIBLE MOVES");
+			tempMove.xPos = 0;
+			tempMove.yPos = 0;
+			tempMove.rot = 0; 
+			tempMove.meep = "PASS";
+			tempMove.meepPos = -1;
+			System.out.println("3X: " + tempMove.xPos + " Y: " + tempMove.yPos + " Rot: " + tempMove.rot);
 			return tempMove;
 		}
 		System.out.println("2X: " + tempMove.xPos + " Y: " + tempMove.yPos + " Rot: " + tempMove.rot);
