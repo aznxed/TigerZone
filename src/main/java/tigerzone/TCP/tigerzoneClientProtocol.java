@@ -191,6 +191,9 @@ public class tigerzoneClientProtocol {
                 	else if((playerMove.meep).equals("CROCODILE")){
                 		theOutput = theOutput + " " + playerMove.meep;
                 	}
+                	else {
+                		theOutput = theOutput + " NONE";
+                	}
         		}
         		else if ((playerMove.meep).equals("PASS")){
         			theOutput = theOutput + " UNPLACEABLE PASS";
