@@ -34,7 +34,7 @@ public class tcpClient {
 		    PrintWriter out = new PrintWriter(tzSocket.getOutputStream(), true);
 		    BufferedReader in = new BufferedReader(new InputStreamReader(tzSocket.getInputStream()));
 		) {
-			System.out.println("Connected");
+			System.out.println("Connected\n");
 		    String serverMessage;
 		    String userMessage;
 		    clientp.initInfo(serverPassword, userName, userPassword);
