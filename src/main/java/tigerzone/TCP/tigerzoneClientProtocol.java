@@ -116,69 +116,37 @@ public class tigerzoneClientProtocol {
         		matchNum = 1;
         		challengeNum = Integer.valueOf(split[2]);
         		matchTotal = Integer.valueOf(split[6]);
-        		state = ReceivedChallenge;
         	}
         	//Wait for next challenge
         	//If game over 
         	else if (split[0].equals("THANK")) {
             	theOutput = "Bye.";
             	outputTournamentRecord();
-        		state = Finished;
         	}
-        }
-        //Input: BEGIN ROUND 1 OF 1
-        else if (state == ReceivedChallenge) {
-        	String[] split = theInput.split(" ");
-        	gamesOver = 0;
-        	if (split[0].equals("BEGIN")) {
+        	//Begin Round
+        	else if (split[0].equals("BEGIN")) {
+            	gamesOver = 0;
         		matchNum = Integer.valueOf(split[2]);
-                state = ReceivedRounds;
         	}
-        }
-        //Input: YOUR OPPONENT IS PLAYER Blue
-        //Not sure what to do here
-        else if (state == ReceivedRounds) {
-        	String[] split = theInput.split(" ");
-        	if (split[0].equals("YOUR")) {
+        	else if (split[0].equals("YOUR")) {
         		opponent = split[4];
-                state = ReceivedOpponent;
         	}
-        }
-        
-        else if (state == ReceivedOpponent) {
-        	String[] split = theInput.split(" ");
-        	if (split[0].equals("STARTING")) {
+        	else if (split[0].equals("STARTING")) {
         		//bot.placeFirstTile(split[3], Integer.valueOf(split[5]), Integer.valueOf(split[6]), Integer.valueOf(split[7]));
         		bot.initBoards();
         		bot.botProcess(3);
                 bot.firstTile(split[3], Integer.valueOf(split[6]), Integer.valueOf(split[5]), Integer.valueOf(split[7]));
                 tigerMeep = 7;
-        		state = ReceivedStartTile;
         	}
-        }
-        
-        else if (state == ReceivedStartTile) {
-        	String[] split = theInput.split(" ");
-        	if (split[0].equals("THE")) {
+        	else if (split[0].equals("THE")) {
         		for (int i = 0; i < Integer.valueOf(split[2]); i++) {
         			//Add tile to deck
         			//bot.addDeck(split[6 + i]);
         		}
-        		state = ReceivedRemainingTiles;
         	}
-        }
-        
-        else if (state == ReceivedRemainingTiles) {
-        	String[] split = theInput.split(" ");
-        	if (split[0].equals("MATCH")) {
-        		state = MakeAMove;
+        	else if (split[0].equals("MATCH")) {
         	}
-        }
-        
-        //MAKE YOUR MOVE IN GAME A WITHIN 1 SECOND: MOVE 1 PLACE TLTTP
-        else if (state == MakeAMove) {
-        	String[] split = theInput.split(" ");
-        	if (split[0].equals("MAKE")) {
+        	else if (split[0].equals("MAKE")) {
         		//player needs to make a move
             	playerMove = bot.makeMove(split[5], Integer.valueOf(split[7]), split[12]);
         		theOutput = "GAME " + split[5] + " MOVE " + split[10];
@@ -273,14 +241,13 @@ public class tigerzoneClientProtocol {
             			boardLoss = 0;
             			boardTie = 0;
             			
-            			state = MatchesOver;
             		}
             	}
             	else if (!split[5].equals(playerName)){
         			//Opponent placed a tile
         			//GAME <gid> MOVE <#> PLAYER <pid> TILE <tile> UNPLACEABLE RETRIEVE TIGER AT <x> <y>
         			if (split[6].equals("PLACED")){
-	        			if (split[12].equals("NONE") || split[12].equals("CROCODILE")) {
+	        			if (true) {
 	        				bot.placeTile(split[1], split[7], Integer.valueOf(split[9]), Integer.valueOf(split[10]), Integer.valueOf(split[11]), "", -1);
 	        				}
 	        			else {
@@ -311,47 +278,23 @@ public class tigerzoneClientProtocol {
         			//Wait for other players move
         		}
         	}
-        	//Something has gone wrong if you're here
         	else if (split[0].equals("END") && split[2].equals("ROUND")) {
-        		System.out.println("ERROR DIDN'T DETECT MATCH END");
         		if (matchNum < matchTotal) {
-        			state = ReceivedChallenge;
         		}
         		else {
-        			state = RoundsOver;
         		}
         	}
-        }
-        //END OF ROUND 1 OF 1
-        else if (state == MatchesOver) {
-        	String[] split = theInput.split(" ");
-        	if (split[0].equals("END") && split[2].equals("ROUND")) {
-        		if (matchNum < matchTotal) {
-        			state = ReceivedChallenge;
-        		}
-        		else {
-        			state = RoundsOver;
-        		}
-        	}
-        }
-        
-        else if (state == RoundsOver) {
-        	String[] split = theInput.split(" ");
         	//Challenge is over Wait for new challenge
-        	if (split[0].equals("END") && (split[2].equals("CHALLENGES") || split[2].equals("CHALLENGE"))) {
-        		state = WasWelcomed;
+        	else if (split[0].equals("END") && (split[2].equals("CHALLENGES") || split[2].equals("CHALLENGE"))) {
         	}
-        }
-        //This can probably be deleted
-        else if (state == ChallengeOver) {
-        	String[] split = theInput.split(" ");
-        	if (split[0].equals("THANK")) {
+        	else if (split[0].equals("THANK")) {
             	theOutput = "Bye.";
             	System.out.println("Games Played:      " + gamesPlayed);
             	System.out.println("Tournament Record: " + boardWin + " - " + boardTie + " - " + boardLoss);
             	System.out.println("Forfeited:         " + myForfeit);
-            	System.out.println("Enemy Forfeited:   " + enemyForfeit);
-        		state = Finished;
+        	}
+        	else if (split[4].equals("FORFEITED")){
+        		System.out.println("ERROR TIMEOUT");
         	}
         }
         else if (state == Finished) {
