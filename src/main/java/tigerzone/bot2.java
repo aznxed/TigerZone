@@ -32,8 +32,17 @@ public class bot2 {
 		//Place first tile
 		public void firstTile(String tile, int x, int y, int rot){
 			Tile newTile = new Tile(tile);
-			move reportMove = boardA.makeMoveBoard(newTile, 77 - y, 77 + x, rot);
+			move reportMove = boardA.makeMoveBoard(tile, 77 - y, 77 + x, rot);
 			boardB.makeMoveBoard(newTile, 77 - y, 77 + x, rot);
+			//Initialize board bounds
+			boardA.setTopBound(77 + x - 1);
+			boardA.setBottomBound(77 + x + 1);
+			boardA.setLeftBound(77 - y - 1);
+			boardA.setRightBound(77 - y + 1);
+			boardB.setTopBound(77 + x - 1);
+			boardB.setBottomBound(77 + x + 1);
+			boardB.setLeftBound(77 - y - 1);
+			boardB.setRightBound(77 - y + 1);
 			System.out.println("Report Move: " + reportMove.xPos + " " + reportMove.yPos + " " + reportMove.xPos);
 			return;
 		}
@@ -66,19 +75,6 @@ public class bot2 {
 			}
 			//Translate x and y coordinates and rotation
 			move currMove = new move(tempMove2.yPos - 77, 77 - tempMove2.xPos, tempMove2.rot, tempMove2.meep, tempMove2.meepPos);
-			//Next tile
-			//Tile bar = myDeck.get(tileDeck);
-			//Tile tempTile = myDeck.transTile(tile);
-			/*
-			long timeLeft = (long) ((double) time * 0.8 * 1000);
-			while (timeLeft > (System.currentTimeMillis() - startTime)) {
-				//Check for next best move
-			}
-			while (currMove.meepPos == -2){
-				//Check for any valid move
-				currMove = new move(0, 0, 0, "", -1);
-				//makeMove  Return (X, Y, rot, meep, meepPos);
-			}*/
 			System.out.println("Got a move in: " + (System.currentTimeMillis() - startTime));
 			return currMove;
 		}

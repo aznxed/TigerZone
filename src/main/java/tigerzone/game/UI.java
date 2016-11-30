@@ -99,7 +99,6 @@ public class UI
 							+ "."
 							+ Integer.toString(gameBoard.getBoard()[i][j]
 									.getDegrees()) + ".png";
-					System.out.println(iconPath + "\n");
 					ImageIcon II = new ImageIcon(iconPath);
 					Image image = II.getImage(); // transform it
 					int tileHeight = gameBoard.getBottomBound() - gameBoard.getTopBound();

@@ -39,11 +39,11 @@ public class tigerzoneServerProtocol {
     private String tourPassword = "PersiaRocks!";
     private String playPassword = "Obiwan77";
 	//private String startingTile = "TLTJ-";
-	private String startingTile = "TJJT-";
+	private String startingTile = "TLLLC";
 	//private String tileString = "LJJJ- LJTJD TLTTP LJTJ- JLJL- JJTJX TLLL- TLLT- TTTT- JJJJX LLLL- JJTJX TLTT-";
-	private String tileString = "JJJJ- JJJJX JJTJX TTTT- TJTJ- TJJT- TJTT- LLLL- JLLL- LLJJ- JLJL- LJLJ- LJJJ- JLLJ- TLJT- TLJTP JLTT- JLTTB TLTJ- TLTJD TLLL- TLTT- TLTTP TLLT- TLLTB LJTJ- LJTJD TLLLC";
+	private String tileString = "JJJJ- JJJJX JJTJX TTTT- TJTJ- TJJT- TJTT- LLLL- JLLL- LLJJ- JLJL- LJLJ- LJJJ- JLLJ- TLJT- TLJTP JLTT- JLTTB TLTJ- TLTJD TLLL- TLTT- TLTTP TLLT- TLLTB LJTJ- LJTJD";
 	//private String tileString = "JJJJ- JJJJX";
-	//private String tileString = "JJJJ- JJJJX JJTJX TTTT- TJTJ- TJTT-";
+	//private String tileString = "JJJJ- JJJJX";
 	private String[] deck = tileString.split(" ");
 	private int moveNum = 0;
 	private move botMove;
@@ -149,7 +149,7 @@ public class tigerzoneServerProtocol {
         	getReply = false;
         	int xPos = 0;
         	int yPos = 0;
-        	int rot = 90;
+        	int rot = 0;
             theOutput = "STARTING TILE IS " + startingTile + " AT " + xPos + " " + yPos + " " + rot;
             //Initialize board and place first for serverBot
             serverBot.initBoards();

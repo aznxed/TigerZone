@@ -242,26 +242,33 @@ public class Board {
 		List<Integer> validOrients = new ArrayList<Integer>();
 
 		List<Tile> nbors = getNeighbors(x, y);
+		System.out.println("NumNeighbors: " + nbors.size());
 
 		// Add possible orientation to list
-		validOrients.add(0);
-		validOrients.add(90);
-		validOrients.add(180);
-		validOrients.add(270);
+		if (nbors.size() > 0) {
+			validOrients.add(0);
+			validOrients.add(90);
+			validOrients.add(180);
+			validOrients.add(270);
+		}
 
 		// For each neighboring tile, check if sides match for each orientation
 		// If not, remove from validOrients
 		for (int i = 0; i < nbors.size(); i++) {
 			Tile nTile = nbors.get(i);
 
-			if (validOrients.isEmpty()) {
+			/*if (validOrients.isEmpty()) {
 				break;
-			}
+			}*/
+			
 			// Check if its in same row
 			if (nTile.getRow() == x) {
 				if (nTile.getCol() > y) {
 					// This is right neighbor
+					System.out.println("-------------TILE GET EDGE: " + nTile.getLeftEdge() + " Other tile edge: " + tile.getRightEdge());
+					
 					if (nTile.getLeftEdge() != tile.getRightEdge()) {
+						System.out.print("Not equal\n");
 						if (validOrients.contains(0)) {
 							validOrients.remove(Integer.valueOf(0));
 						}
@@ -362,10 +369,13 @@ public class Board {
 		List<Tile> possibleMoves = new ArrayList<Tile>();
 	    for (int i = getTopBound(); i <= getBottomBound(); i++) {
 			for (int j = getLeftBound(); j <= getRightBound(); j++) {
+				System.out.println("Orients: " + i + " " + j);
+				//Check if there is a tile
 				if (isValid(i, j, tile)) {
 					tile.setRow(i);
 					tile.setCol(j);
 					List<Integer> validOrients = getValidOrients(i, j, tile);
+					System.out.println("ValidOrients " + i + " " + j + " " + validOrients.size());
 					for (int k = 0; k < validOrients.size(); k++) {
 						possibleMoves.add(tile.rotateTile(tile, validOrients.get(k)));
 					}
@@ -391,11 +401,12 @@ public class Board {
 		board[x][y] = tile;
 	}
 	//Places random Tile
+	//DEPRECATED
 	public boolean addTile(Tile tile)// moveto AI
 	{
 	
 		if (!(getPossibleMoves(tile).isEmpty())) {
-
+			
 			// Keep a list of all the tiles placed on the board
 			placedTiles.add(tile);
 			tile.setBoard(this);
@@ -439,14 +450,37 @@ public class Board {
 	{
 		move tempMove;
 		tempMove = new move(0, 0, 0, "", -1);
-		if (startTile){
-			startTile = false;
-			Tile tempTile;
-			tempTile = tile.rotateTile(tile, rots);
-			board[xs][ys] = tempTile;
-			tempMove.xPos = xs;
-			tempMove.yPos = ys;
-		}
+		startTile = false;
+		//Tile tempTile = tile.rotateTile(tile, 90);
+		Tile tempTile = new Tile("TLLLC", 0, xs, ys);
+		System.out.println(tempTile.getTilePortionType()[1] + " " + tempTile.getTilePortionType()[3] + " " + 
+				tempTile.getTilePortionType()[3] + " " + tempTile.getTilePortionType()[5] + " " +
+				tempTile.getTilePortionType()[7]);
+		board[xs][ys] = tempTile;
+		tempMove.xPos = xs;
+		tempMove.yPos = ys;
+		//board[CENTER_CELL][CENTER_CELL] = startTile;
+		System.out.println("5X: " + tempMove.xPos + " Y: " + tempMove.yPos + " Rot: " + tempMove.rot);
+		return tempMove;
+	}
+	
+	//Used to place start Tile
+	//Because I don't care anymore
+	public move makeMoveBoard(String tile, int xs, int ys, int rots)// moveto AI
+	{
+		move tempMove;
+		tempMove = new move(0, 0, 0, "", -1);
+		startTile = false;
+		System.out.println(tile);
+		Tile tempTile = new Tile(tile, rots, xs, ys);
+		//Tile tempTile = new Tile("TLLLC", 0, xs, ys);
+		System.out.println(tempTile.getTilePortionType()[1] + " " + tempTile.getTilePortionType()[3] + " " + 
+				tempTile.getTilePortionType()[3] + " " + tempTile.getTilePortionType()[5] + " " +
+				tempTile.getTilePortionType()[7]);
+		board[xs][ys] = tempTile;
+		tempMove.xPos = xs;
+		tempMove.yPos = ys;
+		//board[CENTER_CELL][CENTER_CELL] = startTile;
 		System.out.println("5X: " + tempMove.xPos + " Y: " + tempMove.yPos + " Rot: " + tempMove.rot);
 		return tempMove;
 	}
@@ -456,8 +490,10 @@ public class Board {
 	{
 		move tempMove;
 		tempMove = new move(0, 0, 0, "", -1);
+		System.out.println("NumberPossibleMoves: " + getPossibleMoves(tile).size());
 		
 		if (!(getPossibleMoves(tile).isEmpty())) {
+			System.out.println("NumberPossibleMoves: " + getPossibleMoves(tile).size());
 			
 			// Keep a list of all the tiles placed on the board
 			placedTiles.add(tile);
@@ -518,7 +554,7 @@ public class Board {
 
 	public void initTiles(Deck tiles) {
 		//this will be moved to deck.java
-		Tile startTile = new Tile("TLTJ-", 0, CENTER_CELL, CENTER_CELL);
+		Tile startTile = new Tile("TLLLC", 0, CENTER_CELL, CENTER_CELL);
 		board[CENTER_CELL][CENTER_CELL] = startTile;
 	}
 
