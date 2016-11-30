@@ -2,12 +2,16 @@ package tigerzone;
 
 import tigerzone.game.Board;
 import tigerzone.game.Tile;
+import tigerzone.game.UI;
+
 import java.util.Random;
 
 public class bot2 {
 	//Initialize the deck of tiles
 		private Board boardA;
 		private Board boardB;
+		
+		private String firstGame = "";
 	
 		public void initDeck(){
 			return;
@@ -28,13 +32,17 @@ public class bot2 {
 		//Place first tile
 		public void firstTile(String tile, int x, int y, int rot){
 			Tile newTile = new Tile(tile);
-			move reportMove = boardA.makeMoveBoard(newTile, x, y, rot);
-			boardB.makeMoveBoard(newTile, x, y, rot);
+			move reportMove = boardA.makeMoveBoard(newTile, 77 - y, 77 + x, rot);
+			boardB.makeMoveBoard(newTile, 77 - y, 77 + x, rot);
 			System.out.println("Report Move: " + reportMove.xPos + " " + reportMove.yPos + " " + reportMove.xPos);
 			return;
 		}
 		//Play a tile
 		public move makeMove(String game, int time, String tile){
+			
+			if (firstGame.equals("")){
+				firstGame = game;
+			}
 			
 			//TerrainType[] transTile = new TerrainType[];
 			//TerrainType[] transTile = Tile.returnTileTerrain(tile);
@@ -50,7 +58,7 @@ public class bot2 {
 			
 			Tile newTile = new Tile(tile);
 			move tempMove2;
-			if (game.equals("A")){
+			if (game.equals(firstGame)){
 				tempMove2 = boardA.makeMoveBoard(newTile);
 			}
 			else {
@@ -77,11 +85,11 @@ public class bot2 {
 		//Place a tile ALWAYS ENEMY TILE
 		public void placeTile(String game, String tile, int x, int y, int rot, String meep, int meepPos){
 			Tile newTile = new Tile(tile);
-			if (game.equals("A")) {
-				boardA.placeTileBoard(newTile, x, y, rot);
+			if (game.equals(firstGame)) {
+				boardA.placeTileBoard(newTile, 77 - y, 77 + x, rot);
 			}
 			else {
-				boardB.placeTileBoard(newTile, x, y, rot);
+				boardB.placeTileBoard(newTile, 77 - y , 77 + x, rot);
 			}
 			return;
 		}
@@ -113,5 +121,11 @@ public class bot2 {
 
 			boardB.initTiles(boardB.deck);//change to deck
 			return;
+		}
+		public void printBoard() {
+			UI window = new UI();
+			window.createUIBoard(boardA);
+			//UI test = new UI();
+			//test.createUIBoard(gameBoard);
 		}
 }

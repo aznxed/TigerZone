@@ -118,7 +118,86 @@ public class Board {
 	 * @return
 	 */
 	
+	// Can I place this tile here?
+	// TEST NOT COMPLETED
 	public boolean isValid(int x, int y, Tile tile) {
+
+		// Tile already exists in that position
+		if (board[x][y] != null) {
+			return false;
+		}
+
+		// return true if the board is empty
+		if (placedTiles.isEmpty()) {
+			return true;
+		}
+
+		// Get the neighbors of this position
+		List<Tile> nbors = getNeighbors(x, y);
+
+		// If there are no neighbors, then its not a valid
+		// position in which to place a tile.
+		if (nbors.isEmpty()) {
+			return false;
+		}
+
+		// Ensure that all the neighbors are compatible.
+		boolean valid = true;
+		// Iterate through all its potential neighbors
+		for (Tile neighbor : nbors) {
+
+			// Check if neighbor is in same row
+			if (neighbor.getRow() == x) {
+				if (neighbor.getCol() > y) {
+					// This is right neighbor
+					if (neighbor.getLeftEdge() != tile.getRightEdge()) {
+						valid = false;
+						// no need to continue checking other
+						// neighbors
+						break;
+					}
+				} else {
+					// This is left neighbor
+					if (neighbor.getRightEdge() != tile.getLeftEdge()) {
+						valid = false;
+						break;
+					}
+				}
+			}
+
+			// If not in the same row, it must be in the same column
+			if (neighbor.getCol() == y) {
+				if (neighbor.getRow() > x) {
+					// This is bottom neighbor
+					if (neighbor.getTopEdge() != tile.getBottomEdge()) {
+						valid = false;
+						break;
+					}
+
+				} else {
+					// This is top neighbor
+					if (neighbor.getBottomEdge() != tile.getTopEdge()) {
+						valid = false;
+						break;
+					}
+				}
+			}
+
+		} // Iterate thru neighbors
+		return valid;
+
+		/*
+		 * // Space already has tile if (board[x][y] != null) { return false; }
+		 * 
+		 * List<Tile> nbors = getNeighbors(x, y);
+		 * 
+		 * // No neighbors if (nbors.isEmpty()) { return false; }
+		 * 
+		 * return true;
+		 */
+	}
+	
+	/*public boolean isValid(int x, int y, Tile tile) {
 		// Space already has tile
 		if (board[x][y] != null) {
 			return false;
@@ -132,7 +211,7 @@ public class Board {
 		}
 
 		return true;
-	}
+	}*/
 
 	/**
 	 * Add a Tile to the board. It will first validate that the Tile can be
@@ -351,10 +430,11 @@ public class Board {
 	
 	public void placeTileBoard(Tile tile, int x, int y, int rot){
 		Tile rotTile = tile.rotateTile(tile, rot);
-		board[77 - y][x + 77] = rotTile;
+		board[x][y] = rotTile;
 		return;
 	}
 	
+	//Used to place start Tile
 	public move makeMoveBoard(Tile tile, int xs, int ys, int rots)// moveto AI
 	{
 		move tempMove;

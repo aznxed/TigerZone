@@ -68,6 +68,7 @@ public class tigerzoneClientProtocol {
         	System.out.println("Game Record:      " + boardWinTotal + " - " + boardTieTotal + " - " + boardLossTotal);
         	System.out.println("Forfeited:        " + myForfeit);
         	System.out.println("Enemy Forfeited:  " + enemyForfeit);
+        	bot.printBoard();
     	}
     	else {
     		System.out.println("No games played");
@@ -150,7 +151,7 @@ public class tigerzoneClientProtocol {
         		//bot.placeFirstTile(split[3], Integer.valueOf(split[5]), Integer.valueOf(split[6]), Integer.valueOf(split[7]));
         		bot.initBoards();
         		bot.botProcess(3);
-                bot.firstTile(split[3], 77 - Integer.valueOf(split[6]), Integer.valueOf(split[5]) + 77, Integer.valueOf(split[7]));
+                bot.firstTile(split[3], Integer.valueOf(split[6]), Integer.valueOf(split[5]), Integer.valueOf(split[7]));
                 tigerMeep = 7;
         		state = ReceivedStartTile;
         	}
@@ -184,7 +185,7 @@ public class tigerzoneClientProtocol {
         		if ((playerMove.meepPos) != -1){
             		theOutput = theOutput + " PLACE " + split[12]+ " AT "
             					+ playerMove.xPos + " " + playerMove.yPos + " " + playerMove.rot;
-                	if((playerMove.meep).equals("TIGER") && tigerMeep > 0){
+                	if((playerMove.meep).equals("TIGER") && tigerMeep > 0) {
                 		theOutput = theOutput + " " + playerMove.meep + " " + playerMove.meepPos;
                 		tigerMeep--;
                 	}
