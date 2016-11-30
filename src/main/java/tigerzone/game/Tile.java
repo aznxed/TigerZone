@@ -283,7 +283,7 @@ public Tile rotateTile(Tile tile, int degrees) {
 				rotateArr[1] = tile.getTilePortionType()[3];
 				rotateArr[2] = tile.getTilePortionType()[0];
 				rotateArr[3] = tile.getTilePortionType()[7];
-				rotateArr[4] = tile.getTilePortionType()[1];
+				rotateArr[4] = tile.getTilePortionType()[4];
 				rotateArr[5] = tile.getTilePortionType()[1];
 				rotateArr[6] = tile.getTilePortionType()[8];
 				rotateArr[7] = tile.getTilePortionType()[5];
