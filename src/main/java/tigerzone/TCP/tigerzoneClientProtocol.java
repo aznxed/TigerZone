@@ -280,7 +280,7 @@ public class tigerzoneClientProtocol {
         			//Opponent placed a tile
         			//GAME <gid> MOVE <#> PLAYER <pid> TILE <tile> UNPLACEABLE RETRIEVE TIGER AT <x> <y>
         			if (split[6].equals("PLACED")){
-	        			if (split.length < (12 + 1)) {
+	        			if (split[12].equals("NONE") || split[12].equals("CROCODILE")) {
 	        				bot.placeTile(split[1], split[7], Integer.valueOf(split[9]), Integer.valueOf(split[10]), Integer.valueOf(split[11]), "", -1);
 	        				}
 	        			else {

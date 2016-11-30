@@ -302,12 +302,6 @@ public class Board {
 		}
 
 	}
-	public void addNewTile(Tile tile)
-	{
-		int x = tile.getRow();
-		int y = tile.getCol();
-		board[x][y] = tile;
-	}
 	
 	//Used to place start Tile 
 	//NEEDED but should be changed to version with string 
