@@ -445,7 +445,8 @@ public class Board {
 		return;
 	}
 	
-	//Used to place start Tile
+	//Used to place start Tile 
+	//DEPRECATED
 	public move makeMoveBoard(Tile tile, int xs, int ys, int rots)// moveto AI
 	{
 		move tempMove;
@@ -485,7 +486,7 @@ public class Board {
 		return tempMove;
 	}
 	
-	//Places random Tile
+	//Places random Tile Used in bot2
 	public move makeMoveBoard(Tile tile)// moveto AI
 	{
 		move tempMove;
