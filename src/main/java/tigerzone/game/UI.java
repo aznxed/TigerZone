@@ -61,7 +61,7 @@ public class UI
 				return 23;
 			case"TLLT-":	
 				return 24;
-			case"TLLTB-":	
+			case"TLLTB":	
 				return 25;
 			case"LJTJ-":	
 				return 26;
@@ -70,7 +70,7 @@ public class UI
 			case"TLLLC":	
 				return 28;
 				}
-		
+		System.out.println("ERROR TILE: " + terrainType + " not found");
 		return 0;
 		
 	}
