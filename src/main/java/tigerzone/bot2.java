@@ -32,9 +32,9 @@ public class bot2 {
 		//Place first tile
 		public void firstTile(String tile, int x, int y, int rot){
 			Tile newTile = new Tile(tile);
-			move reportMove = boardA.makeMoveBoard(tile, 77 - y, 77 + x, rot);
+			move reportMove = boardA.placeBoard(tile, 77 - y, 77 + x, rot);
 			boardB.makeMoveBoard(newTile, 77 - y, 77 + x, rot);
-			//Initialize board bounds
+			/*//Initialize board bounds
 			boardA.setTopBound(77 + x - 1);
 			boardA.setBottomBound(77 + x + 1);
 			boardA.setLeftBound(77 - y - 1);
@@ -42,11 +42,11 @@ public class bot2 {
 			boardB.setTopBound(77 + x - 1);
 			boardB.setBottomBound(77 + x + 1);
 			boardB.setLeftBound(77 - y - 1);
-			boardB.setRightBound(77 - y + 1);
+			boardB.setRightBound(77 - y + 1);*/
 			System.out.println("Report Move: " + reportMove.xPos + " " + reportMove.yPos + " " + reportMove.xPos);
 			return;
 		}
-		//Play a tile
+		//Return a move for the given tile 
 		public move makeMove(String game, int time, String tile){
 			
 			if (firstGame.equals("")){
@@ -74,7 +74,7 @@ public class bot2 {
 				tempMove2 = boardB.makeMoveBoard(newTile);
 			}
 			//Translate x and y coordinates and rotation
-			move currMove = new move(tempMove2.yPos - 77, 77 - tempMove2.xPos, tempMove2.rot, tempMove2.meep, tempMove2.meepPos);
+			move currMove = new move(tempMove2.yPos - 77, 77 - tempMove2.xPos , tempMove2.rot, tempMove2.meep, tempMove2.meepPos);
 			System.out.println("Got a move in: " + (System.currentTimeMillis() - startTime));
 			return currMove;
 		}
@@ -82,10 +82,10 @@ public class bot2 {
 		public void placeTile(String game, String tile, int x, int y, int rot, String meep, int meepPos){
 			Tile newTile = new Tile(tile);
 			if (game.equals(firstGame)) {
-				boardA.placeTileBoard(newTile, 77 - y, 77 + x, rot);
+				boardA.placeBoard(tile, 77 - y, 77 + x, rot);
 			}
 			else {
-				boardB.placeTileBoard(newTile, 77 - y , 77 + x, rot);
+				boardB.placeBoard(tile, 77 - y , 77 + x, rot);
 			}
 			return;
 		}

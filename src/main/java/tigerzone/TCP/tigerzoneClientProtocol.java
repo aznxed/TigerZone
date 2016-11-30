@@ -197,14 +197,14 @@ public class tigerzoneClientProtocol {
                 	}
         		}
         		else if ((playerMove.meep).equals("PASS")){
-        			theOutput = theOutput + " UNPLACEABLE PASS";
+        			theOutput = theOutput + " TILE " + split[12] + " UNPLACEABLE PASS";
         		}
         		else if ((playerMove.meep).equals("RETRIEVE")){
-        			theOutput = theOutput + " UNPLACEABLE RETRIEVE TIGER AT "
+        			theOutput = theOutput + " TILE " + split[12] + " UNPLACEABLE RETRIEVE TIGER AT "
         						+ playerMove.xPos + " " + playerMove.yPos;
         		}
         		else if ((playerMove.meep).equals("ADD")){
-        			theOutput = theOutput + " UNPLACEABLE ADD ANOTHER TIGER AT "
+        			theOutput = theOutput + " TILE " + split[12] + " UNPLACEABLE ADD ANOTHER TIGER AT "
         						+ playerMove.xPos + " " + playerMove.yPos;
         		}
         		else {
