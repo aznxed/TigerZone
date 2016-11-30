@@ -131,111 +131,19 @@ public class Board {
 		if (placedTiles.isEmpty()) {
 			return true;
 		}
-
-		// Get the neighbors of this position
-		List<Tile> nbors = getNeighbors(x, y);
-
-		// If there are no neighbors, then its not a valid
-		// position in which to place a tile.
-		if (nbors.isEmpty()) {
-			return false;
-		}
-
-		// Ensure that all the neighbors are compatible.
-		boolean valid = true;
-		// Iterate through all its potential neighbors
-		for (Tile neighbor : nbors) {
-
-			// Check if neighbor is in same row
-			if (neighbor.getRow() == x) {
-				if (neighbor.getCol() > y) {
-					// This is right neighbor
-					if (neighbor.getLeftEdge() != tile.getRightEdge()) {
-						valid = false;
-						// no need to continue checking other
-						// neighbors
-						break;
-					}
-				} else {
-					// This is left neighbor
-					if (neighbor.getRightEdge() != tile.getLeftEdge()) {
-						valid = false;
-						break;
-					}
-				}
-			}
-
-			// If not in the same row, it must be in the same column
-			if (neighbor.getCol() == y) {
-				if (neighbor.getRow() > x) {
-					// This is bottom neighbor
-					if (neighbor.getTopEdge() != tile.getBottomEdge()) {
-						valid = false;
-						break;
-					}
-
-				} else {
-					// This is top neighbor
-					if (neighbor.getBottomEdge() != tile.getTopEdge()) {
-						valid = false;
-						break;
-					}
-				}
-			}
-
-		} // Iterate thru neighbors
-		return valid;
-
-		/*
-		 * // Space already has tile if (board[x][y] != null) { return false; }
-		 * 
-		 * List<Tile> nbors = getNeighbors(x, y);
-		 * 
-		 * // No neighbors if (nbors.isEmpty()) { return false; }
-		 * 
-		 * return true;
-		 */
-	}
+		else {
+			// Get the neighbors of this position
+			List<Tile> nbors = getNeighbors(x, y);
 	
-	/*public boolean isValid(int x, int y, Tile tile) {
-		// Space already has tile
-		if (board[x][y] != null) {
-			return false;
+			// If there are no neighbors, then its not a valid
+			// position in which to place a tile.
+			if (nbors.isEmpty()) {
+				return false;
+			}
+			else {
+				return true;
+			}
 		}
-
-		List<Tile> nbors = getNeighbors(x, y);
-
-		// No neighbors
-		if (nbors.isEmpty()) {
-			return false;
-		}
-
-		return true;
-	}*/
-
-	/**
-	 * Add a Tile to the board. It will first validate that the Tile can be
-	 * added to that position.
-	 *
-	 * @param x
-	 * @param y
-	 * @param tile
-	 * @return
-	 */
-	public boolean addXTile(int x, int y, Tile tile)
-	{
-		/*if (!isValid(x, y, tile)) {
-			return false;
-		}*/
-		
-		// add tile to board
-		// give tile coords
-		placedTiles.add(tile);
-		board[x][y] = tile;
-		tile.setCol(y);
-		tile.setRow(x);
-		tile.setBoard(this);
-		return true;
 	}
 
 	public List<Integer> getValidOrients(int x, int y, Tile tile) {
@@ -400,53 +308,9 @@ public class Board {
 		int y = tile.getCol();
 		board[x][y] = tile;
 	}
-	//Places random Tile
-	//DEPRECATED
-	public boolean addTile(Tile tile)// moveto AI
-	{
-	
-		if (!(getPossibleMoves(tile).isEmpty())) {
-			
-			// Keep a list of all the tiles placed on the board
-			placedTiles.add(tile);
-			tile.setBoard(this);
-
-			Random rand = new Random();
-
-			Tile addTile = getPossibleMoves(tile).get(
-					rand.nextInt(getPossibleMoves(tile).size()));
-			int x = addTile.getRow();
-			int y = addTile.getCol();
-			board[x][y] = addTile;
-
-			if (x == getTopBound() && x > 0) {
-				setTopBound(x - 1);
-			}
-			if (x == getBottomBound() && x < MAX_ROWS) {
-				setBottomBound(x + 1);
-			}
-			if (y == getLeftBound() && y > 0) {
-				setLeftBound(y - 1);
-			}
-			if (y == getRightBound() && y < MAX_COLS) {
-				setRightBound(y + 1);
-			}
-			return true;
-		}
-		else {
-			return false;
-		}
-		
-	}
-	
-	public void placeTileBoard(Tile tile, int x, int y, int rot){
-		Tile rotTile = tile.rotateTile(tile, rot);
-		board[x][y] = rotTile;
-		return;
-	}
 	
 	//Used to place start Tile 
-	//DEPRECATED
+	//NEEDED but should be changed to version with string 
 	public move makeMoveBoard(Tile tile, int xs, int ys, int rots)// moveto AI
 	{
 		move tempMove;
@@ -605,9 +469,6 @@ public class Board {
 
 		gameBoard.initTiles(deck);//change to deck
 
-		for (int i = 0; i < deck.getSize()+1; i++) {
-			gameBoard.addTile(deck.getTop());
-		}
 		UI test = new UI();
 		test.createUIBoard(gameBoard);
 	}
